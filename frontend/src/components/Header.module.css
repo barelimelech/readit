@@ -1,0 +1,10 @@
+.icon_btn{
+    size: large;
+    color: inherit;
+    
+    /* size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }} */
+}
