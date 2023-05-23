@@ -15,13 +15,23 @@ import {
 import classes from "./Login.module.css";
 
 const Login = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleFormSubmit = () => {};
   return (
     <StyledEngineProvider injectFirst>
       <form onSubmit={handleFormSubmit}>
-        <Grid item container justifyContent="center"  style={{ marginTop: "2rem", marginLeft: "auto", marginRight: "auto", marginBottom: "1rem" }}>
+        <Grid
+          item
+          container
+          justifyContent="center"
+          style={{
+            marginTop: "2rem",
+            marginLeft: "auto",
+            marginRight: "auto",
+            marginBottom: "1rem",
+          }}
+        >
           <Typography variant="h5">Login</Typography>
         </Grid>
         <TextField
@@ -33,15 +43,7 @@ const Login = () => {
           type="username"
           autoComplete="current-email"
         />
-        <TextField
-          className={classes.textfield}
-          required
-          fullWidth
-          id="outlined-email-input"
-          label="Email"
-          type="email"
-          autoComplete="current-email"
-        />
+
         <TextField
           className={classes.textfield}
           required
@@ -51,29 +53,20 @@ const Login = () => {
           type="password"
           autoComplete="current-password"
         />
-        <TextField
-          className={classes.textfield}
-          required
-          fullWidth
-          id="outlined-password-input"
-          label="Confirm Password"
-          type="password"
-          autoComplete="current-password"
-        />
+
         <Grid
           item
           container
-          xs={7}
-          style={{ marginTop: "2rem", marginLeft: "auto", marginRight: "auto" }}
+          xs={1}
+          style={{ marginTop: "auto", marginLeft: "auto", marginRight: "auto" }}
         >
           <Button
             variant="contained"
-            fullWidth
             type="submit"
             style={{
               color: "white",
               fontSize: "1.1rem",
-              marginLeft: "5rem",
+              marginLeft: "1rem",
               // "&:hover": {
               // 	backgroundColor: "blue",
               // },
@@ -85,21 +78,21 @@ const Login = () => {
         </Grid>
 
         <Grid
-				item
-				container
-				justifyContent="center"
-				style={{ marginTop: "1rem" }}
-			>
-				<Typography variant="small">
-					Don't have an account yet?{" "}
-					<span
-						onClick={() => navigate("/register")}
-						style={{ cursor: "pointer", color: "blue" }}
-					>
-						SIGN UP
-					</span>
-				</Typography>
-			</Grid>
+          item
+          container
+          justifyContent="center"
+          style={{ marginTop: "1rem" }}
+        >
+          <Typography variant="small">
+            Don't have an account yet?{" "}
+            <span
+              onClick={() => navigate("/register")}
+              style={{ cursor: "pointer", color: "blue" }}
+            >
+              SIGN UP
+            </span>
+          </Typography>
+        </Grid>
       </form>
     </StyledEngineProvider>
   );
