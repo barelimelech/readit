@@ -16,7 +16,8 @@ import {
   Alert,
 } from "@mui/material";
 
-import Login from "./Login";
+import Login from "./Authentication/Login";
+import Search from './Search'
 
 const Home = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const Home = () => {
 
   return (
     <div>
-      home
+      <Search/>
     </div>
   );
 };

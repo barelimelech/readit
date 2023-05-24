@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Searches from "./components/Searches";
+import Searches from "./components/SearchesList";
 import Home from "./components/Home";
-import Login from "./components/Login";
+import Login from "./components/Authentication/Login";
 import Header from "./components/Header";
-import Register from "./components/Register";
+import Register from "./components/Authentication/Register";
 import History from "./components/History";
 // import logo from "./logo.svg";
 import "./App.css";

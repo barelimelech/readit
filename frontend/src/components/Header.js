@@ -22,7 +22,7 @@ import ClickAwayListener from "@mui/base/ClickAwayListener";
 
 import classes from "./Header.module.css";
 
-import Login from "./Login";
+import Login from "./Authentication/Login";
 import History from "./History";
 import BurgerSidebarMenu from "./Menu/BurgerSidebarMenu";
 
@@ -31,17 +31,6 @@ const Header = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-
-  // const handleOpenMenu = () => {
-  //   // //setShowMenu(event.currentTarget);
-  //   // setShowMenu(false);
-  //   // // <History/>
-  //   // navigate("/history");
-  // };
-
-  // const handleCloseMenu = () => {
-  //   setShowMenu(true);
-  // };
 
   useEffect(() => {
     if (showMenu) {
@@ -52,6 +41,12 @@ const Header = () => {
   const handleCloseNavMenu = () => {};
   console.log("is logged in  " + isLoggedIn);
 
+  const words = ['apple', 'banana', 'cherry', 'date', 'elderberry', 'fig', 'grape', 'apple', 'banana', 'cherry', 'date', 'elderberry', 'fig', 'grape'];
+  const handleWordClick = (word) => {
+    console.log('Clicked word:', word);
+    // Perform any desired action with the clicked word
+  };
+
   return (
     <div>
       <StyledEngineProvider injectFirst>
@@ -59,15 +54,20 @@ const Header = () => {
           <AppBar position="static">
             <Toolbar>
               <Typography>
-                <BurgerSidebarMenu />
+                <BurgerSidebarMenu words={words} onWordClick={handleWordClick}/>
               </Typography>
               <Button
+                sx={{ marginLeft: "35px" }}
                 color="inherit"
                 onClick={() => navigate("/")}
                 style={{ textTransform: "none" }}
               >
-                <Grid >
-                  <Typography paddingLeft="50px" variant="h6" component="div" sx={{ flexGrow: 3 }}>
+                <Grid>
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{ flexGrow: 1 }}
+                  >
                     readit
                   </Typography>
                 </Grid>
@@ -85,9 +85,6 @@ const Header = () => {
                   Login
                 </Button>
                 //   </Toolbar>
-                // <div className={classes.align_right}>
-
-                //   </div>
               )}
               {isLoggedIn && <Button color="inherit">Profile</Button>}
             </Toolbar>
