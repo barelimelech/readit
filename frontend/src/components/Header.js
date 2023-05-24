@@ -1,5 +1,6 @@
-import { useState, MouseEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, MouseEvent, useEffect } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
+import { Navbar, Nav } from "react-bootstrap";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -15,14 +16,15 @@ import {
   Snackbar,
   Alert,
   StyledEngineProvider,
-  ClickAwayListener,
   Modal,
 } from "@mui/material";
+import ClickAwayListener from "@mui/base/ClickAwayListener";
 
 import classes from "./Header.module.css";
 
 import Login from "./Login";
 import History from "./History";
+import BurgerSidebarMenu from "./Menu/BurgerSidebarMenu";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -30,48 +32,42 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
-  const handleOpenMenu = () => {
-    //setShowMenu(event.currentTarget);
-    setShowMenu((prev) => !prev);
-    // <History/>
-    navigate('/history');
-  };
+  // const handleOpenMenu = () => {
+  //   // //setShowMenu(event.currentTarget);
+  //   // setShowMenu(false);
+  //   // // <History/>
+  //   // navigate("/history");
+  // };
 
-  const handleCloseMenu = () => {
-    setShowMenu(true);
-  };
+  // const handleCloseMenu = () => {
+  //   setShowMenu(true);
+  // };
+
+  useEffect(() => {
+    if (showMenu) {
+      console.log("showMenu  " + showMenu);
+    }
+  }, [showMenu]);
+
   const handleCloseNavMenu = () => {};
   console.log("is logged in  " + isLoggedIn);
 
   return (
-    <StyledEngineProvider injectFirst>
+    <div>
+      <StyledEngineProvider injectFirst>
         <Box sx={{ flexGrow: 1 }}>
           <AppBar position="static">
             <Toolbar>
-
-            {/* <ClickAwayListener onClickAway={handleCloseMenu}> */}
-
-              <IconButton
-                className={classes.icon_btn}
-                size="large"
-                //   edge="start"
-                //   color="inherit"
-                aria-label="menu"
-                onClick={handleOpenMenu}
-                onMouseOver={handleCloseMenu}
-                sx={{ mr: 2 }}
-              >
-                <MenuIcon />
-              </IconButton>
-              {/* </ClickAwayListener> */}
-
+              <Typography>
+                <BurgerSidebarMenu />
+              </Typography>
               <Button
                 color="inherit"
                 onClick={() => navigate("/")}
                 style={{ textTransform: "none" }}
               >
-                <Grid item>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                <Grid >
+                  <Typography paddingLeft="50px" variant="h6" component="div" sx={{ flexGrow: 3 }}>
                     readit
                   </Typography>
                 </Grid>
@@ -80,15 +76,26 @@ const Header = () => {
                 <Typography textAlign="center">TMP</Typography>
               </MenuItem>
               {!isLoggedIn && (
-                <Button color="inherit" onClick={() => navigate("/login")}>
+                // <Toolbar sx={{ justifyContent: "space-between" }}>
+                <Button
+                  sx={{ marginLeft: "auto" }}
+                  color="inherit"
+                  onClick={() => navigate("/login")}
+                >
                   Login
                 </Button>
+                //   </Toolbar>
+                // <div className={classes.align_right}>
+
+                //   </div>
               )}
               {isLoggedIn && <Button color="inherit">Profile</Button>}
             </Toolbar>
           </AppBar>
         </Box>
-    </StyledEngineProvider>
+      </StyledEngineProvider>
+      {/* </ClickAwayListener> */}
+    </div>
   );
 };
 

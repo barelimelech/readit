@@ -8,3 +8,9 @@
               aria-label="menu"
               sx={{ mr: 2 }} */
 }
+
+
+.align_right{
+    display: flex !important;
+    justify-content: right !important;
+}
