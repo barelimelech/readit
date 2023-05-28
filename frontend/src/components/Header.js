@@ -1,6 +1,8 @@
-import { useState, MouseEvent, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
+import { useImmerReducer } from "use-immer";
+import Axios from "axios";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -8,29 +10,27 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+
+//Contexts
+
+import StateContext from "../contexts/StateContext";
+import DispatchContext from "../contexts/DispatchContext";
+
 import {
   Grid,
   Typography,
   Button,
-  TextField,
-  Snackbar,
-  Alert,
   StyledEngineProvider,
-  Modal,
 } from "@mui/material";
-import ClickAwayListener from "@mui/base/ClickAwayListener";
 
-import classes from "./Header.module.css";
-
-import Login from "./Authentication/Login";
-import History from "./History";
 import BurgerSidebarMenu from "./Menu/BurgerSidebarMenu";
 
 const Header = () => {
   const navigate = useNavigate();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const GlobalState = useContext(StateContext);
+  const GlobalDispatch = useContext(DispatchContext);
 
   useEffect(() => {
     if (showMenu) {
@@ -39,13 +39,44 @@ const Header = () => {
   }, [showMenu]);
 
   const handleCloseNavMenu = () => {};
-  console.log("is logged in  " + isLoggedIn);
 
-  const words = ['apple', 'banana', 'cherry', 'date', 'elderberry', 'fig', 'grape', 'apple', 'banana', 'cherry', 'date', 'elderberry', 'fig', 'grape'];
+  const words = [
+    "apple",
+    "banana",
+    "cherry",
+    "date",
+    "elderberry",
+    "fig",
+    "grape",
+    "apple",
+    "banana",
+    "cherry",
+    "date",
+    "elderberry",
+    "fig",
+    "grape",
+  ];
   const handleWordClick = (word) => {
-    console.log('Clicked word:', word);
+    console.log("Clicked word:", word);
     // Perform any desired action with the clicked word
   };
+
+  async function handleLogout() {
+    const confirmLogout = window.confirm("Are you sure you want to leave?");
+    if (confirmLogout) {
+      try {
+        const response = await Axios.post(
+          "http://localhost:8000/api-auth-djoser/token/logout/",
+          GlobalState.userToken,
+          { headers: { Authorization: "Token ".concat(GlobalState.userToken) } }
+        );
+
+        GlobalDispatch({ type: "logout" });
+        navigate("/");
+        // setOpenSnack(true);
+      } catch (e) {}
+    }
+  }
 
   return (
     <div>
@@ -54,7 +85,10 @@ const Header = () => {
           <AppBar position="static">
             <Toolbar>
               <Typography>
-                <BurgerSidebarMenu words={words} onWordClick={handleWordClick}/>
+                <BurgerSidebarMenu
+                  words={words}
+                  onWordClick={handleWordClick}
+                />
               </Typography>
               <Button
                 sx={{ marginLeft: "35px" }}
@@ -63,11 +97,7 @@ const Header = () => {
                 style={{ textTransform: "none" }}
               >
                 <Grid>
-                  <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{ flexGrow: 1 }}
-                  >
+                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     readit
                   </Typography>
                 </Grid>
@@ -75,8 +105,11 @@ const Header = () => {
               <MenuItem key={"tmp"} onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">TMP</Typography>
               </MenuItem>
-              {!isLoggedIn && (
-                // <Toolbar sx={{ justifyContent: "space-between" }}>
+              {GlobalState.userIsLogged? (
+                <MenuItem key={"tmp"} onClick={handleLogout}>
+                  <Typography textAlign="center">Log out</Typography>
+                </MenuItem>
+              ) : (
                 <Button
                   sx={{ marginLeft: "auto" }}
                   color="inherit"
@@ -84,9 +117,11 @@ const Header = () => {
                 >
                   Login
                 </Button>
-                //   </Toolbar>
               )}
-              {isLoggedIn && <Button color="inherit">Profile</Button>}
+              {/* {isLoggedIn && <Button color="inherit">Profile</Button>} */}
+              {/* <MenuItem key={"tmp"} onClick={handleLogout}>
+                <Typography textAlign="center">Log out</Typography>
+              </MenuItem> */}
             </Toolbar>
           </AppBar>
         </Box>

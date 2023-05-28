@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_gis',
     'corsheaders',
+    'djoser',
+    'rest_framework.authtoken',
 
     'users.apps.UsersConfig',
     'searches.apps.SearchesConfig',
@@ -141,3 +143,15 @@ GDAL_LIBRARY_PATH = '/opt/homebrew/Cellar/gdal/3.6.1/lib/libgdal.dylib'
 GEOS_LIBRARY_PATH = '/opt/homebrew/Cellar/geos/3.11.1/lib/libgeos_c.1.17.1.dylib'
 
 CORS_ALLOW_ALL_ORIGINS = True 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
+DJOSER = {
+    "USER_CREATE_PASSWORD_RETYPE" : True,
+    'SEND_CONFIRMATION_EMAIL': False,
+
+}

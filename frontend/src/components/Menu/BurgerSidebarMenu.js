@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./BurgerSidebarMenu.css";
 import { Button, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { AiFillDelete } from 'react-icons/ai';
+import { AiFillDelete, AiFillDislike } from 'react-icons/ai';
+import {BiDislike} from 'react-icons/bi';
 
 
 const BurgerSidebarMenu = (props) => {
@@ -53,7 +54,7 @@ const BurgerSidebarMenu = (props) => {
                 background: "#f0f0f0",
               }}
             >
-              <AiFillDelete/>
+                <AiFillDislike/>
               {word}
             </p>
             </div>
@@ -81,6 +82,7 @@ const BurgerSidebarMenu = (props) => {
                 background: "#f0f0f0",
               }}
             >
+              <AiFillDelete/>
               {word}
             </p>
           ))}

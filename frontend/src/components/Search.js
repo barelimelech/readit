@@ -2,11 +2,21 @@ import React, { useState } from "react";
 import { Autocomplete, Button, Box } from "@mui/material";
 import { TextField, IconButton } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
-const SearchPage = ({ onSearch }) => {
+
+// var KEY = 'AIzaSyA2q8MGCoPBhqqTxsUo-w1sUscgu9H9DQE'
+// var CX = '858f2fc5425274d63'
+const Search = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = () => {
-    onSearch(searchTerm);
+    // fetch("https://www.googleapis.com/customsearch/v1?key={AIzaSyA2q8MGCoPBhqqTxsUo-w1sUscgu9H9DQE}&cx={858f2fc5425274d63}&q=" + searchTerm)
+    // .then(response => response.json())
+    // .then(response => {
+    //     // this.setState({ results: response.items });
+    //     console.log(response.items);
+    // });
+    // console.log(searchTerm);
+    // onSearch(searchTerm);
   };
 
   const handleKeyPress = (event) => {
@@ -56,7 +66,13 @@ const SearchPage = ({ onSearch }) => {
           )}
         /> */}
         <Box margin="auto" marginTop={1}>
-          <Button variant="contained" color="primary" size="large">
+          <Button
+            value={searchTerm}
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={handleSearch}
+          >
             Search
           </Button>
         </Box>
@@ -70,4 +86,4 @@ const SearchPage = ({ onSearch }) => {
   );
 };
 
-export default SearchPage;
+export default Search;
