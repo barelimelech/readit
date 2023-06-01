@@ -20,7 +20,6 @@ import classes from "./Login.module.css";
 const Login = () => {
   const navigate = useNavigate();
   const GlobalDispatch = useContext(DispatchContext);
-  const GlobalState = useContext(StateContext);
 
   const initialState = {
     usernameValue: "",
@@ -63,7 +62,7 @@ const Login = () => {
     if (state.sendRequestToSignup) {
       const source = Axios.CancelToken.source();
 
-      async function SignIn() {
+      async function signin() {
         try {
           const response = await Axios.post(
             "http://localhost:8000/api-auth-djoser/token/login/",
@@ -89,7 +88,7 @@ const Login = () => {
           console.log(error);
         }
       }
-      SignIn();
+      signin();
       return () => {
         source.cancel();
       };

@@ -1,14 +1,35 @@
-import React, { useState } from "react";
-import { Autocomplete, Button, Box } from "@mui/material";
-import { TextField, IconButton } from "@mui/material";
+import React, { useState, useContext } from "react";
 import { Search as SearchIcon } from "@mui/icons-material";
+import PopupMessage from "./PopupMessage";
+import { useNavigate } from "react-router-dom";
+
+//Contexts
+import StateContext from "../contexts/StateContext";
+import DispatchContext from "../contexts/DispatchContext";
+import {
+  Button, Box, TextField,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+} from "@mui/material";
 
 // var KEY = 'AIzaSyA2q8MGCoPBhqqTxsUo-w1sUscgu9H9DQE'
 // var CX = '858f2fc5425274d63'
 const Search = ({ onSearch }) => {
+  const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
+  const GlobalState = useContext(StateContext);
+  const GlobalDispatch = useContext(DispatchContext);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleSearch = () => {
+    if (!GlobalState.userIsLogged) {
+      console.log("bar");
+      setShowPopup(true);
+    } else {
+      setShowPopup(false);
+    }
     // fetch("https://www.googleapis.com/customsearch/v1?key={AIzaSyA2q8MGCoPBhqqTxsUo-w1sUscgu9H9DQE}&cx={858f2fc5425274d63}&q=" + searchTerm)
     // .then(response => response.json())
     // .then(response => {
@@ -18,6 +39,14 @@ const Search = ({ onSearch }) => {
     // console.log(searchTerm);
     // onSearch(searchTerm);
   };
+
+  // useEffect(()=>{
+  //   if(tmp!==true){
+  //     <PopupMessage/>
+
+  //   }
+
+  // },[tmp])
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -65,6 +94,7 @@ const Search = ({ onSearch }) => {
             />
           )}
         /> */}
+
         <Box margin="auto" marginTop={1}>
           <Button
             value={searchTerm}
@@ -75,6 +105,15 @@ const Search = ({ onSearch }) => {
           >
             Search
           </Button>
+          {showPopup && (
+            <Dialog open={showPopup} onClose={() => setShowPopup(false)}>
+              <DialogTitle>For search, log in first</DialogTitle>
+              <DialogActions>
+                <Button onClick={() => navigate("/login")}>Login</Button>
+              </DialogActions>
+            </Dialog>
+          )}
+          {/* {showPopup && <PopupMessage/>} */}
         </Box>
         <Box margin="auto" marginTop={1}>
           <Button variant="contained" color="secondary" marginLeft={1}>

@@ -34,9 +34,9 @@ const BurgerSidebarMenu = (props) => {
 
   return (
     <div className={`burger-sidebar-menu ${isOpen ? "open" : ""}`}>
-      <MenuItem className="burger-button" onClick={handleToggle}>
+      <Button className="burger-button" onClick={handleToggle} style={{color:"white"}}>
         <MenuIcon className="burger-icon"></MenuIcon>
-      </MenuItem>
+      </Button>
       <div className="sidebar-content">
       <h3 style={{color:"black"}}>Upcoming</h3>
         <ul style={{ overflowY: "scroll", maxHeight: "350px", color: "black" }}>

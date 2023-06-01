@@ -14,6 +14,7 @@ import "./App.css";
 //Contexts
 import DispatchContext from './contexts/DispatchContext';
 import StateContext from './contexts/StateContext';
+import Profile from "./components/Profile/Profile";
 
 
 function App() {
@@ -72,6 +73,8 @@ function App() {
         <Route path="/listings" element={<Searches />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        
         {/* <Route path="/history" element={<History />} /> */}
       </Routes>
     </BrowserRouter>

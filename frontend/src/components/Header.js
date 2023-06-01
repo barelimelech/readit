@@ -1,27 +1,20 @@
 import { useState, useContext, useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
-import { Navbar, Nav } from "react-bootstrap";
-import { useImmerReducer } from "use-immer";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
+
+import classes from './Header.module.css'
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import {BsFillPersonFill} from "react-icons/bs"
 
 //Contexts
-
 import StateContext from "../contexts/StateContext";
 import DispatchContext from "../contexts/DispatchContext";
 
-import {
-  Grid,
-  Typography,
-  Button,
-  StyledEngineProvider,
-} from "@mui/material";
+import { Typography, Button, StyledEngineProvider, Grid } from "@mui/material";
 
 import BurgerSidebarMenu from "./Menu/BurgerSidebarMenu";
 
@@ -84,31 +77,36 @@ const Header = () => {
         <Box sx={{ flexGrow: 1 }}>
           <AppBar position="static">
             <Toolbar>
-              <Typography>
-                <BurgerSidebarMenu
-                  words={words}
-                  onWordClick={handleWordClick}
-                />
-              </Typography>
-              <Button
-                sx={{ marginLeft: "35px" }}
+              {GlobalState.userIsLogged && (
+                <MenuItem style={{ color: "white" }}>
+                  <BurgerSidebarMenu
+                    words={words}
+                    onWordClick={handleWordClick}
+                  />
+                </MenuItem>
+              )}
+              <MenuItem
                 color="inherit"
                 onClick={() => navigate("/")}
                 style={{ textTransform: "none" }}
               >
-                <Grid>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    readit
-                  </Typography>
-                </Grid>
-              </Button>
-              <MenuItem key={"tmp"} onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">TMP</Typography>
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                  readit
+                </Typography>
               </MenuItem>
-              {GlobalState.userIsLogged? (
-                <MenuItem key={"tmp"} onClick={handleLogout}>
-                  <Typography textAlign="center">Log out</Typography>
+              {GlobalState.userIsLogged && (
+                <MenuItem className={classes.alignRight} key={"tmp"}  onClick={() => navigate("/profile")}>
+                  <BsFillPersonFill/>
                 </MenuItem>
+              )}
+              {GlobalState.userIsLogged ? (
+                <Button
+                  sx={{ marginLeft: "auto" }}
+                  color="inherit"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
               ) : (
                 <Button
                   sx={{ marginLeft: "auto" }}
@@ -118,10 +116,6 @@ const Header = () => {
                   Login
                 </Button>
               )}
-              {/* {isLoggedIn && <Button color="inherit">Profile</Button>} */}
-              {/* <MenuItem key={"tmp"} onClick={handleLogout}>
-                <Typography textAlign="center">Log out</Typography>
-              </MenuItem> */}
             </Toolbar>
           </AppBar>
         </Box>

@@ -10,7 +10,7 @@
 }
 
 
-.align_right{
+.alignRight{
     display: flex !important;
     justify-content: right !important;
 }

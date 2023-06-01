@@ -19,7 +19,6 @@ import classes from "./Register.module.css";
 
 const Register = () => {
   const navigate = useNavigate();
-  // const [sendRequestToSignup, setSendRequestToSignup] = useState(false);
 
   const initialState = {
     usernameValue: "",
@@ -89,7 +88,7 @@ const Register = () => {
     if(state.sendRequestToSignup){
     const source = Axios.CancelToken.source();
 
-    async function SignUp() {
+    async function signup() {
     
       try {
         const response = await Axios.post(
@@ -111,7 +110,7 @@ const Register = () => {
         console.log(error)
       }
     }
-    SignUp();
+    signup();
     return()=>{
       source.cancel();
     };
