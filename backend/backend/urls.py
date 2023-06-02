@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from searches.api import views as searches_api_views
+from users.api import views as users_api_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +25,8 @@ urlpatterns = [
 
     path('api-auth-djoser/', include('djoser.urls')),
     path('api-auth-djoser/', include('djoser.urls.authtoken')),
+
+    path('api/users/', users_api_views.UsersList.as_view()),
+    path('api/users/<int:id>/', users_api_views.UserDetail.as_view()),
+    path('api/users/<int:id>/update/', users_api_views.UserUpdate.as_view()),
 ]

@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useImmerReducer } from "use-immer";
 
-import Searches from "./components/SearchesList";
-import Home from "./components/Home";
+import Searches from "./components/HomePage/SearchesList";
+import Home from "./components/HomePage/Home";
 import Login from "./components/Authentication/Login";
 import Header from "./components/Header";
 import Register from "./components/Authentication/Register";
-import History from "./components/History";
+import Histoty from './components/Menu/History'
 // import logo from "./logo.svg";
 import "./App.css";
 
@@ -15,6 +15,7 @@ import "./App.css";
 import DispatchContext from './contexts/DispatchContext';
 import StateContext from './contexts/StateContext';
 import Profile from "./components/Profile/Profile";
+import ProfileUpdate from "./components/Profile/ProfileUpdate";
 
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/updateprofile" element={<ProfileUpdate />} />
         
         {/* <Route path="/history" element={<History />} /> */}
       </Routes>

@@ -4,10 +4,12 @@ import PopupMessage from "./PopupMessage";
 import { useNavigate } from "react-router-dom";
 
 //Contexts
-import StateContext from "../contexts/StateContext";
-import DispatchContext from "../contexts/DispatchContext";
+import StateContext from "../../contexts/StateContext";
+import DispatchContext from "../../contexts/DispatchContext";
 import {
-  Button, Box, TextField,
+  Button,
+  Box,
+  TextField,
   Dialog,
   DialogTitle,
   DialogActions,
@@ -22,6 +24,15 @@ const Search = ({ onSearch }) => {
   const GlobalState = useContext(StateContext);
   const GlobalDispatch = useContext(DispatchContext);
   const [showPopup, setShowPopup] = useState(false);
+
+  const handleSearchLater = () => {
+    if (!GlobalState.userIsLogged) {
+      console.log("bar");
+      setShowPopup(true);
+    } else {
+      setShowPopup(false);
+    }
+  };
 
   const handleSearch = () => {
     if (!GlobalState.userIsLogged) {
@@ -116,7 +127,12 @@ const Search = ({ onSearch }) => {
           {/* {showPopup && <PopupMessage/>} */}
         </Box>
         <Box margin="auto" marginTop={1}>
-          <Button variant="contained" color="secondary" marginLeft={1}>
+          <Button
+            variant="contained"
+            color="secondary"
+            marginLeft={1}
+            onClick={handleSearchLater}
+          >
             Search Later
           </Button>
         </Box>
