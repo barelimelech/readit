@@ -11,6 +11,8 @@ from users.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    # first_name = serializers.SerializerMethodField()
+    # last_name = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = '__all__'

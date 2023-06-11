@@ -7,7 +7,8 @@ import Home from "./components/HomePage/Home";
 import Login from "./components/Authentication/Login";
 import Header from "./components/Header";
 import Register from "./components/Authentication/Register";
-import Histoty from './components/Menu/History'
+import Histoty from './components/Menu/History';
+import AccountCreated from "./components/Authentication/AccountCreated";
 // import logo from "./logo.svg";
 import "./App.css";
 
@@ -15,12 +16,14 @@ import "./App.css";
 import DispatchContext from './contexts/DispatchContext';
 import StateContext from './contexts/StateContext';
 import Profile from "./components/Profile/Profile";
-import ProfileUpdate from "./components/Profile/ProfileUpdate";
+import EditProfile from "./components/Profile/EditProfile";
 
 
 function App() {
 
   const initialState = {
+    userFirstName: localStorage.getItem("theUserFirstName"),
+    userLastName: localStorage.getItem("theUserLastName"),
     userUsername: localStorage.getItem("theUserUsername"),
     userEmail: localStorage.getItem("theUserEmail"),
     userId: localStorage.getItem("theUserId"),
@@ -34,6 +37,8 @@ function App() {
         draft.userToken = action.tokenValue;
         break;
       case "userSignsIn":
+        draft.userFirstName = action.firstNameInfo;
+        draft.userLastName = action.lastNameInfo;
         draft.userUsername = action.usernameInfo;
         draft.userEmail = action.emailInfo;
         draft.userId = action.IdInfo;
@@ -52,11 +57,15 @@ function App() {
 
   useEffect(() => {
     if (state.userIsLogged) {
+      localStorage.setItem("theUserFirstName", state.userFirstName);
+      localStorage.setItem("theUserLastName", state.userLastName);
       localStorage.setItem("theUserUsername", state.userUsername);
       localStorage.setItem("theUserEmail", state.userEmail);
       localStorage.setItem("theUserId", state.userId);
       localStorage.setItem("theUserToken", state.userToken);
     } else {
+      localStorage.removeItem("theUserFirstName");
+      localStorage.removeItem("theUserLastName");
       localStorage.removeItem("theUserUsername");
       localStorage.removeItem("theUserEmail");
       localStorage.removeItem("theUserId");
@@ -75,8 +84,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/updateprofile" element={<ProfileUpdate />} />
-        
+        <Route path="/updateprofile" element={<EditProfile />} />
+        <Route path="/created" element={<AccountCreated />} />
+
         {/* <Route path="/history" element={<History />} /> */}
       </Routes>
     </BrowserRouter>

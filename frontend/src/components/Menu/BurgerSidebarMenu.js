@@ -51,10 +51,11 @@ const BurgerSidebarMenu = (props) => {
                 padding: "8px",
                 borderRadius: "4px",
                 margin: "4px 9",
-                background: "#f0f0f0",
+                background: "#c4ddf2",
               }}
             >
                 <AiFillDislike/>
+                
               {word}
             </p>
             </div>
@@ -79,7 +80,7 @@ const BurgerSidebarMenu = (props) => {
                 padding: "8px",
                 borderRadius: "4px",
                 margin: "4px 0",
-                background: "#f0f0f0",
+                background: "#c4ddf2",
               }}
             >
               <AiFillDelete/>

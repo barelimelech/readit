@@ -1,4 +1,4 @@
-import React, { useEffect,useContext, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
@@ -8,10 +8,16 @@ import classes from "./Profile.module.css";
 
 //components
 import StateContext from "../../contexts/StateContext";
-import ProfileUpdate from "./ProfileUpdate";
+import ProfileUpdate from "./EditProfile";
 
 // MUI
-import { Button,Grid, Typography, StyledEngineProvider } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  StyledEngineProvider,
+} from "@mui/material";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -20,11 +26,12 @@ const Profile = () => {
 
   const initialState = {
     userProfile: {
+      first_name: "",
+      last_name: "",
       username: "",
     },
     dataIsLoading: true,
   };
-
 
   const handleSave = () => {
     // Perform save/update operation here, e.g., make an API call
@@ -38,6 +45,8 @@ const Profile = () => {
   function ReducerFuction(draft, action) {
     switch (action.type) {
       case "catchUserProfileInfo":
+        draft.userProfile.first_name = action.profileObject.first_name;
+        draft.userProfile.last_name = action.profileObject.last_name;
         draft.userProfile.username = action.profileObject.username;
         break;
 
@@ -70,41 +79,45 @@ const Profile = () => {
     GetProfileInfo();
   }, []);
 
-  const handelUpdateProfile = () =>{
+  const handelUpdateProfile = () => {
     // <ProfileUpdate userProfile={state.userProfile} />
     setIsEditing(true);
-    navigate('/updateprofile')
+    navigate("/updateprofile");
   };
 
   return (
     <StyledEngineProvider injectFirst>
-
-    <Grid item container direction="column" justifyContent="center">
-      <Grid item>
-        <Typography className={classes.profile_details}>
-          Hello{" "}
-          <span className={classes.profile_span}>
-            {GlobalState.userUsername}
-          </span>
-        </Typography>
+      <Grid
+        item
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Grid item>
+          <Typography className={classes.profile_details}>
+            <Box
+             sx={{ p:10, width: 900,  boxShadow: 14 }}
+            >
+              Hello{" "}
+              <span className={classes.profile_span}>
+                {GlobalState.userUsername}
+              </span>
+              <br/>
+              <span className={classes.profile_span}>
+                {GlobalState.userFirstName}
+              </span>
+              <br/>
+              <span className={classes.profile_span}>
+                {GlobalState.userLastName}
+              </span>
+              <Grid>
+                <Button onClick={handelUpdateProfile}>Edit profile</Button>
+              </Grid>
+            </Box>
+          </Typography>
+        </Grid>
       </Grid>
-      {/* <Grid item>
-        <Typography
-          variant="h5"
-          style={{ textAlign: "center", marginTop: "1rem" }}
-        >
-          You have
-        </Typography>
-      </Grid> */}
-    </Grid>
-
-     {/* <ProfileUpdate userProfile={state.userProfile} /> */}
-
-    <Grid>
-      <Button onClick={handelUpdateProfile}>
-        Update profile
-      </Button>
-    </Grid>
     </StyledEngineProvider>
   );
 };
