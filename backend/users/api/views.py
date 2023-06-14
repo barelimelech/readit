@@ -15,3 +15,20 @@ class UserUpdate(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'id'
+
+
+# class ProfileList(generics.ListAPIView):
+#     queryset = Profile.objects.all()
+#     serializer_class = ProfileSerializer
+
+
+# class ProfileDetail(generics.RetrieveAPIView):
+#     queryset = Profile.objects.all()
+#     serializer_class = ProfileSerializer
+#     lookup_field = 'user'
+
+
+# class ProfileUpdate(generics.UpdateAPIView):
+#     queryset = Profile.objects.all()
+#     serializer_class = ProfileSerializer
+#     lookup_field = 'user'

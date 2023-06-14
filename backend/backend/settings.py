@@ -153,5 +153,7 @@ REST_FRAMEWORK = {
 DJOSER = {
     "USER_CREATE_PASSWORD_RETYPE" : True,
     'SEND_CONFIRMATION_EMAIL': False,
-
+    # 'SERIALIZERS': {
+    #     'user_create':'users.apps.UsersConfig.serializers.UserSerializer'
+    # },
 }

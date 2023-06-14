@@ -114,6 +114,8 @@ const Login = () => {
           console.log(response);
           GlobalDispatch({
             type: "userSignsIn",
+            firstNameInfo: response.data.first_name,
+            lastNameInfo: response.data.last_name,
             usernameInfo: response.data.username,
             emailInfo: response.data.email,
             IdInfo: response.data.id,

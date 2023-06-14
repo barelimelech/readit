@@ -56,8 +56,6 @@ const Register = () => {
         // draft.firstNameErrors.hasErrors = false;
         // draft.firstNameErrors.errorMessage = "";
         // draft.serverMessageFirstName = "";
-        console.log("hello bar " + draft.firstNameValue);
-        console.log("hello bar2 " + action.firstNameChosen);
         break;
       case "catchLastNameChange":
         draft.lastNameValue = action.lastNameChosen;
@@ -196,9 +194,9 @@ const Register = () => {
           const response = await Axios.post(
             "http://localhost:8000/api-auth-djoser/users/",
             {
+              username: state.usernameValue,
               first_name: state.firstNameValue,
               last_name: state.lastNameValue,
-              username: state.usernameValue,
               email: state.emailValue,
               password: state.passwordValue,
               re_password: state.password2Value,
@@ -207,11 +205,9 @@ const Register = () => {
               cancelToken: source.token,
             }
           );
-          
           dispatch({ type: "openTheSnack" });
         } catch (error) {
           dispatch({ type: "allowTheButton" });
-
           if (error.response.data.username) {
             console.log(error.response.data.username);
             dispatch({ type: "usernameExists" });
@@ -245,7 +241,7 @@ const Register = () => {
     if (state.openSnack) {
       setTimeout(() => {
         navigate("/login");
-      }, 150);
+      }, 1500);
     }
   }, [state.openSnack]);
 

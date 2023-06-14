@@ -23,6 +23,8 @@ const EditProfile = () => {
   const GlobalState = useContext(StateContext);
 
   const initialState = {
+    first_name: GlobalState.userFirstName,
+    last_name: GlobalState.userLastName,
     username: GlobalState.userUsername,
     email: GlobalState.userEmail,
     sendRequest: 0,
@@ -32,6 +34,13 @@ const EditProfile = () => {
 
   function ReducerFuction(draft, action) {
     switch (action.type) {
+      case "catchFirstNameChange":
+        console.log("changeeee   " + draft.first_name + "  " + action.firstNameChosen)
+        draft.first_name = action.firstNameChosen;
+        break;
+        case "catchLastNameChange":
+        draft.last_name = action.lastNameChosen;
+        break;
       case "catchUsernameChange":
         draft.username = action.usernameChosen;
         break;
@@ -65,14 +74,10 @@ const EditProfile = () => {
     if (state.sendRequest) {
       async function UpdateProfile() {
         const formData = new FormData();
-        console.log("usernamse update" + state.username);
-
+        formData.append("first_name", state.first_name);
+        formData.append("last_name", state.last_name);
         formData.append("username", state.username);
         formData.append("email", state.email);
-        //   formData.append("phone_number", state.phoneNumberValue);
-        //   formData.append("bio", state.bioValue);
-        //   formData.append("profile_picture", state.profilePictureValue);
-        //   formData.append("seller", GlobalState.userId);
 
         try {
           const response = await Axios.patch(
@@ -128,15 +133,15 @@ const EditProfile = () => {
 
                 <Grid item container style={{ marginTop: "1rem" }}>
                   <TextField
-                    id="username"
-                    label="username*"
+                    id="firstName"
+                    label="firstName"
                     variant="outlined"
                     fullWidth
-                    value={state.username}
+                    value={state.first_name}
                     onChange={(e) =>
                       dispatch({
-                        type: "catchUsernameChange",
-                        usernameChosen: e.target.value,
+                        type: "catchFirstNameChange",
+                        firstNameChosen: e.target.value,
                       })
                     }
                   />
@@ -144,15 +149,15 @@ const EditProfile = () => {
 
                 <Grid item container style={{ marginTop: "1rem" }}>
                   <TextField
-                    id="email"
-                    label="email*"
+                    id="lastName"
+                    label="lastName*"
                     variant="outlined"
                     fullWidth
-                    value={state.email}
+                    value={state.last_name}
                     onChange={(e) =>
                       dispatch({
-                        type: "catchEmailChange",
-                        emailChosen: e.target.value,
+                        type: "catchLastNameChange",
+                        lastNameChosen: e.target.value,
                       })
                     }
                   />

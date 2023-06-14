@@ -63,6 +63,7 @@ function App() {
       localStorage.setItem("theUserEmail", state.userEmail);
       localStorage.setItem("theUserId", state.userId);
       localStorage.setItem("theUserToken", state.userToken);
+      console.log(state.userUsername + " locallllll")
     } else {
       localStorage.removeItem("theUserFirstName");
       localStorage.removeItem("theUserLastName");

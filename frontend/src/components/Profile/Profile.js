@@ -48,6 +48,8 @@ const Profile = () => {
         draft.userProfile.first_name = action.profileObject.first_name;
         draft.userProfile.last_name = action.profileObject.last_name;
         draft.userProfile.username = action.profileObject.username;
+        console.log(action.profileObject.first_name + " action.profileObject.first_name")
+        console.log(draft.userProfile.first_name+ " draft.userProfile.first_name")
         break;
 
       case "loadingDone":
@@ -102,6 +104,7 @@ const Profile = () => {
               Hello{" "}
               <span className={classes.profile_span}>
                 {GlobalState.userUsername}
+                
               </span>
               <br/>
               <span className={classes.profile_span}>
@@ -109,7 +112,7 @@ const Profile = () => {
               </span>
               <br/>
               <span className={classes.profile_span}>
-                {GlobalState.userLastName}
+              {GlobalState.userLastName}
               </span>
               <Grid>
                 <Button onClick={handelUpdateProfile}>Edit profile</Button>

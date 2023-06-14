@@ -5,12 +5,19 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
-
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email','first_name', 'last_name']
+    def get_full_name(self):
+        full_name = '%s %s' % (self.last_name.upper(), self.first_name)
+        return full_name.strip()
+  
 
 # class Profile(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     first_name = models.CharField(max_length=150)
+#     last_name = models.CharField(max_length=150)
 #     # agency_name = models.CharField(max_length=100, null=True, blank=True)
 #     # phone_number = models.CharField(max_length=25, null=True, blank=True)
 #     # bio = models.TextField(null=True, blank=True)
