@@ -1,7 +1,13 @@
-.profile_details{
+.profile_headline{
+    font-size: x-large;
     text-align:center;
     margin-top: 5rem;
-    font-size: xx-large;
+    margin-bottom: 5rem;
+
+}
+.profile_details{
+    margin-top: 5rem;
+
 }
 .profile_span{
     color: #1d71cb;

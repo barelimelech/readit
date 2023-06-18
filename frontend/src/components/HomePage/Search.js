@@ -1,7 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Search as SearchIcon } from "@mui/icons-material";
 import PopupMessage from "./PopupMessage";
 import { useNavigate } from "react-router-dom";
+import Axios from "axios";
+import { useImmerReducer } from "use-immer";
 
 //Contexts
 import StateContext from "../../contexts/StateContext";
@@ -15,7 +17,7 @@ import {
   DialogActions,
 } from "@mui/material";
 
-// var KEY = 'AIzaSyA2q8MGCoPBhqqTxsUo-w1sUscgu9H9DQE'
+// var KEY = 'AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU'
 // var CX = '858f2fc5425274d63'
 const Search = ({ onSearch }) => {
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ const Search = ({ onSearch }) => {
   const GlobalState = useContext(StateContext);
   const GlobalDispatch = useContext(DispatchContext);
   const [showPopup, setShowPopup] = useState(false);
+  const [searchBtn, setSerachBtn] = useState(false);
 
   const handleSearchLater = () => {
     if (!GlobalState.userIsLogged) {
@@ -36,9 +39,9 @@ const Search = ({ onSearch }) => {
 
   const handleSearch = () => {
     if (!GlobalState.userIsLogged) {
-      console.log("bar");
       setShowPopup(true);
     } else {
+      setSerachBtn(true);
       setShowPopup(false);
     }
     // fetch("https://www.googleapis.com/customsearch/v1?key={AIzaSyA2q8MGCoPBhqqTxsUo-w1sUscgu9H9DQE}&cx={858f2fc5425274d63}&q=" + searchTerm)
@@ -50,6 +53,28 @@ const Search = ({ onSearch }) => {
     // console.log(searchTerm);
     // onSearch(searchTerm);
   };
+
+  useEffect(() => {
+    if (searchBtn) {
+      const source = Axios.CancelToken.source();
+      async function addSearch() {
+        const formData = new FormData();
+        formData.append("user", GlobalState.userId);
+				formData.append("text", searchTerm);
+				formData.append("isNew", true);
+				formData.append("isDeleted", false);
+
+        try {
+          
+          const response = await Axios.post(
+            "http://localhost:8000/api/searches/create/",formData
+            
+          );
+        } catch (error) {}
+      }
+      addSearch();
+    }
+  }, [searchBtn]);
 
   // useEffect(()=>{
   //   if(tmp!==true){
@@ -124,7 +149,6 @@ const Search = ({ onSearch }) => {
               </DialogActions>
             </Dialog>
           )}
-          {/* {showPopup && <PopupMessage/>} */}
         </Box>
         <Box margin="auto" marginTop={1}>
           <Button

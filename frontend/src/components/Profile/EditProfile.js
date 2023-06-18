@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
@@ -18,15 +18,15 @@ import {
   StyledEngineProvider,
 } from "@mui/material";
 
-const EditProfile = () => {
+const EditProfile = (props) => {
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
 
   const initialState = {
-    first_name: GlobalState.userFirstName,
-    last_name: GlobalState.userLastName,
-    username: GlobalState.userUsername,
-    email: GlobalState.userEmail,
+    first_name: props.userProfile.first_name,
+    last_name: props.userProfile.last_name,
+    username: props.userProfile.username,
+    email: props.userProfile.email,
     sendRequest: 0,
     openSnack: false,
     disabledBtn: false,
@@ -35,8 +35,8 @@ const EditProfile = () => {
   function ReducerFuction(draft, action) {
     switch (action.type) {
       case "catchFirstNameChange":
-        console.log("changeeee   " + draft.first_name + "  " + action.firstNameChosen)
         draft.first_name = action.firstNameChosen;
+        // GlobalState.userFirstName = action.firstNameChosen;
         break;
         case "catchLastNameChange":
         draft.last_name = action.lastNameChosen;

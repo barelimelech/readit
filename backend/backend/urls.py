@@ -22,6 +22,11 @@ from users.api import views as users_api_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/searches', searches_api_views.SearchesList.as_view()),
+    path('api/searches/create/', searches_api_views.SearchCreate.as_view()),
+    path('api/searches/<int:pk>/', searches_api_views.SearchDetail.as_view()),
+    # path('api/profiles/<int:pk>/', users_api_views.ProfileDetail.as_view()),
+    path('api/searches/<int:pk>/delete/',searches_api_views.SearchDelete.as_view()),
+    path('api/searches/<int:pk>/update/',searches_api_views.SearchUpdate.as_view()),
 
     path('api-auth-djoser/', include('djoser.urls')),
     path('api-auth-djoser/', include('djoser.urls.authtoken')),

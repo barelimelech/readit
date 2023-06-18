@@ -17,7 +17,9 @@ import {
   Grid,
   Typography,
   StyledEngineProvider,
+  Paper,
 } from "@mui/material";
+import EditProfile from "./EditProfile";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -29,6 +31,7 @@ const Profile = () => {
       first_name: "",
       last_name: "",
       username: "",
+      email: "",
     },
     dataIsLoading: true,
   };
@@ -48,8 +51,7 @@ const Profile = () => {
         draft.userProfile.first_name = action.profileObject.first_name;
         draft.userProfile.last_name = action.profileObject.last_name;
         draft.userProfile.username = action.profileObject.username;
-        console.log(action.profileObject.first_name + " action.profileObject.first_name")
-        console.log(draft.userProfile.first_name+ " draft.userProfile.first_name")
+        draft.userProfile.email = action.profileObject.email;
         break;
 
       case "loadingDone":
@@ -84,43 +86,54 @@ const Profile = () => {
   const handelUpdateProfile = () => {
     // <ProfileUpdate userProfile={state.userProfile} />
     setIsEditing(true);
-    navigate("/updateprofile");
+    // navigate("/updateprofile");
   };
 
   return (
     <StyledEngineProvider injectFirst>
-      <Grid
-        item
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item>
-          <Typography className={classes.profile_details}>
-            <Box
-             sx={{ p:10, width: 900,  boxShadow: 14 }}
-            >
-              Hello{" "}
-              <span className={classes.profile_span}>
-                {GlobalState.userUsername}
-                
-              </span>
-              <br/>
-              <span className={classes.profile_span}>
-                {GlobalState.userFirstName}
-              </span>
-              <br/>
-              <span className={classes.profile_span}>
-              {GlobalState.userLastName}
-              </span>
-              <Grid>
-                <Button onClick={handelUpdateProfile}>Edit profile</Button>
-              </Grid>
-            </Box>
-          </Typography>
+      {isEditing === false ? (
+        <Grid
+          item
+          container
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid item>
+            <Typography className={classes.profile_headline}>
+              <Box sx={{ p: 10, width: 900, boxShadow: 14 }}>
+                <h1> Hello</h1>
+                <br />
+                username:
+
+                <Paper className={classes.profile_span}>
+                   {GlobalState.userUsername}
+                </Paper>
+                <br />
+                first name:
+                <Paper className={classes.profile_span}>
+                   {GlobalState.userFirstName}
+                </Paper>
+                <br />
+                last name:
+                <Paper className={classes.profile_span}>
+                  {GlobalState.userLastName}
+                </Paper>
+                <br />
+                email:
+                <Paper className={classes.profile_span}>
+                   {GlobalState.userEmail}
+                </Paper>
+                <Grid>
+                  <Button size="large" onClick={handelUpdateProfile}>Edit profile</Button>
+                </Grid>
+              </Box>
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
+      ) : (
+        <EditProfile userProfile={state.userProfile}></EditProfile>
+      )}
     </StyledEngineProvider>
   );
 };
