@@ -42,43 +42,6 @@ const Search = ({ onSearch }) => {
     }
   };
 
-  const handleSearch = async () => {
-    if (!GlobalState.userIsLogged) {
-      setShowPopup(true);
-    } else {
-      setShowPopup(false);
-      try {
-        const apiKey = "AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU";
-        const cx = "858f2fc5425274d63";
-        const numResults = 10; // Number of results to fetch
-
-        const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${searchTerm}&num=${numResults}`;
-        const response = await Axios.get(apiUrl);
-        setSearchResults(response.data.items);
-        // console.log("res : "+ searchResults.size);
-        // navigate('/results', { state: { searchResults } });
-        // navigate(`/results/${searchResults}`);
-        navigate("/results");
-        // navigate('/results',  {  state: { searchResults } } );
-        // navigate(`/results?searchTerm=${searchTerm}`, { state: { searchResults } });
-
-      } catch (error) {
-        console.error("Error searching:", error);
-      }
-      setSerachBtn(true);
-
-    }
-
-    // fetch("https://www.googleapis.com/customsearch/v1?key={AIzaSyA2q8MGCoPBhqqTxsUo-w1sUscgu9H9DQE}&cx={858f2fc5425274d63}&q=" + searchTerm)
-    // .then(response => response.json())
-    // .then(response => {
-    //     // this.setState({ results: response.items });
-    //     console.log(response.items);
-    // });
-    // console.log(searchTerm);
-    // onSearch(searchTerm);
-  };
-
   useEffect(() => {
     if (searchBtn) {
       const source = Axios.CancelToken.source();
@@ -100,6 +63,45 @@ const Search = ({ onSearch }) => {
     }
   }, [searchBtn]);
 
+  useEffect(() => {
+    if (searchBtn) {
+      const source = Axios.CancelToken.source();
+      async function getSearchResults() {
+        try {
+          const apiKey = "AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU";
+          const cx = "858f2fc5425274d63";
+          const numResults = 10; // Number of results to fetch
+          const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${searchTerm}&num=${numResults}`;
+          const response = await Axios.get(apiUrl);
+          setSearchResults(response.data.items);
+          navigate("/results");
+        } catch (error) {}
+      }
+      getSearchResults();
+    }
+  }, [searchBtn]);
+
+  const handleSearch = async () => {
+    if (!GlobalState.userIsLogged) {
+      setShowPopup(true);
+    } else {
+      setShowPopup(false);
+      // try {
+      //   const apiKey = "AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU";
+      //   const cx = "858f2fc5425274d63";
+      //   const numResults = 10; // Number of results to fetch
+
+      //   const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${searchTerm}&num=${numResults}`;
+      //   const response = await Axios.get(apiUrl);
+      //   setSearchResults(response.data.items);
+      //   navigate("/results");
+      // } catch (error) {
+      //   console.error("Error searching:", error);
+      // }
+      setSerachBtn(true);
+    }
+  };
+
   // useEffect(()=>{
   //   if(tmp!==true){
   //     <PopupMessage/>
@@ -115,30 +117,27 @@ const Search = ({ onSearch }) => {
   };
   return (
     <div>
-      {/* {searchBtn === false? ( */}
-
-    
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      height="100vh"
-    >
       <Box
         display="flex"
-        flexDirection="column"
-        // alignItems="center"
-        width="500px" // Adjust the width as desired
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
       >
-        <TextField
-          label="Search something..."
-          value={searchTerm}
-          onChange={(event) => setSearchTerm(event.target.value)}
-          onKeyPress={handleKeyPress}
-        />
-        {/* <IconButton onClick={handleSearch}></IconButton> */}
+        <Box
+          display="flex"
+          flexDirection="column"
+          // alignItems="center"
+          width="500px" // Adjust the width as desired
+        >
+          <TextField
+            label="Search something..."
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            onKeyPress={handleKeyPress}
+          />
+          {/* <IconButton onClick={handleSearch}></IconButton> */}
 
-        {/* <Autocomplete
+          {/* <Autocomplete
           //   freeSolo
           options={[]}
           renderInput={(params) => (
@@ -159,39 +158,37 @@ const Search = ({ onSearch }) => {
           )}
         /> */}
 
-        <Box margin="auto" marginTop={1}>
-          <Button
-            value={searchTerm}
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={handleSearch}
-          >
-            Search
-          </Button>
-          {showPopup && (
-            <Dialog open={showPopup} onClose={() => setShowPopup(false)}>
-              <DialogTitle>For search, log in first</DialogTitle>
-              <DialogActions>
-                <Button onClick={() => navigate("/login")}>Login</Button>
-              </DialogActions>
-            </Dialog>
-          )}
-        </Box>
-        <Box margin="auto" marginTop={1}>
-          <Button
-            variant="contained"
-            color="secondary"
-            marginLeft={1}
-            onClick={handleSearchLater}
-          >
-            Search Later
-          </Button>
+          <Box margin="auto" marginTop={1}>
+            <Button
+              value={searchTerm}
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={handleSearch}
+            >
+              Search
+            </Button>
+            {showPopup && (
+              <Dialog open={showPopup} onClose={() => setShowPopup(false)}>
+                <DialogTitle>For search, log in first</DialogTitle>
+                <DialogActions>
+                  <Button onClick={() => navigate("/login")}>Login</Button>
+                </DialogActions>
+              </Dialog>
+            )}
+          </Box>
+          <Box margin="auto" marginTop={1}>
+            <Button
+              variant="contained"
+              color="secondary"
+              marginLeft={1}
+              onClick={handleSearchLater}
+            >
+              Search Later
+            </Button>
+          </Box>
         </Box>
       </Box>
-    
-    </Box>
-    {/* ) : (<SearchesList searchResults = {searchResults}> </SearchesList> )} */}
     </div>
   );
 };
