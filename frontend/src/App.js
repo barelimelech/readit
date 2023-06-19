@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useImmerReducer } from "use-immer";
 
-import Searches from "./components/HomePage/SearchesList";
+import SearchesList from "./components/HomePage/SearchesList";
 import Home from "./components/HomePage/Home";
 import Login from "./components/Authentication/Login";
 import Header from "./components/Header";
@@ -17,7 +17,7 @@ import DispatchContext from './contexts/DispatchContext';
 import StateContext from './contexts/StateContext';
 import Profile from "./components/Profile/Profile";
 import EditProfile from "./components/Profile/EditProfile";
-
+import SearchContext from "./contexts/SearchContext";
 
 function App() {
 
@@ -53,6 +53,7 @@ function App() {
   }
 
   const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
+  const [searchResults, setSearchResults] = useState([]);
 
 
   useEffect(() => {
@@ -75,13 +76,14 @@ function App() {
   }, [state.userIsLogged]);
   return (
     <StateContext.Provider value={state}>
-
     <DispatchContext.Provider value={dispatch}>
+    <SearchContext.Provider value={{ searchResults, setSearchResults }}>
+
     <BrowserRouter>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/listings" element={<Searches />} />
+        <Route path="/results" element={<SearchesList/>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
@@ -91,6 +93,8 @@ function App() {
         {/* <Route path="/history" element={<History />} /> */}
       </Routes>
     </BrowserRouter>
+    </SearchContext.Provider>
+
     </DispatchContext.Provider>
     </StateContext.Provider>
 

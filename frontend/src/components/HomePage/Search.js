@@ -1,13 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Search as SearchIcon } from "@mui/icons-material";
+import { Key, Search as SearchIcon } from "@mui/icons-material";
 import PopupMessage from "./PopupMessage";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
-
+import SearchesList from "./SearchesList";
 //Contexts
 import StateContext from "../../contexts/StateContext";
 import DispatchContext from "../../contexts/DispatchContext";
+import SearchContext from "../../contexts/SearchContext";
+
 import {
   Button,
   Box,
@@ -15,10 +17,11 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 
-// var KEY = 'AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU'
-// var CX = '858f2fc5425274d63'
 const Search = ({ onSearch }) => {
   const navigate = useNavigate();
 
@@ -27,6 +30,8 @@ const Search = ({ onSearch }) => {
   const GlobalDispatch = useContext(DispatchContext);
   const [showPopup, setShowPopup] = useState(false);
   const [searchBtn, setSerachBtn] = useState(false);
+  // const [searchResults, setSearchResults] = useState([]);
+  const { setSearchResults } = useContext(SearchContext);
 
   const handleSearchLater = () => {
     if (!GlobalState.userIsLogged) {
@@ -37,13 +42,33 @@ const Search = ({ onSearch }) => {
     }
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!GlobalState.userIsLogged) {
       setShowPopup(true);
     } else {
-      setSerachBtn(true);
       setShowPopup(false);
+      try {
+        const apiKey = "AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU";
+        const cx = "858f2fc5425274d63";
+        const numResults = 10; // Number of results to fetch
+
+        const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${searchTerm}&num=${numResults}`;
+        const response = await Axios.get(apiUrl);
+        setSearchResults(response.data.items);
+        // console.log("res : "+ searchResults.size);
+        // navigate('/results', { state: { searchResults } });
+        // navigate(`/results/${searchResults}`);
+        navigate("/results");
+        // navigate('/results',  {  state: { searchResults } } );
+        // navigate(`/results?searchTerm=${searchTerm}`, { state: { searchResults } });
+
+      } catch (error) {
+        console.error("Error searching:", error);
+      }
+      setSerachBtn(true);
+
     }
+
     // fetch("https://www.googleapis.com/customsearch/v1?key={AIzaSyA2q8MGCoPBhqqTxsUo-w1sUscgu9H9DQE}&cx={858f2fc5425274d63}&q=" + searchTerm)
     // .then(response => response.json())
     // .then(response => {
@@ -60,15 +85,14 @@ const Search = ({ onSearch }) => {
       async function addSearch() {
         const formData = new FormData();
         formData.append("user", GlobalState.userId);
-				formData.append("text", searchTerm);
-				formData.append("isNew", true);
-				formData.append("isDeleted", false);
+        formData.append("text", searchTerm);
+        formData.append("isNew", true);
+        formData.append("isDeleted", false);
 
         try {
-          
           const response = await Axios.post(
-            "http://localhost:8000/api/searches/create/",formData
-            
+            "http://localhost:8000/api/searches/create/",
+            formData
           );
         } catch (error) {}
       }
@@ -90,6 +114,10 @@ const Search = ({ onSearch }) => {
     }
   };
   return (
+    <div>
+      {/* {searchBtn === false? ( */}
+
+    
     <Box
       display="flex"
       justifyContent="center"
@@ -161,7 +189,10 @@ const Search = ({ onSearch }) => {
           </Button>
         </Box>
       </Box>
+    
     </Box>
+    {/* ) : (<SearchesList searchResults = {searchResults}> </SearchesList> )} */}
+    </div>
   );
 };
 
