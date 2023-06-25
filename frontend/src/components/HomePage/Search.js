@@ -35,7 +35,6 @@ const Search = ({ onSearch }) => {
 
   const handleSearchLater = () => {
     if (!GlobalState.userIsLogged) {
-      console.log("bar");
       setShowPopup(true);
     } else {
       setShowPopup(false);

@@ -1,4 +1,5 @@
-import { useState, useContext, useEffect } from "react";
+import React ,
+ { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 
@@ -9,15 +10,19 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import MenuItem from "@mui/material/MenuItem";
 import {BsFillPersonFill} from "react-icons/bs"
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import RecentActorsIcon from "@mui/icons-material/RecentActors";
+import Menu from './Menu/Menu';
 
 //Contexts
 import StateContext from "../contexts/StateContext";
 import DispatchContext from "../contexts/DispatchContext";
 
-import { Typography, Button, StyledEngineProvider, Grid } from "@mui/material";
+import { Typography, Button, StyledEngineProvider,Drawer, List,ListItemButton,ListItem,  ListItemIcon,ListItemText } from "@mui/material";
 
 import BurgerSidebarMenu from "./Menu/BurgerSidebarMenu";
-
+import MenuIcon from "@mui/icons-material/Menu";
 const Header = () => {
   const navigate = useNavigate();
 
@@ -31,28 +36,30 @@ const Header = () => {
     }
   }, [showMenu]);
 
-  const handleCloseNavMenu = () => {};
 
-  const words = [
-    "apple",
-    "banana",
-    "cherry",
-    "date",
-    "elderberry",
-    "fig",
-    "grape",
-    "apple",
-    "banana",
-    "cherry",
-    "date",
-    "elderberry",
-    "fig",
-    "grape",
-  ];
+ 
   const handleWordClick = (word) => {
     console.log("Clicked word:", word);
     // Perform any desired action with the clicked word
   };
+
+  // const [drawerState, setDrawerState] = React.useState({
+  //   top: false,
+  //   left: false,
+  //   bottom: false,
+  //   right: false,
+  // });
+
+  // const toggleDrawer = (anchor, open) => (event) => {
+  //   if (
+  //     event.type === "keydown" &&
+  //     (event.key === "Tab" || event.key === "Shift")
+  //   ) {
+  //     return;
+  //   }
+
+  //   setDrawerState({ ...drawerState, [anchor]: open });
+  // };
 
   async function handleLogout() {
     const confirmLogout = window.confirm("Are you sure you want to leave?");
@@ -78,12 +85,15 @@ const Header = () => {
           <AppBar position="static">
             <Toolbar>
               {GlobalState.userIsLogged && (
-                <MenuItem style={{ color: "white" }}>
-                  <BurgerSidebarMenu
-                    words={words}
-                    onWordClick={handleWordClick}
-                  />
-                </MenuItem>
+            
+                // <MenuItem style={{ color: "white" }}>
+                //   <BurgerSidebarMenu
+                //     words={words}
+                //     onWordClick={handleWordClick}
+                //   />
+                // </MenuItem>
+                <Menu/>
+
               )}
               <MenuItem
                 color="inherit"
