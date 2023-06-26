@@ -27,6 +27,7 @@ urlpatterns = [
     # path('api/profiles/<int:pk>/', users_api_views.ProfileDetail.as_view()),
     path('api/searches/<int:pk>/delete/',searches_api_views.SearchDelete.as_view()),
     path('api/searches/<int:pk>/update/',searches_api_views.SearchUpdate.as_view()),
+    path('api/searches/upsert/',searches_api_views.UpsertResourceView.as_view()),
 
     path('api-auth-djoser/', include('djoser.urls')),
     path('api-auth-djoser/', include('djoser.urls.authtoken')),

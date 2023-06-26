@@ -86,21 +86,23 @@ const Menu = (props) => {
             `http://localhost:8000/api/searches/${wordClicked.id}/update/`,
             formData
           );
-        } catch (error) {}
+        } catch (error) {
+          console.log("the error : " + error);
+        }
       }
       updateSearch();
     }
   }, [wordClicked]);
 
-  const handelWordToHistory= (item) => {
-    console.log("3 " +item.id);
+  const handelWordToHistory = (item) => {
+    console.log("3 " + item.id);
     setWordClicked(item);
     setIsClicked(true);
   };
 
-  const handelWordDelete= (item) => {
+  const handelWordDelete = (item) => {
     setWordClickedToDelete(item);
-    console.log("word deletee")
+    console.log("word deletee");
   };
 
   useEffect(() => {
@@ -109,7 +111,8 @@ const Menu = (props) => {
       async function updateSearch() {
         try {
           const response = await Axios.delete(
-            `http://localhost:8000/api/searches/${wordClickedToDelete.id}/delete/`          );
+            `http://localhost:8000/api/searches/${wordClickedToDelete.id}/delete/`
+          );
         } catch (error) {}
       }
       updateSearch();
@@ -129,58 +132,61 @@ const Menu = (props) => {
         <h3 style={{ marginLeft: "10px", color: "black" }}>Upcoming</h3>
         <Paper style={{ maxHeight: 400, overflow: "auto" }}>
           <List>
-            {searchList.length === 0 && <p>No searches yet...</p>}
-            {searchList.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => handleWordClick(item.text)}
-                style={{
-                  cursor: "pointer",
-                  padding: "8px",
-                  borderRadius: "4px",
-                  margin: "4px 9",
-                }}
-              >
-                {String(item.user) === String(GlobalState.userId) &&
-                  item.isNew === true && (
+            {/* {searchList.length === 0 && <p>No searches yet...</p>} */}
+            {searchList.map(
+              (item) =>
+                String(item.user) === String(GlobalState.userId) &&
+                item.isNew === true && (
+                  <div
+                    key={item.id}
+                    onClick={() => handleWordClick(item.text)}
+                    style={{
+                      cursor: "pointer",
+                      padding: "8px",
+                      borderRadius: "4px",
+                      margin: "4px 9",
+                    }}
+                  >
                     <div>
                       <Button onClick={() => handelWordToHistory(item)}>
                         <AiFillDislike />
                       </Button>
                       <Button style={{ color: "black" }}>{item.text}</Button>
                     </div>
-                  )}
-              </div>
-            ))}
+                  </div>
+                )
+            )}
           </List>
         </Paper>
 
         <h3 style={{ marginLeft: "10px", color: "black" }}>History</h3>
         <Paper style={{ maxHeight: 400, overflow: "auto" }}>
           <List>
-          
-            {searchList.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => handleWordClick(item.text)}
-                style={{
-                  cursor: "pointer",
-                  padding: "8px",
-                  borderRadius: "4px",
-                  margin: "4px 9",
-                }}
-              >
-                {String(item.user) === String(GlobalState.userId) && item.isNew === false && (
-                  <div>
-                    <Button onClick={() => handelWordDelete(item)}>
-                    <AiFillDelete />
-                    </Button>
-                    <Button>{item.text}</Button>
+            {searchList.map(
+              (item) =>
+                String(item.user) === String(GlobalState.userId) &&
+                item.isNew === false && (
+                  <div
+                    key={item.id}
+                    onClick={() => handleWordClick(item.text)}
+                    style={{
+                      cursor: "pointer",
+                      padding: "8px",
+                      borderRadius: "4px",
+                      margin: "4px 9",
+                    }}
+                  >
+                    <div>
+                      <Button onClick={() => handelWordDelete(item)}>
+                        <AiFillDelete />
+                      </Button>
+                      <Button>{item.text}</Button>
+                    </div>
+
+                    {/* {item.isNew === true && <p>No history yet...</p>} */}
                   </div>
-                )}
-                {item.isNew === true && <p>No history yet...</p>}
-              </div>
-            ))}
+                )
+            )}
           </List>
         </Paper>
       </Drawer>

@@ -17,6 +17,7 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
+  Alert,
   List,
   ListItem,
   ListItemText,
@@ -30,6 +31,11 @@ const Search = ({ onSearch }) => {
   const GlobalDispatch = useContext(DispatchContext);
   const [showPopup, setShowPopup] = useState(false);
   const [searchBtn, setSerachBtn] = useState(false);
+  const [searchLaterBtn, setSerachLaterBtn] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [textError, setTextError] = useState("");
+
+
   // const [searchResults, setSearchResults] = useState([]);
   const { setSearchResults } = useContext(SearchContext);
 
@@ -38,17 +44,20 @@ const Search = ({ onSearch }) => {
       setShowPopup(true);
     } else {
       setShowPopup(false);
+      setSerachLaterBtn(true);
     }
   };
 
   useEffect(() => {
     if (searchBtn) {
+      setHasError(false);
+      setSerachBtn(false);
       const source = Axios.CancelToken.source();
       async function addSearch() {
         const formData = new FormData();
         formData.append("user", GlobalState.userId);
         formData.append("text", searchTerm);
-        formData.append("isNew", true);
+        formData.append("isNew", false);
         formData.append("isDeleted", false);
 
         try {
@@ -56,11 +65,49 @@ const Search = ({ onSearch }) => {
             "http://localhost:8000/api/searches/create/",
             formData
           );
-        } catch (error) {}
+
+        } catch (error) {
+          setHasError(true);
+          if(error.response.data.text){
+
+            setTextError("the search is already exist")
+          }
+        }
       }
       addSearch();
     }
   }, [searchBtn]);
+
+  useEffect(() => {
+    if (searchLaterBtn) {
+      setHasError(false);
+      setSerachLaterBtn(false);
+      const source = Axios.CancelToken.source();
+      async function addSearch() {
+        const formData = new FormData();
+        formData.append("user", GlobalState.userId);
+        formData.append("text", searchTerm);
+        formData.append("isNew", true);
+        formData.append("isDeleted", false);
+        formData.append("timestamp", new Date().toISOString());
+
+        try {
+          const response = await Axios.post(
+            "http://localhost:8000/api/searches/upsert/",
+            formData
+          );
+
+        } catch (error) {
+          setHasError(true);
+          // if(error.response.data.text){
+
+          //   setTextError("the search is already exist")
+          // }
+        }
+      }
+      addSearch();
+    }
+  }, [ searchLaterBtn]);
 
   useEffect(() => {
     if (searchBtn) {
@@ -85,29 +132,10 @@ const Search = ({ onSearch }) => {
       setShowPopup(true);
     } else {
       setShowPopup(false);
-      // try {
-      //   const apiKey = "AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU";
-      //   const cx = "858f2fc5425274d63";
-      //   const numResults = 10; // Number of results to fetch
-
-      //   const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${searchTerm}&num=${numResults}`;
-      //   const response = await Axios.get(apiUrl);
-      //   setSearchResults(response.data.items);
-      //   navigate("/results");
-      // } catch (error) {
-      //   console.error("Error searching:", error);
-      // }
       setSerachBtn(true);
     }
   };
 
-  // useEffect(()=>{
-  //   if(tmp!==true){
-  //     <PopupMessage/>
-
-  //   }
-
-  // },[tmp])
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -156,7 +184,7 @@ const Search = ({ onSearch }) => {
             />
           )}
         /> */}
-
+          {hasError &&  <Alert severity="error">{textError}</Alert>}
           <Box margin="auto" marginTop={1}>
             <Button
               value={searchTerm}
