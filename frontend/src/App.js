@@ -54,6 +54,7 @@ function App() {
 
   const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
   const [searchResults, setSearchResults] = useState([]);
+  const [searchList, setSearchList] = useState([]);
 
 
   useEffect(() => {
@@ -64,7 +65,6 @@ function App() {
       localStorage.setItem("theUserEmail", state.userEmail);
       localStorage.setItem("theUserId", state.userId);
       localStorage.setItem("theUserToken", state.userToken);
-      console.log(state.userUsername + " locallllll")
     } else {
       localStorage.removeItem("theUserFirstName");
       localStorage.removeItem("theUserLastName");
@@ -77,7 +77,7 @@ function App() {
   return (
     <StateContext.Provider value={state}>
     <DispatchContext.Provider value={dispatch}>
-    <SearchContext.Provider value={{ searchResults, setSearchResults }}>
+    <SearchContext.Provider value={{ searchResults, setSearchResults, searchList, setSearchList }}>
 
     <BrowserRouter>
       <Header />

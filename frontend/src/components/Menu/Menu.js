@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { styled, useTheme } from "@mui/material/styles";
 import { AiFillDelete, AiFillDislike } from "react-icons/ai";
+import SearchContext from "../../contexts/SearchContext";
 
 import {
   Button,
@@ -27,10 +28,12 @@ import StateContext from "../../contexts/StateContext";
 const Menu = (props) => {
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
-  const [searchList, setSearchList] = useState([]);
+  //   const [searchList, setSearchList] = useState([]);
   const [wordClicked, setWordClicked] = useState([]);
   const [wordClickedToDelete, setWordClickedToDelete] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const { searchList, setSearchList } = useContext(SearchContext);
+  const [initialDataFetched, setInitialDataFetched] = useState(false);
 
   const handleWordClick = (word) => {
     console.log(word);
@@ -59,17 +62,17 @@ const Menu = (props) => {
   useEffect(() => {
     async function getAllSearches() {
       try {
-        await Axios.get(`http://localhost:8000/api/searches`).then(
-          (response) => {
-            setSearchList(response.data);
-          }
-        );
+        const response = await Axios.get(`http://localhost:8000/api/searches`);
+        setSearchList(response.data);
+        setInitialDataFetched(true);
       } catch (e) {
         console.log("serxheslist error : " + e);
       }
     }
-    getAllSearches();
-  }, [searchList]);
+    if (!initialDataFetched) {
+      getAllSearches();
+    }
+  }, [setSearchList]);
 
   useEffect(() => {
     if (wordClicked.text !== "") {
@@ -80,19 +83,28 @@ const Menu = (props) => {
         formData.append("text", wordClicked.text);
         formData.append("isNew", false);
         formData.append("isDeleted", false);
+        formData.append("timestamp", new Date().toISOString());
 
         try {
           const response = await Axios.patch(
             `http://localhost:8000/api/searches/${wordClicked.id}/update/`,
             formData
           );
+          setSearchList((prevSearchList) =>
+          prevSearchList.map((item) => {
+            if (item.id === wordClicked.id) {
+              return { ...item, ...response.data };
+            }
+            return item;
+          })
+        );
         } catch (error) {
           console.log("the error : " + error);
         }
       }
       updateSearch();
     }
-  }, [wordClicked]);
+  }, [wordClicked, setSearchList]);
 
   const handelWordToHistory = (item) => {
     console.log("3 " + item.id);
@@ -113,11 +125,14 @@ const Menu = (props) => {
           const response = await Axios.delete(
             `http://localhost:8000/api/searches/${wordClickedToDelete.id}/delete/`
           );
+          setSearchList((prevSearchList) =>
+            prevSearchList.filter((item) => item.id !== wordClickedToDelete.id)
+          );
         } catch (error) {}
       }
       updateSearch();
     }
-  }, [wordClickedToDelete]);
+  }, [wordClickedToDelete, setSearchList]);
 
   return (
     <React.Fragment key={"left"}>

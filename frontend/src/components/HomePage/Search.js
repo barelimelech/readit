@@ -38,6 +38,7 @@ const Search = ({ onSearch }) => {
 
   // const [searchResults, setSearchResults] = useState([]);
   const { setSearchResults } = useContext(SearchContext);
+  const { searchList, setSearchList } = useContext(SearchContext);
 
   const handleSearchLater = () => {
     if (!GlobalState.userIsLogged) {
@@ -59,13 +60,18 @@ const Search = ({ onSearch }) => {
         formData.append("text", searchTerm);
         formData.append("isNew", false);
         formData.append("isDeleted", false);
+        formData.append("timestamp", new Date().toISOString());
 
         try {
           const response = await Axios.post(
             "http://localhost:8000/api/searches/create/",
             formData
           );
+          setSearchList((prevSearchList) => [...prevSearchList, response.data]);
 
+          // const newElement = [...searchList, formData];
+          // //setSearchList((searchList)=> [...searchList, formData]);
+          //   setSearchList(newElement);
         } catch (error) {
           setHasError(true);
           if(error.response.data.text){
@@ -76,7 +82,7 @@ const Search = ({ onSearch }) => {
       }
       addSearch();
     }
-  }, [searchBtn]);
+  }, [searchBtn, setSearchList]);
 
   useEffect(() => {
     if (searchLaterBtn) {
@@ -96,6 +102,7 @@ const Search = ({ onSearch }) => {
             "http://localhost:8000/api/searches/upsert/",
             formData
           );
+          setSearchList((prevSearchList) => [...prevSearchList, response.data]);
 
         } catch (error) {
           setHasError(true);
@@ -107,7 +114,7 @@ const Search = ({ onSearch }) => {
       }
       addSearch();
     }
-  }, [ searchLaterBtn]);
+  }, [ searchLaterBtn, setSearchList]);
 
   useEffect(() => {
     if (searchBtn) {
@@ -121,6 +128,7 @@ const Search = ({ onSearch }) => {
           const response = await Axios.get(apiUrl);
           setSearchResults(response.data.items);
           navigate("/results");
+          // <SearchesList/>
         } catch (error) {}
       }
       getSearchResults();
