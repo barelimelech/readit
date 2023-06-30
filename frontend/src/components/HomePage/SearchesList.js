@@ -1,41 +1,101 @@
-import React,{useContext} from "react";
-import { List, ListItem, ListItemText } from '@mui/material';
-import { useLocation } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import React, { useContext, useState } from "react";
+import { List, ListItem, ListItemText, Grid, Box } from "@mui/material";
+import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import Search from "./Search";
 import SearchContext from "../../contexts/SearchContext";
 
 const SearchesList = (props) => {
-  // const location = useLocation();
-  // const searchResults = location.state?.searchResults || [];
-  // const location = useLocation();
-  // const { searchResults } = location.state;
-
-  // const { searchResults } = props.location.state; 
-  // fetch("http://localhost:8000/api/searches/")
-  //   .then((response) => response.json())
-  //   .then((data) => console.log(data));
-  // const { data } = useParams();
-  // const searchResults = JSON.parse(data);
+ 
   const { searchResults } = useContext(SearchContext);
+  const { globlSearchTerm } = useContext(SearchContext);
+  const [searchTerm, setSearchTerm] = useState(globlSearchTerm);
 
   return (
-    <div>
-      <h2>Search Results</h2>
-      <List>
-        {searchResults.map((result) => (
-          <ListItem key={result.cacheId} alignItems="flex-start">
-            <ListItemText
-              primary={
-                <a href={result.link} target="_blank" rel="noopener noreferrer">
-                  {result.title}
-                </a>
-              }
-              secondary={result.snippet}
-            />
-          </ListItem>
-        ))}
-      </List>
-    </div>
+    <Grid container alignItems="center" display="flex" justifyContent="center">
+      <Grid item xs={12}>
+        <Search />
+      </Grid>
+      <h2 style={{ textAlign: "center" }}>
+        Search Results for {globlSearchTerm}
+      </h2>
+      <Grid
+        item
+        xs={12}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <List>
+          {searchResults.map((result) => (
+            <ListItem key={result.cacheId} alignItems="flex-start">
+              <ListItemText
+                primary={
+                  <a
+                    href={result.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {result.title}
+                  </a>
+                }
+                secondary={result.snippet}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Grid>
+      <h1>Explore other options</h1>
+      <Grid
+        item
+        xs={12}
+        alignItems="center"
+        justifyContent="center"
+        marginLeft="200px"
+        marginRight="200px"
+        marginBottom="200px"
+      >
+        <Box
+          sx={{ p: 2, border: "1px dashed grey" }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          gap="10px"
+        >
+          <a
+            href={`https://www.bing.com/search?q=${globlSearchTerm}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Bing
+          </a>
+
+          <a
+            href={`https://www.mojeek.com/search?q=${globlSearchTerm}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            mojeek
+          </a>
+
+          <a
+            href={`https://search.yahoo.com/search?p=${globlSearchTerm}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            yahoo
+          </a>
+
+          <a
+            href={`https://search.brave.com/search?q=${globlSearchTerm}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            brave
+          </a>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 

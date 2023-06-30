@@ -55,6 +55,8 @@ function App() {
   const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
   const [searchResults, setSearchResults] = useState([]);
   const [searchList, setSearchList] = useState([]);
+  const [globlSearchTerm, setGloblSearchTerm] = useState("");
+  const [globalSearchBtn, setGlobalSearchBtn] = useState(false);
 
 
   useEffect(() => {
@@ -77,7 +79,7 @@ function App() {
   return (
     <StateContext.Provider value={state}>
     <DispatchContext.Provider value={dispatch}>
-    <SearchContext.Provider value={{ searchResults, setSearchResults, searchList, setSearchList }}>
+    <SearchContext.Provider value={{ searchResults, setSearchResults, searchList, setSearchList, globlSearchTerm,setGloblSearchTerm , globalSearchBtn, setGlobalSearchBtn}}>
 
     <BrowserRouter>
       <Header />

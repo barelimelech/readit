@@ -30,13 +30,20 @@ const Menu = (props) => {
   const GlobalState = useContext(StateContext);
   //   const [searchList, setSearchList] = useState([]);
   const [wordClicked, setWordClicked] = useState([]);
+  const [deleteClicked, setDeleteClicked] = useState(false);
   const [wordClickedToDelete, setWordClickedToDelete] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
   const { searchList, setSearchList } = useContext(SearchContext);
   const [initialDataFetched, setInitialDataFetched] = useState(false);
+  const { globlSearchTerm, setGloblSearchTerm } = useContext(SearchContext);
+  const { setSearchResults } = useContext(SearchContext);
+  const { globalSearchBtn, setGlobalSearchBtn } = useContext(SearchContext);
 
   const handleWordClick = (word) => {
     console.log(word);
+    setGloblSearchTerm(word);
+    setGlobalSearchBtn(true);
+    
     if (props.onWordClick) {
       props.onWordClick(word);
     }
@@ -75,7 +82,7 @@ const Menu = (props) => {
   }, [setSearchList]);
 
   useEffect(() => {
-    if (wordClicked.text !== "") {
+    if (isClicked) {
       const source = Axios.CancelToken.source();
       async function updateSearch() {
         const formData = new FormData();
@@ -103,8 +110,9 @@ const Menu = (props) => {
         }
       }
       updateSearch();
+      setIsClicked(false);
     }
-  }, [wordClicked, setSearchList]);
+  }, [isClicked, setSearchList]);
 
   const handelWordToHistory = (item) => {
     console.log("3 " + item.id);
@@ -114,11 +122,12 @@ const Menu = (props) => {
 
   const handelWordDelete = (item) => {
     setWordClickedToDelete(item);
+    setDeleteClicked(true);
     console.log("word deletee");
   };
 
   useEffect(() => {
-    if (wordClickedToDelete.text !== "") {
+    if (deleteClicked) {
       const source = Axios.CancelToken.source();
       async function updateSearch() {
         try {
@@ -131,8 +140,9 @@ const Menu = (props) => {
         } catch (error) {}
       }
       updateSearch();
+      setDeleteClicked(false);
     }
-  }, [wordClickedToDelete, setSearchList]);
+  }, [deleteClicked, setSearchList]);
 
   return (
     <React.Fragment key={"left"}>
@@ -183,7 +193,6 @@ const Menu = (props) => {
                 item.isNew === false && (
                   <div
                     key={item.id}
-                    onClick={() => handleWordClick(item.text)}
                     style={{
                       cursor: "pointer",
                       padding: "8px",
@@ -195,7 +204,7 @@ const Menu = (props) => {
                       <Button onClick={() => handelWordDelete(item)}>
                         <AiFillDelete />
                       </Button>
-                      <Button>{item.text}</Button>
+                      <Button onClick={() => handleWordClick(item.text)}>{item.text}</Button>
                     </div>
 
                     {/* {item.isNew === true && <p>No history yet...</p>} */}

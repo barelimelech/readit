@@ -105,7 +105,6 @@ const Profile = () => {
                 <h1> Hello</h1>
                 <br />
                 username:
-
                 <Paper className={classes.profile_span}>
                    {GlobalState.userUsername}
                 </Paper>

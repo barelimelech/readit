@@ -1,15 +1,17 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Key, Search as SearchIcon } from "@mui/icons-material";
 import PopupMessage from "./PopupMessage";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 import SearchesList from "./SearchesList";
+import Popup from "../Popup";
 //Contexts
 import StateContext from "../../contexts/StateContext";
 import DispatchContext from "../../contexts/DispatchContext";
 import SearchContext from "../../contexts/SearchContext";
 
+import classes from "./Search.module.css";
 import {
   Button,
   Box,
@@ -18,15 +20,16 @@ import {
   DialogTitle,
   DialogActions,
   Alert,
+  Grid,
   List,
   ListItem,
   ListItemText,
 } from "@mui/material";
 
-const Search = ({ onSearch }) => {
+const Search = ({ props }) => {
   const navigate = useNavigate();
 
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
   const GlobalState = useContext(StateContext);
   const GlobalDispatch = useContext(DispatchContext);
   const [showPopup, setShowPopup] = useState(false);
@@ -35,64 +38,100 @@ const Search = ({ onSearch }) => {
   const [hasError, setHasError] = useState(false);
   const [textError, setTextError] = useState("");
 
-
   // const [searchResults, setSearchResults] = useState([]);
   const { setSearchResults } = useContext(SearchContext);
   const { searchList, setSearchList } = useContext(SearchContext);
+  const { globlSearchTerm, setGloblSearchTerm } = useContext(SearchContext);
+  const { globalSearchBtn, setGlobalSearchBtn } = useContext(SearchContext);
+  const [showLaterReadPopup, setShowLaterReadPopup] = useState(false);
 
   const handleSearchLater = () => {
     if (!GlobalState.userIsLogged) {
       setShowPopup(true);
-    } else {
+    }  else {
       setShowPopup(false);
       setSerachLaterBtn(true);
+      setShowLaterReadPopup(true);
     }
   };
 
+  const handleSearch = async () => {
+    if (!GlobalState.userIsLogged) {
+      setShowPopup(true);
+    } else {
+      setShowPopup(false);
+      setSerachBtn(true);
+      setGlobalSearchBtn(true);
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+  const handleLaterReadClosePopup = () => {
+    setShowLaterReadPopup(false);
+  };
+
   useEffect(() => {
-    if (searchBtn) {
+    if ((searchBtn || globalSearchBtn) && globlSearchTerm !=='') {
       setHasError(false);
       setSerachBtn(false);
-      const source = Axios.CancelToken.source();
+      setGlobalSearchBtn(false);
       async function addSearch() {
         const formData = new FormData();
         formData.append("user", GlobalState.userId);
-        formData.append("text", searchTerm);
+        formData.append("text", globlSearchTerm);
         formData.append("isNew", false);
         formData.append("isDeleted", false);
         formData.append("timestamp", new Date().toISOString());
 
         try {
           const response = await Axios.post(
-            "http://localhost:8000/api/searches/create/",
+            "http://localhost:8000/api/searches/upsert/",
             formData
           );
-          setSearchList((prevSearchList) => [...prevSearchList, response.data]);
+
+          if (response.status === 201) {
+            setSearchList((prevSearchList) => [
+              ...prevSearchList,
+              response.data,
+            ]);
+          }
 
           // const newElement = [...searchList, formData];
           // //setSearchList((searchList)=> [...searchList, formData]);
           //   setSearchList(newElement);
         } catch (error) {
           setHasError(true);
-          if(error.response.data.text){
+          if (error.response && error.response.data && error.response.data.text) {
+            // Error response data is not blank
+            setTextError("the search is already exist");
 
-            setTextError("the search is already exist")
+            console.log(error.response.data.text);
+          } else {
+            // Error response data is blank or undefined
+            setTextError("write something");
+
+            console.log("Error response data is blank");
           }
+          
         }
       }
       addSearch();
     }
-  }, [searchBtn, setSearchList]);
+  }, [searchBtn, globalSearchBtn, setSearchList]);
 
   useEffect(() => {
-    if (searchLaterBtn) {
+    if (searchLaterBtn && globlSearchTerm !=='') {
       setHasError(false);
       setSerachLaterBtn(false);
       const source = Axios.CancelToken.source();
       async function addSearch() {
         const formData = new FormData();
         formData.append("user", GlobalState.userId);
-        formData.append("text", searchTerm);
+        formData.append("text", globlSearchTerm);
         formData.append("isNew", true);
         formData.append("isDeleted", false);
         formData.append("timestamp", new Date().toISOString());
@@ -102,8 +141,18 @@ const Search = ({ onSearch }) => {
             "http://localhost:8000/api/searches/upsert/",
             formData
           );
-          setSearchList((prevSearchList) => [...prevSearchList, response.data]);
-
+          if (response.status === 201) {
+            setSearchList((prevSearchList) => [
+              ...prevSearchList,
+              response.data,
+            ]);
+          } else if (response.status === 200) {
+            setSearchList((prevSearchList) => [
+              ...prevSearchList,
+              response.data,
+            ]);
+                    }
+  
         } catch (error) {
           setHasError(true);
           // if(error.response.data.text){
@@ -114,117 +163,112 @@ const Search = ({ onSearch }) => {
       }
       addSearch();
     }
-  }, [ searchLaterBtn, setSearchList]);
+  }, [searchLaterBtn, setSearchList]);
 
   useEffect(() => {
-    if (searchBtn) {
-      const source = Axios.CancelToken.source();
+    if ((searchBtn || globalSearchBtn) && globlSearchTerm !=='') {
       async function getSearchResults() {
         try {
           const apiKey = "AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU";
           const cx = "858f2fc5425274d63";
           const numResults = 10; // Number of results to fetch
-          const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${searchTerm}&num=${numResults}`;
+          const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${globlSearchTerm}&num=${numResults}`;
           const response = await Axios.get(apiUrl);
           setSearchResults(response.data.items);
+          // <Link to='/results'></Link>
+          setGloblSearchTerm(globlSearchTerm);
           navigate("/results");
           // <SearchesList/>
         } catch (error) {}
       }
       getSearchResults();
     }
-  }, [searchBtn]);
+  }, [globalSearchBtn, searchBtn]);
 
-  const handleSearch = async () => {
-    if (!GlobalState.userIsLogged) {
-      setShowPopup(true);
-    } else {
-      setShowPopup(false);
-      setSerachBtn(true);
-    }
-  };
-
-
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      handleSearch();
-    }
-  };
+ 
   return (
-    <div>
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <Box
-          display="flex"
-          flexDirection="column"
-          // alignItems="center"
-          width="500px" // Adjust the width as desired
-        >
-          <TextField
-            label="Search something..."
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-            onKeyPress={handleKeyPress}
-          />
-          {/* <IconButton onClick={handleSearch}></IconButton> */}
-
-          {/* <Autocomplete
-          //   freeSolo
-          options={[]}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Search"
-              variant="outlined"
-              InputProps={{
-                ...params.InputProps,
-                startAdornment: (
-                  <>
-                    <SearchIcon color="disabled" sx={{ marginRight: 1 }} />
-                    {params.InputProps.startAdornment}
-                  </>
-                ),
-              }}
+    <Grid
+      container
+      spacing={2}
+      alignItems="center"
+      display="flex"
+      justifyContent="center"
+    >
+      <Grid item xs={8}>
+        <div className={classes.textfieldContainer}>
+        {(searchBtn===true || searchLaterBtn===true) && globlSearchTerm === "" && (
+            <Popup
+              title={"Right something"}
+              context={""}
+              open={showLaterReadPopup}
+              onClose={handleLaterReadClosePopup}
             />
           )}
-        /> */}
-          {hasError &&  <Alert severity="error">{textError}</Alert>}
-          <Box margin="auto" marginTop={1}>
-            <Button
-              value={searchTerm}
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={handleSearch}
-            >
-              Search
-            </Button>
-            {showPopup && (
-              <Dialog open={showPopup} onClose={() => setShowPopup(false)}>
-                <DialogTitle>For search, log in first</DialogTitle>
-                <DialogActions>
-                  <Button onClick={() => navigate("/login")}>Login</Button>
-                </DialogActions>
-              </Dialog>
-            )}
-          </Box>
-          <Box margin="auto" marginTop={1}>
-            <Button
-              variant="contained"
-              color="secondary"
-              marginLeft={1}
-              onClick={handleSearchLater}
-            >
-              Search Later
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-    </div>
+          <TextField
+            variant="outlined"
+            fullWidth
+            // style={{ margin: '16px 16px 8px' }}
+            size="large"
+            label="Search something..."
+            value={globlSearchTerm}
+            onChange={(event) => {
+              setGloblSearchTerm(event.target.value);
+            }}
+            onKeyPress={handleKeyPress}
+          />
+        </div>
+      </Grid>
+
+      {hasError && <Alert severity="error">{textError}</Alert>}
+
+      <Grid item xs={8}>
+        <div className={classes.buttonContainer}>
+          <Button
+            fullWidth
+            // style={{ margin: '16px 16px 8px' }}
+            value={globlSearchTerm}
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={handleSearch}
+          >
+            Search
+          </Button>
+        </div>
+
+        {showPopup && (
+          <Dialog open={showPopup} onClose={() => setShowPopup(false)}>
+            <DialogTitle>For search, log in first</DialogTitle>
+            <DialogActions>
+              <Button onClick={() => navigate("/login")}>Login</Button>
+            </DialogActions>
+          </Dialog>
+        )}
+      </Grid>
+
+      <Grid item xs={8}>
+        <div className={classes.buttonContainer}>
+          <Button
+            fullWidth
+            // style={{ margin: '16px 16px 8px' }}
+            value={globlSearchTerm}
+            variant="outlined"
+            size="large"
+            onClick={handleSearchLater}
+          >
+            Search Later
+          </Button> 
+          { globlSearchTerm !=='' &&
+          <Popup
+            title={"New Word Is Added"}
+            context={"The search is added to your Upcoming."}
+            open={showLaterReadPopup}
+            onClose={handleLaterReadClosePopup}
+          />
+        }
+        </div>
+      </Grid>
+    </Grid>
   );
 };
 

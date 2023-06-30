@@ -1,6 +1,6 @@
 import React ,
  { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 
 import classes from './Header.module.css'
@@ -92,7 +92,7 @@ const Header = () => {
                 //     onWordClick={handleWordClick}
                 //   />
                 // </MenuItem>
-                <Menu/>
+                  <Menu/>
 
               )}
               <MenuItem
@@ -101,7 +101,7 @@ const Header = () => {
                 style={{ textTransform: "none" }}
               >
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                  readit
+                  lateread
                 </Typography>
               </MenuItem>
               {GlobalState.userIsLogged && (
