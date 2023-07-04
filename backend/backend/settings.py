@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'rest_framework.authtoken',
-
+    
+    'waitinglist.apps.WaitinglistConfig',
     'users.apps.UsersConfig',
     'searches.apps.SearchesConfig',
+    
 
 ]
 

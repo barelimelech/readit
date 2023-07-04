@@ -184,13 +184,13 @@ const Menu = (props) => {
                     }}
                   >
                     <div>
-                    <Button onClick={() => handelWordDelete(item)}>
+                      <Button onClick={() => handelWordDelete(item)}>
                         <AiFillDelete />
                       </Button>
                       <Button onClick={() => handelWordToHistory(item)}>
                         <AiFillDislike />
                       </Button>
-                     
+
                       <Button
                         onClick={() => handleWordClick(item.text)}
                         style={{ color: "black" }}

@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from searches.api import views as searches_api_views
 from users.api import views as users_api_views
+from waitinglist.api import views as waitinglist_api_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,4 +36,9 @@ urlpatterns = [
     path('api/users/', users_api_views.UsersList.as_view()),
     path('api/users/<int:id>/', users_api_views.UserDetail.as_view()),
     path('api/users/<int:id>/update/', users_api_views.UserUpdate.as_view()),
+
+    path('api/waitinglist/', waitinglist_api_view.WaitingListList.as_view()),
+    path('api/waitinglist/create/', waitinglist_api_view.WaitingListCreate.as_view()),
+    path('api/waitinglist/<int:id>/', waitinglist_api_view.WaitingListDetail.as_view()),
+    path('api/waitinglist/<int:id>/update/', waitinglist_api_view.WaitingListUpdate.as_view()),
 ]

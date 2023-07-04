@@ -224,13 +224,23 @@ const Login = () => {
           justifyContent="center"
           style={{ marginTop: "1rem" }}
         >
-          <Typography variant="small">
+          {/* <Typography variant="small">
             Don't have an account yet?{" "}
             <span
               onClick={() => navigate("/register")}
               style={{ cursor: "pointer", color: "blue" }}
             >
               SIGN UP
+            </span>
+          </Typography> */}
+
+          <Typography variant="small">
+            Don't have an account? Want to get in to waiting list?{" "}
+            <span
+              onClick={() => navigate("/waitinglist")}
+              style={{ cursor: "pointer", color: "blue" }}
+            >
+              TO WAITING LIST
             </span>
           </Typography>
         </Grid>

@@ -22,6 +22,7 @@ const EditProfile = (props) => {
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
 
+  
   const initialState = {
     first_name: props.userProfile.first_name,
     last_name: props.userProfile.last_name,
@@ -38,7 +39,7 @@ const EditProfile = (props) => {
         draft.first_name = action.firstNameChosen;
         // GlobalState.userFirstName = action.firstNameChosen;
         break;
-        case "catchLastNameChange":
+      case "catchLastNameChange":
         draft.last_name = action.lastNameChosen;
         break;
       case "catchUsernameChange":
@@ -84,6 +85,12 @@ const EditProfile = (props) => {
             `http://localhost:8000/api/users/${GlobalState.userId}/update/`,
             formData
           );
+          GlobalState.userFirstName = state.first_name;
+          GlobalState.userLastName = state.last_name;
+          GlobalState.userUsername = state.username;
+          GlobalState.userEmail = state.email;
+          props.handleSave(response.data); // Invoke the handleSave function
+
 
           dispatch({ type: "openTheSnack" });
         } catch (e) {
@@ -146,7 +153,7 @@ const EditProfile = (props) => {
                     }
                     InputProps={{
                       style: {
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                        backgroundColor: "rgba(255, 255, 255, 0.5)",
                       },
                     }}
                   />
@@ -167,7 +174,7 @@ const EditProfile = (props) => {
                     }
                     InputProps={{
                       style: {
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                        backgroundColor: "rgba(255, 255, 255, 0.5)",
                       },
                     }}
                   />
@@ -214,75 +221,6 @@ const EditProfile = (props) => {
         />
       </div>
     </StyledEngineProvider>
-    // <>
-    //  <div
-    //     style={{
-    //       width: "50%",
-    //       marginLeft: "auto",
-    //       marginRight: "auto",
-    //       marginTop: "3rem",
-    //       padding: "3rem",
-    //     }}
-    //   >
-    //   <form onSubmit={FormSubmit}>
-
-    //       <Grid item container justifyContent="center" style={{ marginTop: "4rem" }}>
-    //         <Typography variant="h4">MY PROFILE</Typography>
-    //       </Grid>
-
-    //       <Grid item container style={{ marginTop: "1rem"}}>
-    //         <TextField
-    //           id="username"
-    //           label="username*"
-    //           variant="outlined"
-    //           fullWidth
-    //           value={state.username}
-    //           onChange={(e) =>
-    //             dispatch({
-    //               type: "catchUsernameChange",
-    //               usernameChosen: e.target.value,
-    //             })
-    //           }
-    //         />
-    //       </Grid>
-
-    //       <Grid
-    //         item
-    //         container
-    //         xs={3}
-    //         style={{
-    //           marginTop: "1rem",
-    //           marginLeft: "auto",
-    //           marginRight: "auto",
-    //         }}
-    //       >
-    //         <Button
-    //           variant="contained"
-    //           fullWidth
-    //           type="submit"
-    //           style={{
-    //             backgroundColor: "#0086b3",
-    //             color: "white",
-    //             fontSize: "1.1rem",
-    //             marginLeft: "1rem",
-    //           }}
-    //           disabled={state.disabledBtn}
-    //         >
-    //           UPDATE PROFILE
-    //         </Button>
-    //       </Grid>
-    //   </form>
-
-    // <Snackbar
-    //   open={state.openSnack}
-    //   message="You have successfully updated your profile!"
-    //   anchorOrigin={{
-    //     vertical: "bottom",
-    //     horizontal: "center",
-    //   }}
-    // />
-    //   </div>
-    // </>
   );
 };
 

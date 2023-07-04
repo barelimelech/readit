@@ -36,8 +36,11 @@ const Profile = () => {
     dataIsLoading: true,
   };
 
-  const handleSave = () => {
-    // Perform save/update operation here, e.g., make an API call
+  const handleSave = (updatedProfile) => {
+    dispatch({
+      type: "catchUserProfileInfo",
+      profileObject: updatedProfile,
+    });
     setIsEditing(false);
   };
 
@@ -52,14 +55,14 @@ const Profile = () => {
         draft.userProfile.last_name = action.profileObject.last_name;
         draft.userProfile.username = action.profileObject.username;
         draft.userProfile.email = action.profileObject.email;
-        break;
+        return;
 
       case "loadingDone":
         draft.dataIsLoading = false;
-        break;
+        return; // Add a return statement here
 
       default:
-        break;
+        return draft; // Add a return statement here
     }
   }
 
@@ -106,32 +109,37 @@ const Profile = () => {
                 <br />
                 username:
                 <Paper className={classes.profile_span}>
-                   {GlobalState.userUsername}
+                  {state.userProfile.username}
                 </Paper>
                 <br />
                 first name:
                 <Paper className={classes.profile_span}>
-                   {GlobalState.userFirstName}
+                  {state.userProfile.first_name}
                 </Paper>
                 <br />
                 last name:
                 <Paper className={classes.profile_span}>
-                  {GlobalState.userLastName}
+                  {state.userProfile.last_name}
                 </Paper>
                 <br />
                 email:
                 <Paper className={classes.profile_span}>
-                   {GlobalState.userEmail}
+                  {state.userProfile.email}
                 </Paper>
                 <Grid>
-                  <Button size="large" onClick={handelUpdateProfile}>Edit profile</Button>
+                  <Button size="large" onClick={handelUpdateProfile}>
+                    Edit profile
+                  </Button>
                 </Grid>
               </Box>
             </Typography>
           </Grid>
         </Grid>
       ) : (
-        <EditProfile userProfile={state.userProfile}></EditProfile>
+        <EditProfile
+          userProfile={state.userProfile}
+          handleSave={handleSave} // Pass the handleSave function
+        />
       )}
     </StyledEngineProvider>
   );

@@ -10,6 +10,7 @@ import Header from "./components/Header";
 import Register from "./components/Authentication/Register";
 import Histoty from "./components/Menu/History";
 import AccountCreated from "./components/Authentication/AccountCreated";
+import WaitingList from './components/Authentication/WaitingList';
 // import logo from "./logo.svg";
 import "./App.css";
 
@@ -150,6 +151,7 @@ function App() {
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/updateprofile" element={<EditProfile />} />
                       <Route path="/created" element={<AccountCreated />} />
+                      <Route path="/waitinglist" element={<WaitingList />} />
 
                       {/* <Route path="/history" element={<History />} /> */}
                     </Routes>

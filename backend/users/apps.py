@@ -7,3 +7,7 @@ class UsersConfig(AppConfig):
 
     # def ready(self):
     #     import users.signals
+
+# class WaitingListConfig(AppConfig):
+#     default_auto_field = 'django.db.models.BigAutoField'
+#     name = 'waitinglist'
