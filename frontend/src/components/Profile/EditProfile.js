@@ -144,6 +144,11 @@ const EditProfile = (props) => {
                         firstNameChosen: e.target.value,
                       })
                     }
+                    InputProps={{
+                      style: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                      },
+                    }}
                   />
                 </Grid>
 
@@ -160,6 +165,11 @@ const EditProfile = (props) => {
                         lastNameChosen: e.target.value,
                       })
                     }
+                    InputProps={{
+                      style: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                      },
+                    }}
                   />
                 </Grid>
 

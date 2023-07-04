@@ -140,14 +140,25 @@ const Login = () => {
           container
           justifyContent="center"
           style={{
-            marginTop: "2rem",
+            marginTop: "7rem",
             marginLeft: "auto",
             marginRight: "auto",
             marginBottom: "1rem",
           }}
+         
         >
           <Typography variant="h5">Login</Typography>
         </Grid>
+        <Grid item
+          container
+          justifyContent="center"
+         
+          style={{
+            marginTop: "3rem",
+            marginLeft: "auto",
+            marginRight: "auto",
+            marginBottom: "1rem",
+          }}>
         <TextField
           className={classes.textfield}
           required
@@ -163,6 +174,7 @@ const Login = () => {
               usernameChosen: e.target.value,
             })
           }
+         
         />
 
         <TextField
@@ -180,8 +192,9 @@ const Login = () => {
               passwordChosen: e.target.value,
             })
           }
+          
         />
-
+</Grid>
         <Grid
           item
           container

@@ -1,26 +1,28 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useImmerReducer } from "use-immer";
+import { Container, Paper, Box, Grid, Typography } from "@mui/material";
 
 import SearchesList from "./components/HomePage/SearchesList";
 import Home from "./components/HomePage/Home";
 import Login from "./components/Authentication/Login";
 import Header from "./components/Header";
 import Register from "./components/Authentication/Register";
-import Histoty from './components/Menu/History';
+import Histoty from "./components/Menu/History";
 import AccountCreated from "./components/Authentication/AccountCreated";
 // import logo from "./logo.svg";
 import "./App.css";
 
+import image from "./Images/background.jpg";
 //Contexts
-import DispatchContext from './contexts/DispatchContext';
-import StateContext from './contexts/StateContext';
+import DispatchContext from "./contexts/DispatchContext";
+import StateContext from "./contexts/StateContext";
 import Profile from "./components/Profile/Profile";
 import EditProfile from "./components/Profile/EditProfile";
 import SearchContext from "./contexts/SearchContext";
+import Sidebar from './components/Menu/Sidebar';
 
 function App() {
-
   const initialState = {
     userFirstName: localStorage.getItem("theUserFirstName"),
     userLastName: localStorage.getItem("theUserLastName"),
@@ -29,7 +31,18 @@ function App() {
     userId: localStorage.getItem("theUserId"),
     userToken: localStorage.getItem("theUserToken"),
     userIsLogged: localStorage.getItem("theUserUsername") ? true : false,
+    // userIsStaff: localStorage.getItem("theUserIsStaff") 
   };
+  const users = [
+    "avia",
+    "amit",
+    "bar",
+    "gal",
+    "adam",
+    "shalom",
+    "talya",
+    "zohar",
+  ];
 
   function ReducerFuction(draft, action) {
     switch (action.type) {
@@ -58,7 +71,6 @@ function App() {
   const [globlSearchTerm, setGloblSearchTerm] = useState("");
   const [globalSearchBtn, setGlobalSearchBtn] = useState(false);
 
-
   useEffect(() => {
     if (state.userIsLogged) {
       localStorage.setItem("theUserFirstName", state.userFirstName);
@@ -77,29 +89,96 @@ function App() {
     }
   }, [state.userIsLogged]);
   return (
-    <StateContext.Provider value={state}>
-    <DispatchContext.Provider value={dispatch}>
-    <SearchContext.Provider value={{ searchResults, setSearchResults, searchList, setSearchList, globlSearchTerm,setGloblSearchTerm , globalSearchBtn, setGlobalSearchBtn}}>
+    <div>
+      <div
+        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
+        <StateContext.Provider value={state}>
+          <DispatchContext.Provider value={dispatch}>
+            <SearchContext.Provider
+              value={{
+                searchResults,
+                setSearchResults,
+                searchList,
+                setSearchList,
+                globlSearchTerm,
+                setGloblSearchTerm,
+                globalSearchBtn,
+                setGlobalSearchBtn,
+              }}
+            >
+              <BrowserRouter>
+                <div
+                  style={{
+                    position: "fixed",
+                    opacity: 1,
+                    width: "100%",
+                  }}
+                >
+                  <Header />
+                </div>
 
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/results" element={<SearchesList/>} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/updateprofile" element={<EditProfile />} />
-        <Route path="/created" element={<AccountCreated />} />
+                <div>
+                  <img
+                    src={image}
+                    alt="my background"
+                    style={{
+                      filter: "brightness(90%) opacity(0.3)",
+                      position: "fixed",
+                      top: "0",
+                      left: "0",
+                      width: "100%",
+                      height: "100%",
+                      zIndex: "-1",
+                    }}
+                  />
+                  {/* <img src={image} alt="my background" style={{ filter: 'brightness(50%) opacity(0.5)', height: "auto", width: "99.99%" }} /> */}
+                  <div
+                    style={{
+                      top: "100px",
+                      left: "20px",
+                      textAlign: "center",
+                      zIndex: "100",
+                      width: "100%",
+                    }}
+                  >
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/results" element={<SearchesList />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/updateprofile" element={<EditProfile />} />
+                      <Route path="/created" element={<AccountCreated />} />
 
-        {/* <Route path="/history" element={<History />} /> */}
-      </Routes>
-    </BrowserRouter>
-    </SearchContext.Provider>
-
-    </DispatchContext.Provider>
-    </StateContext.Provider>
-
+                      {/* <Route path="/history" element={<History />} /> */}
+                    </Routes>
+                  </div>
+                </div>
+              </BrowserRouter>
+            </SearchContext.Provider>
+          </DispatchContext.Provider>
+        </StateContext.Provider>
+      </div>
+      <div>
+        <footer
+          style={{
+            position: "fixed",
+            bottom: "0",
+            left: "0",
+            width: "100%",
+            backgroundColor: "#f5f5f5",
+            padding: "20px",
+          }}
+        >
+          <Grid container justify="center" alignItems="center">
+            <Typography variant="body2" color="textSecondary">
+              © 2023 BAE Website. All rights reserved.
+            </Typography>
+          </Grid>
+        </footer>
+      </div>
+    </div>
   );
 }
 

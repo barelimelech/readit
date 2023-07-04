@@ -1,25 +1,34 @@
-import React ,
- { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 
-import classes from './Header.module.css'
+import classes from "./Header.module.css";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import MenuItem from "@mui/material/MenuItem";
-import {BsFillPersonFill} from "react-icons/bs"
+import { BsFillPersonFill } from "react-icons/bs";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
-import Menu from './Menu/Menu';
-
+import Menu from "./Menu/Menu";
+import Sidebar from "./Menu/Sidebar";
 //Contexts
 import StateContext from "../contexts/StateContext";
 import DispatchContext from "../contexts/DispatchContext";
-
-import { Typography, Button, StyledEngineProvider,Drawer, List,ListItemButton,ListItem,  ListItemIcon,ListItemText } from "@mui/material";
+import SearchContext from "../contexts/SearchContext";
+import {
+  Typography,
+  Button,
+  StyledEngineProvider,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 
 import BurgerSidebarMenu from "./Menu/BurgerSidebarMenu";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -29,6 +38,7 @@ const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const GlobalState = useContext(StateContext);
   const GlobalDispatch = useContext(DispatchContext);
+  const { globlSearchTerm, setGloblSearchTerm } = useContext(SearchContext);
 
   useEffect(() => {
     if (showMenu) {
@@ -36,8 +46,6 @@ const Header = () => {
     }
   }, [showMenu]);
 
-
- 
   const handleWordClick = (word) => {
     console.log("Clicked word:", word);
     // Perform any desired action with the clicked word
@@ -70,7 +78,7 @@ const Header = () => {
           GlobalState.userToken,
           { headers: { Authorization: "Token ".concat(GlobalState.userToken) } }
         );
-
+        setGloblSearchTerm("");
         GlobalDispatch({ type: "logout" });
         navigate("/");
         // setOpenSnack(true);
@@ -79,25 +87,27 @@ const Header = () => {
   }
 
   return (
-    <div>
+    <div >
       <StyledEngineProvider injectFirst>
         <Box sx={{ flexGrow: 1 }}>
           <AppBar position="static">
             <Toolbar>
               {GlobalState.userIsLogged && (
-            
                 // <MenuItem style={{ color: "white" }}>
                 //   <BurgerSidebarMenu
                 //     words={words}
                 //     onWordClick={handleWordClick}
                 //   />
                 // </MenuItem>
-                  <Menu/>
-
+                 <Menu />
+                // <Sidebar/>
               )}
               <MenuItem
                 color="inherit"
-                onClick={() => navigate("/")}
+                onClick={() => {
+                  setGloblSearchTerm("");
+                  navigate("/");
+                }}
                 style={{ textTransform: "none" }}
               >
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -105,8 +115,12 @@ const Header = () => {
                 </Typography>
               </MenuItem>
               {GlobalState.userIsLogged && (
-                <MenuItem className={classes.alignRight} key={"tmp"}  onClick={() => navigate("/profile")}>
-                  <BsFillPersonFill/>
+                <MenuItem
+                  className={classes.alignRight}
+                  key={"tmp"}
+                  onClick={() => navigate("/profile")}
+                >
+                  <BsFillPersonFill />
                 </MenuItem>
               )}
               {GlobalState.userIsLogged ? (

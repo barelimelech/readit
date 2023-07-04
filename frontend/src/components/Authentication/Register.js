@@ -253,7 +253,7 @@ const Register = () => {
           container
           justifyContent="center"
           style={{
-            marginTop: "2rem",
+            marginTop: "7rem",
             marginLeft: "auto",
             marginRight: "auto",
             marginBottom: "1rem",
@@ -297,7 +297,7 @@ const Register = () => {
           required
           fullWidth
           id="outlined-firstname-input"
-          label="FirstName"
+          label="First Name"
           type="firstName"
           autoComplete="current-firstName"
           value={state.firstNameValue}
@@ -307,13 +307,14 @@ const Register = () => {
               firstNameChosen: e.target.value,
             })
           }
+         
         />
         <TextField
           className={classes.textfield}
           required
           fullWidth
           id="outlined-lastname-input"
-          label="LastName"
+          label="Last Name"
           type="lastName"
           autoComplete="current-lastName"
           value={state.lastNameValue}
@@ -323,6 +324,7 @@ const Register = () => {
               lastNameChosen: e.target.value,
             })
           }
+          
         />
         <TextField
           className={classes.textfield}

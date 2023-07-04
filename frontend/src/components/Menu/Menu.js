@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { styled, useTheme } from "@mui/material/styles";
-import { AiFillDelete, AiFillDislike } from "react-icons/ai";
+import { AiFillDelete, AiFillDislike, AiFillLike } from "react-icons/ai";
 import SearchContext from "../../contexts/SearchContext";
 
 import {
@@ -33,6 +33,7 @@ const Menu = (props) => {
   const [deleteClicked, setDeleteClicked] = useState(false);
   const [wordClickedToDelete, setWordClickedToDelete] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const [isClickedToUpcoming, setIsClickedToUpcoming] = useState(false);
   const { searchList, setSearchList } = useContext(SearchContext);
   const [initialDataFetched, setInitialDataFetched] = useState(false);
   const { globlSearchTerm, setGloblSearchTerm } = useContext(SearchContext);
@@ -43,7 +44,7 @@ const Menu = (props) => {
     console.log(word);
     setGloblSearchTerm(word);
     setGlobalSearchBtn(true);
-    
+    navigate("/results");
     if (props.onWordClick) {
       props.onWordClick(word);
     }
@@ -79,16 +80,20 @@ const Menu = (props) => {
     if (!initialDataFetched) {
       getAllSearches();
     }
-  }, [setSearchList]);
+  }, [setSearchList, searchList]);
 
   useEffect(() => {
-    if (isClicked) {
+    if (isClicked || isClickedToUpcoming) {
       const source = Axios.CancelToken.source();
       async function updateSearch() {
         const formData = new FormData();
         formData.append("user", GlobalState.userId);
         formData.append("text", wordClicked.text);
-        formData.append("isNew", false);
+        if (isClicked === true) {
+          formData.append("isNew", false);
+        } else if (isClickedToUpcoming === true) {
+          formData.append("isNew", true);
+        }
         formData.append("isDeleted", false);
         formData.append("timestamp", new Date().toISOString());
 
@@ -98,26 +103,32 @@ const Menu = (props) => {
             formData
           );
           setSearchList((prevSearchList) =>
-          prevSearchList.map((item) => {
-            if (item.id === wordClicked.id) {
-              return { ...item, ...response.data };
-            }
-            return item;
-          })
-        );
+            prevSearchList.map((item) => {
+              if (item.id === wordClicked.id) {
+                return { ...item, ...response.data };
+              }
+              return item;
+            })
+          );
         } catch (error) {
           console.log("the error : " + error);
         }
       }
       updateSearch();
       setIsClicked(false);
+      setIsClickedToUpcoming(false);
     }
-  }, [isClicked, setSearchList]);
+  }, [isClicked, isClickedToUpcoming, setSearchList, searchList]);
 
   const handelWordToHistory = (item) => {
     console.log("3 " + item.id);
     setWordClicked(item);
     setIsClicked(true);
+  };
+  const handelWordToUpcoming = (item) => {
+    console.log("3 " + item.id);
+    setWordClicked(item);
+    setIsClickedToUpcoming(true);
   };
 
   const handelWordDelete = (item) => {
@@ -157,6 +168,7 @@ const Menu = (props) => {
         <h3 style={{ marginLeft: "10px", color: "black" }}>Upcoming</h3>
         <Paper style={{ maxHeight: 400, overflow: "auto" }}>
           <List>
+            {console.log("search : " + searchList)}
             {/* {searchList.length === 0 && <p>No searches yet...</p>} */}
             {searchList.map(
               (item) =>
@@ -164,7 +176,6 @@ const Menu = (props) => {
                 item.isNew === true && (
                   <div
                     key={item.id}
-                    onClick={() => handleWordClick(item.text)}
                     style={{
                       cursor: "pointer",
                       padding: "8px",
@@ -173,10 +184,19 @@ const Menu = (props) => {
                     }}
                   >
                     <div>
+                    <Button onClick={() => handelWordDelete(item)}>
+                        <AiFillDelete />
+                      </Button>
                       <Button onClick={() => handelWordToHistory(item)}>
                         <AiFillDislike />
                       </Button>
-                      <Button style={{ color: "black" }}>{item.text}</Button>
+                     
+                      <Button
+                        onClick={() => handleWordClick(item.text)}
+                        style={{ color: "black" }}
+                      >
+                        {item.text}
+                      </Button>
                     </div>
                   </div>
                 )
@@ -204,8 +224,18 @@ const Menu = (props) => {
                       <Button onClick={() => handelWordDelete(item)}>
                         <AiFillDelete />
                       </Button>
-                      <Button onClick={() => handleWordClick(item.text)}>{item.text}</Button>
+                      <Button onClick={() => handelWordToUpcoming(item)}>
+                        <AiFillLike />
+                      </Button>
+                      <Button onClick={() => handleWordClick(item.text)}>
+                        {item.text}
+                      </Button>
                     </div>
+                    {/* <div>
+                      <Button onClick={() => handelWordToHistory(item)}>
+                        <AiFillDislike />
+                      </Button>
+                    </div> */}
 
                     {/* {item.isNew === true && <p>No history yet...</p>} */}
                   </div>

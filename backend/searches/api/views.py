@@ -53,7 +53,12 @@ class UpsertResourceView(APIView):
             if existing_resource:
                 # If the resource exists, perform an update
                 serializer.update(existing_resource, serializer.validated_data)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                
+                # Make it  prettier (maybe add it to serializer)
+                response = serializer.data.copy()
+                response['id'] = existing_resource.id
+                
+                return Response(response, status=status.HTTP_200_OK)
             else:
                 # If the resource doesn't exist, perform an insert
                 serializer.save()

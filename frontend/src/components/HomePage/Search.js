@@ -48,7 +48,7 @@ const Search = ({ props }) => {
   const handleSearchLater = () => {
     if (!GlobalState.userIsLogged) {
       setShowPopup(true);
-    }  else {
+    } else {
       setShowPopup(false);
       setSerachLaterBtn(true);
       setShowLaterReadPopup(true);
@@ -75,7 +75,7 @@ const Search = ({ props }) => {
   };
 
   useEffect(() => {
-    if ((searchBtn || globalSearchBtn) && globlSearchTerm !=='') {
+    if ((searchBtn || globalSearchBtn) && globlSearchTerm !== "") {
       setHasError(false);
       setSerachBtn(false);
       setGlobalSearchBtn(false);
@@ -95,9 +95,19 @@ const Search = ({ props }) => {
 
           if (response.status === 201) {
             setSearchList((prevSearchList) => [
-              ...prevSearchList,
               response.data,
+              ...prevSearchList,
             ]);
+          }
+          else if (response.status === 200) {
+            const newState = searchList.map(obj => {
+              if (obj.id === response.data.id) {
+                return {...obj, isNew: false};
+              }
+              return obj;
+            });
+            setSearchList(newState);
+            // setSearchList(response.data);
           }
 
           // const newElement = [...searchList, formData];
@@ -105,7 +115,11 @@ const Search = ({ props }) => {
           //   setSearchList(newElement);
         } catch (error) {
           setHasError(true);
-          if (error.response && error.response.data && error.response.data.text) {
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.text
+          ) {
             // Error response data is not blank
             setTextError("the search is already exist");
 
@@ -116,18 +130,16 @@ const Search = ({ props }) => {
 
             console.log("Error response data is blank");
           }
-          
         }
       }
       addSearch();
     }
-  }, [searchBtn, globalSearchBtn, setSearchList]);
+  }, [searchBtn, globalSearchBtn, setSearchList, searchList]);
 
   useEffect(() => {
-    if (searchLaterBtn && globlSearchTerm !=='') {
+    if (searchLaterBtn && globlSearchTerm !== "") {
       setHasError(false);
       setSerachLaterBtn(false);
-      const source = Axios.CancelToken.source();
       async function addSearch() {
         const formData = new FormData();
         formData.append("user", GlobalState.userId);
@@ -141,18 +153,22 @@ const Search = ({ props }) => {
             "http://localhost:8000/api/searches/upsert/",
             formData
           );
+
           if (response.status === 201) {
             setSearchList((prevSearchList) => [
               ...prevSearchList,
               response.data,
             ]);
           } else if (response.status === 200) {
-            setSearchList((prevSearchList) => [
-              ...prevSearchList,
-              response.data,
-            ]);
-                    }
-  
+            const newState = searchList.map(obj => {
+              if (obj.id === response.data.id) {
+                return {...obj, isNew: true};
+              }
+              return obj;
+            });
+            setSearchList(newState);
+            // setSearchList(response.data);
+          }
         } catch (error) {
           setHasError(true);
           // if(error.response.data.text){
@@ -163,10 +179,10 @@ const Search = ({ props }) => {
       }
       addSearch();
     }
-  }, [searchLaterBtn, setSearchList]);
+  }, [searchLaterBtn, setSearchList, searchList]);
 
   useEffect(() => {
-    if ((searchBtn || globalSearchBtn) && globlSearchTerm !=='') {
+    if ((searchBtn || globalSearchBtn) && globlSearchTerm !== "") {
       async function getSearchResults() {
         try {
           const apiKey = "AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU";
@@ -174,18 +190,23 @@ const Search = ({ props }) => {
           const numResults = 10; // Number of results to fetch
           const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${globlSearchTerm}&num=${numResults}`;
           const response = await Axios.get(apiUrl);
-          setSearchResults(response.data.items);
-          // <Link to='/results'></Link>
-          setGloblSearchTerm(globlSearchTerm);
-          navigate("/results");
-          // <SearchesList/>
+          if (response.status === 429) {
+            setSearchResults(
+              `https://www.google.com/search?q=${globlSearchTerm}`
+            );
+          } else {
+            setSearchResults(response.data.items);
+            // <Link to='/results'></Link>
+            setGloblSearchTerm(globlSearchTerm);
+            navigate("/results");
+            // <SearchesList/>
+          }
         } catch (error) {}
       }
       getSearchResults();
     }
   }, [globalSearchBtn, searchBtn]);
 
- 
   return (
     <Grid
       container
@@ -196,14 +217,15 @@ const Search = ({ props }) => {
     >
       <Grid item xs={8}>
         <div className={classes.textfieldContainer}>
-        {(searchBtn===true || searchLaterBtn===true) && globlSearchTerm === "" && (
-            <Popup
-              title={"Right something"}
-              context={""}
-              open={showLaterReadPopup}
-              onClose={handleLaterReadClosePopup}
-            />
-          )}
+          {(searchBtn === true || searchLaterBtn === true) &&
+            globlSearchTerm === "" && (
+              <Popup
+                title={"Right something"}
+                context={""}
+                open={showLaterReadPopup}
+                onClose={handleLaterReadClosePopup}
+              />
+            )}
           <TextField
             variant="outlined"
             fullWidth
@@ -215,6 +237,11 @@ const Search = ({ props }) => {
               setGloblSearchTerm(event.target.value);
             }}
             onKeyPress={handleKeyPress}
+            InputProps={{
+              style: {
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
+              },
+            }}
           />
         </div>
       </Grid>
@@ -256,16 +283,16 @@ const Search = ({ props }) => {
             size="large"
             onClick={handleSearchLater}
           >
-            Search Later
-          </Button> 
-          { globlSearchTerm !=='' &&
-          <Popup
-            title={"New Word Is Added"}
-            context={"The search is added to your Upcoming."}
-            open={showLaterReadPopup}
-            onClose={handleLaterReadClosePopup}
-          />
-        }
+            Save For Later
+          </Button>
+          {globlSearchTerm !== "" && (
+            <Popup
+              title={"New Word Is Added"}
+              context={"The search is added to your Upcoming."}
+              open={showLaterReadPopup}
+              onClose={handleLaterReadClosePopup}
+            />
+          )}
         </div>
       </Grid>
     </Grid>

@@ -13,6 +13,8 @@ class User(AbstractUser):
         full_name = '%s %s' % (self.last_name.upper(), self.first_name)
         return full_name.strip()
   
+    def is_stuff(self):
+        return self.is_staff
 
 # class Profile(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE)
