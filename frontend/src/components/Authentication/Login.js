@@ -224,7 +224,7 @@ const Login = () => {
           justifyContent="center"
           style={{ marginTop: "1rem" }}
         >
-          {/* <Typography variant="small">
+          <Typography variant="small">
             Don't have an account yet?{" "}
             <span
               onClick={() => navigate("/register")}
@@ -232,9 +232,9 @@ const Login = () => {
             >
               SIGN UP
             </span>
-          </Typography> */}
+          </Typography>
 
-          <Typography variant="small">
+          {/* <Typography variant="small">
             Don't have an account? Want to get into the waiting list?{" "}
             <span
               onClick={() => navigate("/waitinglist")}
@@ -242,7 +242,7 @@ const Login = () => {
             >
               Click Here
             </span>
-          </Typography>
+          </Typography> */}
         </Grid>
       </form>
     </StyledEngineProvider>
