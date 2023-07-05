@@ -30,6 +30,8 @@ import {
   ListItemText,
 } from "@mui/material";
 
+import logo from '../Images/logo4.jpg';
+
 import BurgerSidebarMenu from "./Menu/BurgerSidebarMenu";
 import MenuIcon from "@mui/icons-material/Menu";
 const Header = () => {
@@ -110,7 +112,8 @@ const Header = () => {
                 }}
                 style={{ textTransform: "none" }}
               >
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontFamily: 'Poppins, sans-serif' }}>
+                  {/* <img src={logo} style={{height:35, width:120}}></img> */}
                   lateread
                 </Typography>
               </MenuItem>

@@ -163,9 +163,8 @@ function App() {
         </StateContext.Provider>
       </div>
       <div>
-        <footer
+        <div
           style={{
-            position: "fixed",
             bottom: "0",
             left: "0",
             width: "100%",
@@ -178,7 +177,7 @@ function App() {
               © 2023 BAE Website. All rights reserved.
             </Typography>
           </Grid>
-        </footer>
+        </div>
       </div>
     </div>
   );

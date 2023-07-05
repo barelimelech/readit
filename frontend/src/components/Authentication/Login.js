@@ -235,12 +235,12 @@ const Login = () => {
           </Typography> */}
 
           <Typography variant="small">
-            Don't have an account? Want to get in to waiting list?{" "}
+            Don't have an account? Want to get into the waiting list?{" "}
             <span
               onClick={() => navigate("/waitinglist")}
               style={{ cursor: "pointer", color: "blue" }}
             >
-              TO WAITING LIST
+              Click Here
             </span>
           </Typography>
         </Grid>
