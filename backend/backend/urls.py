@@ -15,10 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from searches.api import views as searches_api_views
 from users.api import views as users_api_views
 from waitinglist.api import views as waitinglist_api_view
+from django.shortcuts import render
+
+def render_react(request):
+    return render(request, "index.html")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,4 +46,6 @@ urlpatterns = [
     path('api/waitinglist/create/', waitinglist_api_view.WaitingListCreate.as_view()),
     path('api/waitinglist/<int:id>/', waitinglist_api_view.WaitingListDetail.as_view()),
     path('api/waitinglist/<int:id>/update/', waitinglist_api_view.WaitingListUpdate.as_view()),
+    re_path(r"^$", render_react),
+    re_path(r"^(?:.*)/?$", render_react),
 ]
