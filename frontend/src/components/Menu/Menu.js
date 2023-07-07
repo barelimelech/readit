@@ -4,6 +4,7 @@ import Axios from "axios";
 import { styled, useTheme } from "@mui/material/styles";
 import { AiFillDelete, AiFillDislike, AiFillLike } from "react-icons/ai";
 import SearchContext from "../../contexts/SearchContext";
+import GlobalContext from "../../contexts/GlobalContext";
 
 import {
   Button,
@@ -39,6 +40,7 @@ const Menu = (props) => {
   const { globlSearchTerm, setGloblSearchTerm } = useContext(SearchContext);
   const { setSearchResults } = useContext(SearchContext);
   const { globalSearchBtn, setGlobalSearchBtn } = useContext(SearchContext);
+  const address = useContext(GlobalContext);
 
   const handleWordClick = (word) => {
     console.log(word);
@@ -70,7 +72,9 @@ const Menu = (props) => {
   useEffect(() => {
     async function getAllSearches() {
       try {
-        const response = await Axios.get(`http://localhost:8000/api/searches`);
+        const response = await Axios.get(
+          `http://${address.localhostIP}/api/searches`
+        );
         setSearchList(response.data);
         setInitialDataFetched(true);
       } catch (e) {
@@ -99,7 +103,7 @@ const Menu = (props) => {
 
         try {
           const response = await Axios.patch(
-            `http://localhost:8000/api/searches/${wordClicked.id}/update/`,
+            `http://${address.localhostIP}/api/searches/${wordClicked.id}/update/`,
             formData
           );
           setSearchList((prevSearchList) =>
@@ -143,7 +147,7 @@ const Menu = (props) => {
       async function updateSearch() {
         try {
           const response = await Axios.delete(
-            `http://localhost:8000/api/searches/${wordClickedToDelete.id}/delete/`
+            `http://${address.localhostIP}/api/searches/${wordClickedToDelete.id}/delete/`
           );
           setSearchList((prevSearchList) =>
             prevSearchList.filter((item) => item.id !== wordClickedToDelete.id)

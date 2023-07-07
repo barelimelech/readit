@@ -9,6 +9,7 @@ import classes from "./Profile.module.css";
 //components
 import StateContext from "../../contexts/StateContext";
 import ProfileUpdate from "./EditProfile";
+import GlobalContext from "../../contexts/GlobalContext";
 
 // MUI
 import {
@@ -25,6 +26,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
   const [isEditing, setIsEditing] = useState(false);
+  const address = useContext(GlobalContext);
 
   const initialState = {
     userProfile: {
@@ -73,7 +75,7 @@ const Profile = () => {
     async function GetProfileInfo() {
       try {
         const response = await Axios.get(
-          `http://localhost:8000/api/users/${GlobalState.userId}/`
+          `http://${address.localhostIP}/api/users/${GlobalState.userId}/`
         );
 
         dispatch({

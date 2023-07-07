@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TextField,
   Button,
@@ -10,9 +10,11 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
+import GlobalContext from "../../contexts/GlobalContext";
 
 const WaitingList = () => {
   const navigate = useNavigate();
+  const address = useContext(GlobalContext);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -36,7 +38,7 @@ const WaitingList = () => {
 
         try {
           const response = await Axios.post(
-            "http://localhost:8000/api/waitinglist/create/",
+            `http://${address.localhostIP}/api/waitinglist/create/`,
             formData
           );
           console.log("response " + response);

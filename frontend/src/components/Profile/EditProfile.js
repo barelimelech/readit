@@ -6,7 +6,7 @@ import classes from "./EditProfile.module.css";
 
 // Contexts
 import StateContext from "../../contexts/StateContext";
-
+import GlobalContext from "../../contexts/GlobalContext";
 // MUI
 import {
   Grid,
@@ -21,6 +21,7 @@ import {
 const EditProfile = (props) => {
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
+  const address = useContext(GlobalContext);
 
   
   const initialState = {
@@ -82,7 +83,7 @@ const EditProfile = (props) => {
 
         try {
           const response = await Axios.patch(
-            `http://localhost:8000/api/users/${GlobalState.userId}/update/`,
+            `http://${address.localhostIP}/api/users/${GlobalState.userId}/update/`,
             formData
           );
           GlobalState.userFirstName = state.first_name;

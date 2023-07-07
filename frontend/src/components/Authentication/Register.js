@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
+import GlobalContext from "../../contexts/GlobalContext";
 
 import {
   Grid,
@@ -18,6 +19,7 @@ import classes from "./Register.module.css";
 
 const Register = () => {
   const navigate = useNavigate();
+  const address = useContext(GlobalContext);
 
   const initialState = {
     firstNameValue: "",
@@ -192,7 +194,7 @@ const Register = () => {
         console.log("state.lastNameValue " + state.lastNameValue);
         try {
           const response = await Axios.post(
-            "http://localhost:8000/api-auth-djoser/users/",
+            `http://${address.localhostIP}/api-auth-djoser/users/`,
             {
               username: state.usernameValue,
               first_name: state.firstNameValue,

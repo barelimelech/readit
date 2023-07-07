@@ -18,6 +18,8 @@ import Sidebar from "./Menu/Sidebar";
 import StateContext from "../contexts/StateContext";
 import DispatchContext from "../contexts/DispatchContext";
 import SearchContext from "../contexts/SearchContext";
+import GlobalContext from "../contexts/GlobalContext";
+
 import {
   Typography,
   Button,
@@ -36,6 +38,7 @@ import BurgerSidebarMenu from "./Menu/BurgerSidebarMenu";
 import MenuIcon from "@mui/icons-material/Menu";
 const Header = () => {
   const navigate = useNavigate();
+  const address = useContext(GlobalContext);
 
   const [showMenu, setShowMenu] = useState(false);
   const GlobalState = useContext(StateContext);
@@ -76,7 +79,7 @@ const Header = () => {
     if (confirmLogout) {
       try {
         const response = await Axios.post(
-          "http://localhost:8000/api-auth-djoser/token/logout/",
+          `http://${address.localhostIP}/api-auth-djoser/token/logout/`,
           GlobalState.userToken,
           { headers: { Authorization: "Token ".concat(GlobalState.userToken) } }
         );

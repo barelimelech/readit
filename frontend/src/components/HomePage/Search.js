@@ -10,6 +10,7 @@ import Popup from "../Popup";
 import StateContext from "../../contexts/StateContext";
 import DispatchContext from "../../contexts/DispatchContext";
 import SearchContext from "../../contexts/SearchContext";
+import GlobalContext from "../../contexts/GlobalContext";
 
 import classes from "./Search.module.css";
 import {
@@ -28,6 +29,7 @@ import {
 
 const Search = ({ props }) => {
   const navigate = useNavigate();
+  const address = useContext(GlobalContext);
 
   // const [searchTerm, setSearchTerm] = useState("");
   const GlobalState = useContext(StateContext);
@@ -89,7 +91,7 @@ const Search = ({ props }) => {
 
         try {
           const response = await Axios.post(
-            "http://localhost:8000/api/searches/upsert/",
+            `http://${address.localhostIP}/api/searches/upsert/`,
             formData
           );
 
@@ -150,7 +152,7 @@ const Search = ({ props }) => {
 
         try {
           const response = await Axios.post(
-            "http://localhost:8000/api/searches/upsert/",
+            `http://${address.localhostIP}/api/searches/upsert/`,
             formData
           );
 

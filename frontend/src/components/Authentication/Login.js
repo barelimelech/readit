@@ -6,6 +6,7 @@ import Axios from "axios";
 //Contexts
 import DispatchContext from "../../contexts/DispatchContext";
 import StateContext from "../../contexts/StateContext";
+import GlobalContext from "../../contexts/GlobalContext";
 
 import {
   Grid,
@@ -20,6 +21,7 @@ import classes from "./Login.module.css";
 const Login = () => {
   const navigate = useNavigate();
   const GlobalDispatch = useContext(DispatchContext);
+  const address = useContext(GlobalContext);
 
   const initialState = {
     usernameValue: "",
@@ -65,7 +67,7 @@ const Login = () => {
       async function signin() {
         try {
           const response = await Axios.post(
-            "http://localhost:8000/api-auth-djoser/token/login/",
+            `http://${address.localhostIP}/api-auth-djoser/token/login/`,
             {
               username: state.usernameValue,
               password: state.passwordValue,
@@ -103,7 +105,7 @@ const Login = () => {
       async function getUserInfo() {
         try {
           const response = await Axios.get(
-            "http://localhost:8000/api-auth-djoser/users/me/",
+            `http://${address.localhostIP}/api-auth-djoser/users/me/`,
             {
               headers: { Authorization: "Token ".concat(state.token) },
             },

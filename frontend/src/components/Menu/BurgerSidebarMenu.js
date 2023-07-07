@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./BurgerSidebarMenu.css";
 import { Button, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { AiFillDelete, AiFillDislike } from "react-icons/ai";
 import { BiDislike } from "react-icons/bi";
 import Axios from "axios";
+import GlobalContext from "../../contexts/GlobalContext";
 
 const BurgerSidebarMenu = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchList, setSearchList] = useState([]);
+    const address = useContext(GlobalContext);
+
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
@@ -39,7 +42,7 @@ const BurgerSidebarMenu = (props) => {
   useEffect(() => {
     async function getAllSearches() {
       try {
-        await Axios.get(`http://localhost:8000/api/searches`).then(
+        await Axios.get(`http://${address.localhostIP}/api/searches`).then(
           (response) => {
             setSearchList(response.data);
           }

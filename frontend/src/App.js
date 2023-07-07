@@ -10,7 +10,7 @@ import Header from "./components/Header";
 import Register from "./components/Authentication/Register";
 import Histoty from "./components/Menu/History";
 import AccountCreated from "./components/Authentication/AccountCreated";
-import WaitingList from './components/Authentication/WaitingList';
+import WaitingList from "./components/Authentication/WaitingList";
 // import logo from "./logo.svg";
 import "./App.css";
 
@@ -18,10 +18,12 @@ import image from "./Images/background.jpg";
 //Contexts
 import DispatchContext from "./contexts/DispatchContext";
 import StateContext from "./contexts/StateContext";
+import GlobalContext from "./contexts/GlobalContext";
+
 import Profile from "./components/Profile/Profile";
 import EditProfile from "./components/Profile/EditProfile";
 import SearchContext from "./contexts/SearchContext";
-import Sidebar from './components/Menu/Sidebar';
+import Sidebar from "./components/Menu/Sidebar";
 
 function App() {
   const initialState = {
@@ -32,7 +34,11 @@ function App() {
     userId: localStorage.getItem("theUserId"),
     userToken: localStorage.getItem("theUserToken"),
     userIsLogged: localStorage.getItem("theUserUsername") ? true : false,
-    // userIsStaff: localStorage.getItem("theUserIsStaff") 
+    // userIsStaff: localStorage.getItem("theUserIsStaff")
+  };
+  const initialAddress = {
+    localhostIP:"16.171.9.13",
+    // localhostIP: "localhost:8000",
   };
   const users = [
     "avia",
@@ -71,6 +77,7 @@ function App() {
   const [searchList, setSearchList] = useState([]);
   const [globlSearchTerm, setGloblSearchTerm] = useState("");
   const [globalSearchBtn, setGlobalSearchBtn] = useState(false);
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
     if (state.userIsLogged) {
@@ -94,73 +101,78 @@ function App() {
       <div
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
-        <StateContext.Provider value={state}>
-          <DispatchContext.Provider value={dispatch}>
-            <SearchContext.Provider
-              value={{
-                searchResults,
-                setSearchResults,
-                searchList,
-                setSearchList,
-                globlSearchTerm,
-                setGloblSearchTerm,
-                globalSearchBtn,
-                setGlobalSearchBtn,
-              }}
-            >
-              <BrowserRouter>
-                <div
-                  style={{
-                    position: "fixed",
-                    opacity: 1,
-                    width: "100%",
-                  }}
-                >
-                  <Header />
-                </div>
-
-                <div>
-                  <img
-                    src={image}
-                    alt="my background"
-                    style={{
-                      filter: "brightness(90%) opacity(0.3)",
-                      position: "fixed",
-                      top: "0",
-                      left: "0",
-                      width: "100%",
-                      height: "100%",
-                      zIndex: "-1",
-                    }}
-                  />
-                  {/* <img src={image} alt="my background" style={{ filter: 'brightness(50%) opacity(0.5)', height: "auto", width: "99.99%" }} /> */}
+        <GlobalContext.Provider value={initialAddress}>
+          <StateContext.Provider value={state}>
+            <DispatchContext.Provider value={dispatch}>
+              <SearchContext.Provider
+                value={{
+                  searchResults,
+                  setSearchResults,
+                  searchList,
+                  setSearchList,
+                  globlSearchTerm,
+                  setGloblSearchTerm,
+                  globalSearchBtn,
+                  setGlobalSearchBtn,
+                }}
+              >
+                <BrowserRouter>
                   <div
                     style={{
-                      top: "100px",
-                      left: "20px",
-                      textAlign: "center",
-                      zIndex: "100",
+                      position: "fixed",
+                      opacity: 1,
                       width: "100%",
                     }}
                   >
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      <Route path="/results" element={<SearchesList />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/register" element={<Register />} />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route path="/updateprofile" element={<EditProfile />} />
-                      <Route path="/created" element={<AccountCreated />} />
-                      <Route path="/waitinglist" element={<WaitingList />} />
-
-                      {/* <Route path="/history" element={<History />} /> */}
-                    </Routes>
+                    <Header />
                   </div>
-                </div>
-              </BrowserRouter>
-            </SearchContext.Provider>
-          </DispatchContext.Provider>
-        </StateContext.Provider>
+
+                  <div>
+                    <img
+                      src={image}
+                      alt="my background"
+                      style={{
+                        filter: "brightness(90%) opacity(0.3)",
+                        position: "fixed",
+                        top: "0",
+                        left: "0",
+                        width: "100%",
+                        height: "100%",
+                        zIndex: "-1",
+                      }}
+                    />
+                    {/* <img src={image} alt="my background" style={{ filter: 'brightness(50%) opacity(0.5)', height: "auto", width: "99.99%" }} /> */}
+                    <div
+                      style={{
+                        top: "100px",
+                        left: "20px",
+                        textAlign: "center",
+                        zIndex: "100",
+                        width: "100%",
+                      }}
+                    >
+                      <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/results" element={<SearchesList />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route
+                          path="/updateprofile"
+                          element={<EditProfile />}
+                        />
+                        <Route path="/created" element={<AccountCreated />} />
+                        <Route path="/waitinglist" element={<WaitingList />} />
+
+                        {/* <Route path="/history" element={<History />} /> */}
+                      </Routes>
+                    </div>
+                  </div>
+                </BrowserRouter>
+              </SearchContext.Provider>
+            </DispatchContext.Provider>
+          </StateContext.Provider>
+        </GlobalContext.Provider>
       </div>
       <div>
         <div
