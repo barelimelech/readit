@@ -37,7 +37,8 @@ function App() {
     // userIsStaff: localStorage.getItem("theUserIsStaff")
   };
   const initialAddress = {
-    localhostIP:"16.171.9.13",
+    localhostIP:"lateread.com",
+    // localhostIP:"16.171.9.13",
     // localhostIP: "localhost:8000",
   };
   const users = [
