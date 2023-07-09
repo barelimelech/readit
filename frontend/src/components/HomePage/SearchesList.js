@@ -70,6 +70,14 @@ const SearchesList = (props) => {
             gap="10px"
           >
             <a
+              href={`https://www.google.com/search?q=${globlSearchTerm}`}
+              target="_blank"
+              rel="noreferrer"
+              style={{fontSize: "large"}}
+            >
+              Google
+            </a>
+            <a
               href={`https://www.bing.com/search?q=${globlSearchTerm}`}
               target="_blank"
               rel="noreferrer"
