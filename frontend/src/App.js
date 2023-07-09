@@ -37,11 +37,13 @@ function App() {
     // userIsStaff: localStorage.getItem("theUserIsStaff")
   };
   
-  const initialAddress = window.location.host.includes("localhost")
-    ? {
-        localhostIP: "localhost:8000",
-      }
-    : { localhostIP: "lateread.com" };
+  const initialAddress = { localhostIP: "lateread.com" };
+
+    //  const initialAddress = window.location.host.includes("localhost")
+    //    ? {
+    //        localhostIP: "localhost:8000",
+    //      }
+    //    : { localhostIP: "lateread.com" };
 
   function ReducerFuction(draft, action) {
     switch (action.type) {
