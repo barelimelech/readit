@@ -119,108 +119,85 @@ const EditProfile = (props) => {
     <StyledEngineProvider injectFirst>
       <form onSubmit={FormSubmit}>
         <Grid
-          item
           container
-          direction="column"
           justifyContent="center"
           alignItems="center"
+          className={classes.root}
+          sx={{ marginTop: "5rem" }}
         >
-          <Grid item>
-            <Typography className={classes.edit_profile}>
-              <Box sx={{ p: 10, width: 900, boxShadow: 14 }}>
-                <Grid
-                  item
-                  container
-                  justifyContent="center"
-                  style={{ marginTop: "1rem" }}
-                >
-                  <Typography style={{ color: "#1d71cb" }} variant="h4">
-                    Edit Profile
-                  </Typography>
-                </Grid>
-
-                <Grid item container style={{ marginTop: "1rem" }}>
-                  <TextField
-                    id="firstName"
-                    label="firstName"
-                    variant="outlined"
-                    fullWidth
-                    value={state.first_name}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "catchFirstNameChange",
-                        firstNameChosen: e.target.value,
-                      })
-                    }
-                    InputProps={{
-                      style: {
-                        backgroundColor: "rgba(255, 255, 255, 0.5)",
-                      },
-                    }}
-                  />
-                </Grid>
-
-                <Grid item container style={{ marginTop: "1rem" }}>
-                  <TextField
-                    id="lastName"
-                    label="lastName*"
-                    variant="outlined"
-                    fullWidth
-                    value={state.last_name}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "catchLastNameChange",
-                        lastNameChosen: e.target.value,
-                      })
-                    }
-                    InputProps={{
-                      style: {
-                        backgroundColor: "rgba(255, 255, 255, 0.5)",
-                      },
-                    }}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  container
-                  xs={3}
-                  style={{
-                    marginTop: "1rem",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    type="submit"
-                    style={{
-                      backgroundColor: "#1d71cb",
-                      color: "white",
-                      fontSize: "1.1rem",
-                      marginLeft: "1rem",
-                    }}
-                    disabled={state.disabledBtn}
-                  >
-                    Save
-                  </Button>
-                </Grid>
-              </Box>
+          <Grid item xs={12} md={6}>
+            <Typography
+              variant="h4"
+              align="center"
+              color="primary"
+              gutterBottom
+            >
+              Edit Profile
             </Typography>
+            <Box sx={{ p: { xs: 1, md: 3 }, boxShadow: 14 }}>
+              <TextField
+                id="firstName"
+                label="First Name"
+                variant="outlined"
+                fullWidth
+                value={state.first_name}
+                onChange={(e) =>
+                  dispatch({
+                    type: "catchFirstNameChange",
+                    firstNameChosen: e.target.value,
+                  })
+                }
+                InputProps={{
+                  style: {
+                    backgroundColor: "rgba(255, 255, 255, 0.5)",
+                  },
+                }}
+                sx={{ marginBottom: 2 }}
+              />
+              <TextField
+                id="lastName"
+                label="Last Name"
+                variant="outlined"
+                fullWidth
+                value={state.last_name}
+                onChange={(e) =>
+                  dispatch({
+                    type: "catchLastNameChange",
+                    lastNameChosen: e.target.value,
+                  })
+                }
+                InputProps={{
+                  style: {
+                    backgroundColor: "rgba(255, 255, 255, 0.5)",
+                  },
+                }}
+                sx={{ marginBottom: 2 }}
+              />
+              <Button
+                variant="contained"
+                fullWidth
+                type="submit"
+                disabled={state.disabledBtn}
+                sx={{
+                  backgroundColor: "#1d71cb",
+                  color: "white",
+                  fontSize: "1.1rem",
+                }}
+              >
+                Save
+              </Button>
+            </Box>
           </Grid>
         </Grid>
       </form>
-      <div>
-        <Snackbar
-          open={state.openSnack}
-          message="You have successfully updated your profile!"
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-        />
-      </div>
+      <Snackbar
+        open={state.openSnack}
+        message="You have successfully updated your profile!"
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+      />
     </StyledEngineProvider>
   );
 };

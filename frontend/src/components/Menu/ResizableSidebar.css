@@ -1,0 +1,28 @@
+.resizable-sidebar {
+  display: flex;
+  height: 100vh;
+}
+
+.resizable-handle {
+  width: 10px;
+  background: #ddd;
+  cursor: col-resize;
+  padding: 4px 0;
+  z-index: 1;
+  touch-action: none;
+}
+
+.sidebar-content {
+  background: #f0f0f0;
+  border-right: 1px solid #ccc;
+  overflow: auto;
+}
+
+.page-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.resizing .resizable-handle {
+  background: #aaa;
+}

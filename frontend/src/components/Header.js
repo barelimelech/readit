@@ -14,6 +14,7 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import Menu from "./Menu/Menu";
 import Sidebar from "./Menu/Sidebar";
+import NewSidebar from './Menu/NewSidebar';
 //Contexts
 import StateContext from "../contexts/StateContext";
 import DispatchContext from "../contexts/DispatchContext";
@@ -36,7 +37,7 @@ import logo from '../Images/logo4.jpg';
 
 import BurgerSidebarMenu from "./Menu/BurgerSidebarMenu";
 import MenuIcon from "@mui/icons-material/Menu";
-const Header = () => {
+const Header = (props) => {
   const navigate = useNavigate();
   const address = useContext(GlobalContext);
 
@@ -92,21 +93,24 @@ const Header = () => {
   }
 
   return (
-    <div >
+    <div>
       <StyledEngineProvider injectFirst>
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 100 }}>
           <AppBar position="static">
             <Toolbar>
-              {GlobalState.userIsLogged && (
+              {GlobalState.userIsLogged && props.isMobile && <Menu style={{width:"-webkit-fill-available"}}/>}
+
+              {/* {GlobalState.userIsLogged && (
                 // <MenuItem style={{ color: "white" }}>
                 //   <BurgerSidebarMenu
                 //     words={words}
                 //     onWordClick={handleWordClick}
                 //   />
                 // </MenuItem>
-                 <Menu />
+                //  <Menu />
+                //  <NewSidebar/>
                 // <Sidebar/>
-              )}
+              )} */}
               <MenuItem
                 color="inherit"
                 onClick={() => {
@@ -115,7 +119,11 @@ const Header = () => {
                 }}
                 style={{ textTransform: "none" }}
               >
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontFamily: 'Poppins, sans-serif' }}>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ flexGrow: 1, fontFamily: "Poppins, sans-serif" }}
+                >
                   {/* <img src={logo} style={{height:35, width:120}}></img> */}
                   lateread
                 </Typography>

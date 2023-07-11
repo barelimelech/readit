@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import GlobalContext from "../../contexts/GlobalContext";
+import Popup from "../Popup";
 
 const WaitingList = () => {
   const navigate = useNavigate();
@@ -21,12 +22,24 @@ const WaitingList = () => {
   const [email, setEmail] = useState("");
   const [submitClicked, setSubmitClicked] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [isAlreadyCreated, setIsAlreadyCreated] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setSubmitClicked(true);
+    setShowPopup(true);
+    setIsAlreadyCreated(true);
   };
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    setIsAlreadyCreated(false);
 
+    navigate("/");
+  };
+  const handleGoBack = () => {
+    navigate(-1);
+  };
   useEffect(() => {
     if (submitClicked) {
       async function addUserToWaitingList() {
@@ -43,11 +56,16 @@ const WaitingList = () => {
           );
           console.log("response " + response);
           if (response.status === 201) {
+            setShowPopup(true);
             setIsCreated(true);
-            setFirstName("");
-            setEmail("");
-            setLastName("");
-            // navigate('/');
+            // setFirstName("");
+            // setEmail("");
+            // setLastName("");
+            //navigate('/');
+          }else if (response.status === 400) {
+            setShowPopup(true);
+            setIsAlreadyCreated(true);
+            
           }
         } catch (e) {
           console.log("error waiting list :" + e);
@@ -57,12 +75,12 @@ const WaitingList = () => {
     }
   }, [submitClicked]);
   return (
-    <div>
-      <form onSubmit={handleSubmit} style={{ marginTop: "100px" }}>
+    <div style={{ marginTop: "100px" }}>
+      <form onSubmit={handleSubmit} style={{ marginTop: "50px" }}>
         <Typography variant="h4" gutterBottom>
           Waiting List{" "}
         </Typography>
-        <Box sx={{ mx: "auto", maxWidth: "400px" }}>
+        <Box sx={{ mx: "auto", maxWidth: "400px", px: "16px" }}>
           <TextField
             label="First Name"
             value={firstName}
@@ -107,21 +125,38 @@ const WaitingList = () => {
         <Button type="submit" variant="contained" color="primary">
           Submit
         </Button>
+        <Button onClick={handleGoBack} variant="outlined" color="primary">
+          Go Back
+        </Button>
       </form>
-      <div >
+      <div>
         {isCreated && (
-          <Alert
-            severity="success"
-            style={{
-              width: "25%",
-              justifyContent: "center",
-                display:"inline-flex",
-                marginTop:"30px"
-            }}
-          >
-            <AlertTitle>Success</AlertTitle>
-            You successfuly added to <strong>WAITING LIST!</strong>
-          </Alert>
+          <Popup
+            title={"You successfuly added to WAITING LIST!"}
+            context={""}
+            open={showPopup}
+            onClose={handleClosePopup}
+          />
+          // <Alert
+          //   severity="success"
+          //   style={{
+          //     width: "25%",
+          //     justifyContent: "center",
+          //     display: "inline-flex",
+          //     marginTop: "30px",
+          //   }}
+          // >
+          //   <AlertTitle>Success</AlertTitle>
+          //   You successfuly added to <strong>WAITING LIST!</strong>
+          // </Alert>
+        )}
+        {isAlreadyCreated && (
+          <Popup
+            title={"You already added to WAITING LIST!"}
+            context={""}
+            open={showPopup}
+            onClose={handleClosePopup}
+          />
         )}
       </div>
     </div>

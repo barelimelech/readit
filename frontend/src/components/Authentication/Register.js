@@ -263,6 +263,7 @@ const Register = () => {
         >
           <Typography variant="h5">Register</Typography>
         </Grid>
+        <Box sx={{ mx: "auto", maxWidth: "400px", px: "16px" }}>
 
         {state.serverMessageUsername ? (
           <Alert severity="error">{state.serverMessageUsername}</Alert>
@@ -309,7 +310,6 @@ const Register = () => {
               firstNameChosen: e.target.value,
             })
           }
-         
         />
         <TextField
           className={classes.textfield}
@@ -326,7 +326,6 @@ const Register = () => {
               lastNameChosen: e.target.value,
             })
           }
-          
         />
         <TextField
           className={classes.textfield}
@@ -417,10 +416,13 @@ const Register = () => {
           }
           helperText={state.password2HelperText}
         />
+        </Box>
         <Grid
           item
           container
-          xs={1}
+          xs={12}
+          justifyContent="center" // Add this line to center the content horizontally
+          alignItems="center"
           style={{ marginTop: "auto", marginLeft: "auto", marginRight: "auto" }}
         >
           <Button
@@ -428,8 +430,7 @@ const Register = () => {
             type="submit"
             style={{
               color: "white",
-              fontSize: "1.1rem",
-              marginLeft: "1rem",
+              fontSize: "1rem",
               // "&:hover": {
               // 	backgroundColor: "blue",
               // },
@@ -448,12 +449,12 @@ const Register = () => {
         >
           <Typography variant="small">
             Have an account?{" "}
-            <span
+            <Button
               onClick={() => navigate("/login")}
               style={{ cursor: "pointer", color: "blue" }}
             >
               Login
-            </span>
+            </Button>
           </Typography>
         </Grid>
       </form>

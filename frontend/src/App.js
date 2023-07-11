@@ -24,6 +24,8 @@ import Profile from "./components/Profile/Profile";
 import EditProfile from "./components/Profile/EditProfile";
 import SearchContext from "./contexts/SearchContext";
 import Sidebar from "./components/Menu/Sidebar";
+import MenuSidebar from "./components/Menu/SidebarWrapper";
+import Menu from "./components/Menu/Menu";
 
 function App() {
   const initialState = {
@@ -36,6 +38,25 @@ function App() {
     userIsLogged: localStorage.getItem("theUserUsername") ? true : false,
     // userIsStaff: localStorage.getItem("theUserIsStaff")
   };
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust the threshold as needed
+    };
+
+    // Call the handler on initial load
+    handleResize();
+
+    // Add a listener to update the state when the window is resized
+    window.addEventListener("resize", handleResize);
+
+    console.log("is mobile? " + isMobile);
+
+    // Clean up the listener when the component is unmounted
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isMobile]);
 
   // const initialAddress = { localhostIP: "lateread.com" };
 
@@ -73,6 +94,25 @@ function App() {
   const [globalSearchBtn, setGlobalSearchBtn] = useState(false);
   const [address, setAddress] = useState("");
 
+
+// const [sidebarWidth, setSidebarWidth] = useState(200); // Width of the sidebar
+
+// useEffect(() => {
+//   const handleResize = () => {
+//     const sidebar = document.querySelector(".sidebar-wrapper");
+//     const newSidebarWidth = sidebar ? sidebar.offsetWidth : 0;
+//     setSidebarWidth(newSidebarWidth);
+//   };
+
+//   window.addEventListener("resize", handleResize);
+//   handleResize(); // Initial calculation
+
+//   return () => {
+//     window.removeEventListener("resize", handleResize);
+//   };
+// }, []);
+
+
   useEffect(() => {
     if (state.userIsLogged) {
       localStorage.setItem("theUserFirstName", state.userFirstName);
@@ -90,11 +130,10 @@ function App() {
       localStorage.removeItem("theUserToken");
     }
   }, [state.userIsLogged]);
+
   return (
     <div>
-      <div
-        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-      >
+      <BrowserRouter>
         <GlobalContext.Provider value={initialAddress}>
           <StateContext.Provider value={state}>
             <DispatchContext.Provider value={dispatch}>
@@ -110,83 +149,100 @@ function App() {
                   setGlobalSearchBtn,
                 }}
               >
-                <BrowserRouter>
+                <div
+                  style={{
+                    display: "flex",
+                    minHeight: "100vh",
+                  }}
+                >
+                  {state.userIsLogged && !isMobile && <MenuSidebar />}
                   <div
                     style={{
-                      position: "fixed",
-                      opacity: 1,
-                      width: "100%",
+                      flex: 1,
+                      // paddingRight: `${sidebarWidth}px`, // Adjust the padding to account for the sidebar width
                     }}
                   >
-                    <Header />
-                  </div>
-
-                  <div>
-                    <img
-                      src={image}
-                      alt="my background"
-                      style={{
-                        filter: "brightness(90%) opacity(0.3)",
-                        position: "fixed",
-                        top: "0",
-                        left: "0",
-                        width: "100%",
-                        height: "100%",
-                        zIndex: "-1",
-                      }}
-                    />
-                    {/* <img src={image} alt="my background" style={{ filter: 'brightness(50%) opacity(0.5)', height: "auto", width: "99.99%" }} /> */}
                     <div
                       style={{
-                        top: "100px",
-                        left: "20px",
-                        textAlign: "center",
+                        position: "fixed",
+                        opacity: 1,
+                        width: "-webkit-fill-available",
                         zIndex: "100",
-                        width: "100%",
                       }}
                     >
-                      <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/results" element={<SearchesList />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/profile" element={<Profile />} />
-                        <Route
-                          path="/updateprofile"
-                          element={<EditProfile />}
-                        />
-                        <Route path="/created" element={<AccountCreated />} />
-                        <Route path="/waitinglist" element={<WaitingList />} />
+                      <Header isMobile={isMobile}/>
+                    </div>
 
-                        {/* <Route path="/history" element={<History />} /> */}
-                      </Routes>
+                    <div>
+                      <img
+                        src={image}
+                        alt="my background"
+                        style={{
+                          filter: "brightness(90%) opacity(0.3)",
+                          position: "fixed",
+                          top: "0",
+                          left: "0",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      />
+                      <div
+                        style={{
+                          top: "100px",
+                          left: "20px",
+                          textAlign: "center",
+                          zIndex: "100",
+                          width: "100%",
+                        }}
+                      >
+                        <Routes>
+                          
+                          <Route path="/" element={<Home />} />
+                          <Route path="/results" element={<SearchesList />} />
+                          <Route path="/login" element={<Login />} />
+                          <Route path="/register" element={<Register />} />
+                          <Route path="/profile" element={<Profile />} />
+                          <Route
+                            path="/updateprofile"
+                            element={<EditProfile />}
+                          />
+                          <Route path="/created" element={<AccountCreated />} />
+                          <Route
+                            path="/waitinglist"
+                            element={<WaitingList />}
+                          />
+
+                          {/* <Route path="/history" element={<History />} /> */}
+                        </Routes>
+                      </div>
+                      {/* <div>
+                        <div
+                          style={{
+                            bottom: "0",
+                            left: "0",
+                            width: "100%",
+                            backgroundColor: "#f5f5f5",
+                            padding: "20px",
+                          }}
+                        >
+                          <Grid container justify="center" alignItems="center">
+                            <Typography variant="body2" color="textSecondary">
+                              © 2023 BAE Website. All rights reserved.
+                            </Typography>
+                          </Grid>
+                        </div>
+                      </div> */}
                     </div>
                   </div>
-                </BrowserRouter>
+                </div>
               </SearchContext.Provider>
             </DispatchContext.Provider>
           </StateContext.Provider>
         </GlobalContext.Provider>
-      </div>
-      <div>
-        <div
-          style={{
-            bottom: "0",
-            left: "0",
-            width: "100%",
-            backgroundColor: "#f5f5f5",
-            padding: "20px",
-          }}
-        >
-          <Grid container justify="center" alignItems="center">
-            <Typography variant="body2" color="textSecondary">
-              © 2023 BAE Website. All rights reserved.
-            </Typography>
-          </Grid>
-        </div>
-      </div>
+      </BrowserRouter>
     </div>
   );
 }
+
 
 export default App;

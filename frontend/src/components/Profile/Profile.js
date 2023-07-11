@@ -19,6 +19,7 @@ import {
   Typography,
   StyledEngineProvider,
   Paper,
+  Container,
 } from "@mui/material";
 import EditProfile from "./EditProfile";
 
@@ -95,55 +96,47 @@ const Profile = () => {
   };
 
   return (
-    <StyledEngineProvider injectFirst>
+    <Container maxWidth="md" className={classes.container}>
       {isEditing === false ? (
         <Grid
-          item
           container
           direction="column"
           justifyContent="center"
           alignItems="center"
+          marginTop={15}
+      
         >
           <Grid item>
-            <Typography className={classes.profile_headline}>
-              <Box sx={{ p: 10, width: 900, boxShadow: 14 }}>
-                <h1> Hello</h1>
-                <br />
-                username:
-                <Paper className={classes.profile_span}>
-                  {state.userProfile.username}
-                </Paper>
-                <br />
-                first name:
-                <Paper className={classes.profile_span}>
-                  {state.userProfile.first_name}
-                </Paper>
-                <br />
-                last name:
-                <Paper className={classes.profile_span}>
-                  {state.userProfile.last_name}
-                </Paper>
-                <br />
-                email:
-                <Paper className={classes.profile_span}>
-                  {state.userProfile.email}
-                </Paper>
-                <Grid>
-                  <Button size="large" onClick={handelUpdateProfile}>
-                    Edit profile
-                  </Button>
-                </Grid>
+            <Typography
+              variant="h4"
+              align="center"
+              className={classes.profileHeadline}
+            >
+              Hello {state.userProfile.username}
+            </Typography>
+            <Typography className={classes.profileDetails}>
+              <Box component={Paper} className={classes.profileSpan}>
+                Username: {state.userProfile.username}
               </Box>
+              <Box component={Paper} className={classes.profileSpan}>
+                First Name: {state.userProfile.first_name}
+              </Box>
+              <Box component={Paper} className={classes.profileSpan}>
+                Last Name: {state.userProfile.last_name}
+              </Box>
+              <Box component={Paper} className={classes.profileSpan}>
+                Email: {state.userProfile.email}
+              </Box>
+              <Button size="large" onClick={handelUpdateProfile}>
+                Edit Profile
+              </Button>
             </Typography>
           </Grid>
         </Grid>
       ) : (
-        <EditProfile
-          userProfile={state.userProfile}
-          handleSave={handleSave} // Pass the handleSave function
-        />
+        <EditProfile userProfile={state.userProfile} handleSave={handleSave} />
       )}
-    </StyledEngineProvider>
+    </Container>
   );
 };
 

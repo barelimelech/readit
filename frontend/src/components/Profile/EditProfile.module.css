@@ -2,4 +2,24 @@
     text-align:center;
     margin-top: 5rem;
     font-size: xx-large;
+    @media only screen and (max-width: 600px) {
+    /* Styles for screens up to 600px width */
+    width: 100%; /* Adjust the width for smaller screens */
+  }
 }
+
+/* EditProfile.module.css */
+
+.root {
+  width: 100%; /* Set the container width to 100% */
+  padding: 2rem; /* Add padding for spacing */
+
+  @media only screen and (max-width: 600px) {
+    /* Styles for screens up to 600px width */
+    padding: 1rem; /* Reduce padding for smaller screens */
+  }
+}
+
+
+
+/* Add more styles as needed for other elements within your component */

@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import Search from "./Search";
 import SearchContext from "../../contexts/SearchContext";
 import image from "../../Images/background.jpg";
+import classes from "./SearchList.module.css";
 
 const SearchesList = (props) => {
   const { searchResults } = useContext(SearchContext);
@@ -12,7 +13,7 @@ const SearchesList = (props) => {
   const [searchTerm, setSearchTerm] = useState(globlSearchTerm);
 
   return (
-    <div>
+    <div className="container contact__container">
       <Grid
         container
         alignItems="center"
@@ -23,16 +24,8 @@ const SearchesList = (props) => {
           <Search />
         </Grid>
 
-        <h2 style={{ textAlign: "center" }}>
-          Search Results for {globlSearchTerm}
-        </h2>
-        <Grid
-          item
-          xs={12}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
+        <h2 style={{ textAlign: "center" }}>Search Results</h2>
+        <Grid item xs={12}>
           <List>
             {searchResults.map((result) => (
               <ListItem key={result.cacheId} alignItems="flex-start">
@@ -53,27 +46,23 @@ const SearchesList = (props) => {
           </List>
         </Grid>
         <h1>Explore other options</h1>
-        <Grid
-          item
-          xs={12}
-          alignItems="center"
-          justifyContent="center"
-          marginLeft="200px"
-          marginRight="200px"
-          marginBottom="200px"
-        >
+        <Grid item xs={12}>
           <Box
-            sx={{ p: 2, border: "1px dashed grey" }}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            gap="10px"
+            sx={{
+              p: 2,
+              border: "1px dashed grey",
+              display: "flex",
+              justifyContent: "center",
+              gap: "10px",
+              flexWrap: "wrap",
+            }}
+           
           >
             <a
               href={`https://www.google.com/search?q=${globlSearchTerm}`}
               target="_blank"
               rel="noreferrer"
-              style={{fontSize: "large"}}
+              style={{ fontSize: "large" }}
             >
               Google
             </a>
@@ -81,6 +70,7 @@ const SearchesList = (props) => {
               href={`https://www.bing.com/search?q=${globlSearchTerm}`}
               target="_blank"
               rel="noreferrer"
+              style={{ fontSize: "large" }}
             >
               Bing
             </a>
@@ -89,6 +79,7 @@ const SearchesList = (props) => {
               href={`https://www.mojeek.com/search?q=${globlSearchTerm}`}
               target="_blank"
               rel="noreferrer"
+              style={{ fontSize: "large" }}
             >
               mojeek
             </a>
@@ -97,6 +88,7 @@ const SearchesList = (props) => {
               href={`https://search.yahoo.com/search?p=${globlSearchTerm}`}
               target="_blank"
               rel="noreferrer"
+              style={{ fontSize: "large" }}
             >
               yahoo
             </a>
@@ -105,6 +97,7 @@ const SearchesList = (props) => {
               href={`https://search.brave.com/search?q=${globlSearchTerm}`}
               target="_blank"
               rel="noreferrer"
+              style={{fontSize: "large" ,pointerEvents: "none", cursor: "default"}}
             >
               brave
             </a>

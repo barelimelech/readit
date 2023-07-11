@@ -2,7 +2,16 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { styled, useTheme } from "@mui/material/styles";
-import { AiFillDelete, AiFillDislike, AiFillLike } from "react-icons/ai";
+import {
+  AiFillDelete,
+  AiFillDislike,
+  AiFillLike,
+  AiOutlineHistory,
+} from "react-icons/ai";
+import { BsArrowLeftShort } from "react-icons/bs";
+import { MdWatchLater } from "react-icons/md";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 import SearchContext from "../../contexts/SearchContext";
 import GlobalContext from "../../contexts/GlobalContext";
 
@@ -15,7 +24,12 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  StyledEngineProvider,
+  DrawerHeader,
+  Collapse,
+  IconButton,
 } from "@mui/material";
+import { makeStyles } from "@material-ui/core/styles";
 
 //Icons
 import MenuIcon from "@mui/icons-material/Menu";
@@ -25,9 +39,19 @@ import RecentActorsIcon from "@mui/icons-material/RecentActors";
 
 //Contexts
 import StateContext from "../../contexts/StateContext";
-
+const useStyles = makeStyles((theme) => ({
+  drawer: {
+    width: "-webkit-fill-available",
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: "-webkit-fill-available",
+  },
+}));
 const Menu = (props) => {
   const navigate = useNavigate();
+  const classes = useStyles();
+
   const GlobalState = useContext(StateContext);
   //   const [searchList, setSearchList] = useState([]);
   const [wordClicked, setWordClicked] = useState([]);
@@ -42,6 +66,21 @@ const Menu = (props) => {
   const { globalSearchBtn, setGlobalSearchBtn } = useContext(SearchContext);
   const address = useContext(GlobalContext);
 
+  const [openUpcomingList, setOpenUpcomingList] = useState(false);
+  const [openHistoryList, setOpenHistoryList] = useState(false);
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const handleClickUpcomingList = () => {
+    setOpenUpcomingList(!openUpcomingList);
+  };
+  const handleClickHistoryList = () => {
+    setOpenHistoryList(!openHistoryList);
+  };
+  const handelClodeMenu = () => {
+    toggleDrawer("left", false);
+    //  setDrawerOpen(!drawerOpen);
+  };
   const handleWordClick = (word) => {
     console.log(word);
     setGloblSearchTerm(word);
@@ -49,6 +88,12 @@ const Menu = (props) => {
     navigate("/results");
     if (props.onWordClick) {
       props.onWordClick(word);
+    }
+    if (drawerState.left) {
+      setDrawerState((prevState) => ({
+        ...prevState,
+        left: false,
+      }));
     }
   };
   const [drawerState, setDrawerState] = React.useState({
@@ -88,6 +133,8 @@ const Menu = (props) => {
 
   useEffect(() => {
     if (isClicked || isClickedToUpcoming) {
+      // toggleDrawer("left", false);
+
       const source = Axios.CancelToken.source();
       async function updateSearch() {
         const formData = new FormData();
@@ -164,90 +211,148 @@ const Menu = (props) => {
       <Button onClick={toggleDrawer("left", true)} style={{ color: "white" }}>
         <MenuIcon />
       </Button>
-      <Drawer
-        anchor={"left"}
-        open={drawerState["left"]}
-        onClose={toggleDrawer("left", false)}
-      >
-        <h3 style={{ marginLeft: "10px", color: "black" }}>Upcoming</h3>
-        <Paper style={{ maxHeight: 400, overflow: "auto" }}>
-          <List>
-            {console.log("search : " + searchList)}
-            {/* {searchList.length === 0 && <p>No searches yet...</p>} */}
-            {searchList.map(
-              (item) =>
-                String(item.user) === String(GlobalState.userId) &&
-                item.isNew === true && (
-                  <div
-                    key={item.id}
-                    style={{
-                      cursor: "pointer",
-                      padding: "8px",
-                      borderRadius: "4px",
-                      margin: "4px 9",
-                    }}
-                  >
-                    <div>
-                      <Button onClick={() => handelWordDelete(item)}>
-                        <AiFillDelete />
-                      </Button>
-                      <Button onClick={() => handelWordToHistory(item)}>
-                        <AiFillDislike />
-                      </Button>
-
-                      <Button
-                        onClick={() => handleWordClick(item.text)}
-                        style={{ color: "black" }}
+      <div width="-webkit-fill-available">
+        <Drawer
+          width="-webkit-fill-available"
+          anchor={"left"}
+          open={drawerState["left"]}
+          onClose={toggleDrawer("left", false)}
+          className={classes.drawer}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <IconButton
+            onClick={toggleDrawer("left", false)}
+            style={{
+              color: "black",
+              marginLeft: "auto",
+              marginTop: "10px",
+              marginRight: "10px",
+            }}
+          >
+            <BsArrowLeftShort />
+          </IconButton>
+          <List
+            sx={{
+              width: "100%",
+              maxWidth: 360,
+              bgcolor: "background.paper",
+            }}
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+          >
+            <ListItemButton onClick={handleClickUpcomingList}>
+              <ListItemIcon>
+                <MdWatchLater />
+              </ListItemIcon>
+              <ListItemText primary="Upcoming" />
+              {openUpcomingList ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={openUpcomingList} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {searchList.map(
+                  (item) =>
+                    String(item.user) === String(GlobalState.userId) &&
+                    item.isNew === true && (
+                      <div
+                        key={item.id}
+                        style={{
+                          cursor: "pointer",
+                          padding: "8px",
+                          borderRadius: "4px",
+                          margin: "4px 9",
+                        }}
                       >
-                        {item.text}
-                      </Button>
-                    </div>
-                  </div>
-                )
-            )}
-          </List>
-        </Paper>
+                        <div>
+                          <ListItem>
+                            <Button
+                              onClick={() => handelWordDelete(item)}
+                              style={{ color: "black" }}
+                            >
+                              <AiFillDelete />
+                            </Button>
+                            <Button
+                              onClick={() => handelWordToHistory(item)}
+                              style={{ color: "black" }}
+                            >
+                              <AiFillDislike />
+                            </Button>
 
-        <h3 style={{ marginLeft: "10px", color: "black" }}>History</h3>
-        <Paper style={{ maxHeight: 400, overflow: "auto" }}>
-          <List>
-            {searchList.map(
-              (item) =>
-                String(item.user) === String(GlobalState.userId) &&
-                item.isNew === false && (
-                  <div
-                    key={item.id}
-                    style={{
-                      cursor: "pointer",
-                      padding: "8px",
-                      borderRadius: "4px",
-                      margin: "4px 9",
-                    }}
-                  >
-                    <div>
-                      <Button onClick={() => handelWordDelete(item)}>
-                        <AiFillDelete />
-                      </Button>
-                      <Button onClick={() => handelWordToUpcoming(item)}>
-                        <AiFillLike />
-                      </Button>
-                      <Button onClick={() => handleWordClick(item.text)}>
-                        {item.text}
-                      </Button>
-                    </div>
-                    {/* <div>
+                            <Button
+                              onClick={() => handleWordClick(item.text)}
+                              style={{ color: "black" }}
+                            >
+                              {item.text}
+                            </Button>
+                          </ListItem>
+                        </div>
+                      </div>
+                    )
+                )}
+              </List>
+            </Collapse>
+          </List>
+
+          <List
+            sx={{
+              width: "100%",
+              maxWidth: 360,
+              bgcolor: "background.paper",
+            }}
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+          >
+            <ListItemButton onClick={handleClickHistoryList}>
+              <ListItemIcon>
+                <AiOutlineHistory />
+              </ListItemIcon>
+              <ListItemText primary="History" />
+              {openHistoryList ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={openHistoryList} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {searchList.map(
+                  (item) =>
+                    String(item.user) === String(GlobalState.userId) &&
+                    item.isNew === false && (
+                      <div
+                        key={item.id}
+                        style={{
+                          cursor: "pointer",
+                          padding: "8px",
+                          borderRadius: "4px",
+                          margin: "4px 9",
+                        }}
+                      >
+                        <div>
+                          <ListItem>
+                            <Button onClick={() => handelWordDelete(item)}>
+                              <AiFillDelete />
+                            </Button>
+                            <Button onClick={() => handelWordToUpcoming(item)}>
+                              <AiFillLike />
+                            </Button>
+                            <Button onClick={() => handleWordClick(item.text)}>
+                              {item.text}
+                            </Button>
+                          </ListItem>
+                        </div>
+                        {/* <div>
                       <Button onClick={() => handelWordToHistory(item)}>
                         <AiFillDislike />
                       </Button>
                     </div> */}
 
-                    {/* {item.isNew === true && <p>No history yet...</p>} */}
-                  </div>
-                )
-            )}
+                        {/* {item.isNew === true && <p>No history yet...</p>} */}
+                      </div>
+                    )
+                )}
+              </List>
+            </Collapse>
           </List>
-        </Paper>
-      </Drawer>
+        </Drawer>
+      </div>
     </React.Fragment>
   );
 };

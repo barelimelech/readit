@@ -226,7 +226,7 @@ const Search = ({ props }) => {
                 context={""}
                 open={showLaterReadPopup}
                 onClose={handleLaterReadClosePopup}
-              />
+              /> 
             )}
           <TextField
             variant="outlined"

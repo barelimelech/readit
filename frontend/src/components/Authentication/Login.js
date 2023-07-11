@@ -11,7 +11,7 @@ import GlobalContext from "../../contexts/GlobalContext";
 import {
   Grid,
   Typography,
-  Button,
+  Button,Box,
   TextField,
   StyledEngineProvider,
 } from "@mui/material";
@@ -143,65 +143,51 @@ const Login = () => {
           justifyContent="center"
           style={{
             marginTop: "7rem",
-            marginLeft: "auto",
-            marginRight: "auto",
             marginBottom: "1rem",
           }}
-         
         >
           <Typography variant="h5">Login</Typography>
         </Grid>
-        <Grid item
-          container
-          justifyContent="center"
-         
-          style={{
-            marginTop: "3rem",
-            marginLeft: "auto",
-            marginRight: "auto",
-            marginBottom: "1rem",
-          }}>
-        <TextField
-          className={classes.textfield}
-          required
-          fullWidth
-          id="outlined-name-input"
-          label="Username"
-          type="username"
-          autoComplete="current-username"
-          value={state.usernameValue}
-          onChange={(e) =>
-            dispatch({
-              type: "catchUsernameChange",
-              usernameChosen: e.target.value,
-            })
-          }
-         
-        />
+        <Box sx={{ mx: "auto", maxWidth: "400px", px: "16px" }}>
+          <TextField
+            className={classes.textfield}
+            required
+            fullWidth
+            id="outlined-name-input"
+            label="Username"
+            type="username"
+            autoComplete="current-username"
+            value={state.usernameValue}
+            onChange={(e) =>
+              dispatch({
+                type: "catchUsernameChange",
+                usernameChosen: e.target.value,
+              })
+            }
+          />
 
-        <TextField
-          className={classes.textfield}
-          required
-          fullWidth
-          id="outlined-password-input"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-          value={state.passwordValue}
-          onChange={(e) =>
-            dispatch({
-              type: "catchPasswordChange",
-              passwordChosen: e.target.value,
-            })
-          }
-          
-        />
-</Grid>
+          <TextField
+            className={classes.textfield}
+            required
+            fullWidth
+            id="outlined-password-input"
+            label="Password"
+            type="password"
+            autoComplete="current-password"
+            value={state.passwordValue}
+            onChange={(e) =>
+              dispatch({
+                type: "catchPasswordChange",
+                passwordChosen: e.target.value,
+              })
+            }
+          />
+        </Box>
         <Grid
           item
           container
-          xs={1}
-          style={{ marginTop: "auto", marginLeft: "auto", marginRight: "auto" }}
+          justifyContent="center"
+          style={{ marginTop: "1rem" }}
         >
           <Button
             variant="contained"
@@ -210,11 +196,7 @@ const Login = () => {
               color: "white",
               fontSize: "1.1rem",
               marginLeft: "1rem",
-              // "&:hover": {
-              // 	backgroundColor: "blue",
-              // },
             }}
-            // disabled={state.disabledBtn}
           >
             Submit
           </Button>
@@ -228,23 +210,23 @@ const Login = () => {
         >
           <Typography variant="small">
             Don't have an account yet?{" "}
-            <span
+            <Button
               onClick={() => navigate("/register")}
               style={{ cursor: "pointer", color: "blue" }}
             >
               SIGN UP
-            </span>
+            </Button>
           </Typography>
 
-          {/* <Typography variant="small">
+          <Typography variant="small">
             Don't have an account? Want to get into the waiting list?{" "}
-            <span
+            <Button
               onClick={() => navigate("/waitinglist")}
               style={{ cursor: "pointer", color: "blue" }}
             >
               Click Here
-            </span>
-          </Typography> */}
+            </Button>
+          </Typography>
         </Grid>
       </form>
     </StyledEngineProvider>
