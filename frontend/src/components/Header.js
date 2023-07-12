@@ -25,18 +25,11 @@ import {
   Typography,
   Button,
   StyledEngineProvider,
-  Drawer,
-  List,
-  ListItemButton,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
+  
 } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import logo from '../Images/logo4.jpg';
 
-import BurgerSidebarMenu from "./Menu/BurgerSidebarMenu";
-import MenuIcon from "@mui/icons-material/Menu";
 const Header = (props) => {
   const navigate = useNavigate();
   const address = useContext(GlobalContext);
@@ -45,7 +38,15 @@ const Header = (props) => {
   const GlobalState = useContext(StateContext);
   const GlobalDispatch = useContext(DispatchContext);
   const { globlSearchTerm, setGloblSearchTerm } = useContext(SearchContext);
-
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#a0569a",
+      darker: "#d68bd0",
+      default: "#fce1fa",
+    },
+  },
+});
   useEffect(() => {
     if (showMenu) {
       console.log("showMenu  " + showMenu);
@@ -56,24 +57,6 @@ const Header = (props) => {
     console.log("Clicked word:", word);
     // Perform any desired action with the clicked word
   };
-
-  // const [drawerState, setDrawerState] = React.useState({
-  //   top: false,
-  //   left: false,
-  //   bottom: false,
-  //   right: false,
-  // });
-
-  // const toggleDrawer = (anchor, open) => (event) => {
-  //   if (
-  //     event.type === "keydown" &&
-  //     (event.key === "Tab" || event.key === "Shift")
-  //   ) {
-  //     return;
-  //   }
-
-  //   setDrawerState({ ...drawerState, [anchor]: open });
-  // };
 
   async function handleLogout() {
     const confirmLogout = window.confirm("Are you sure you want to leave?");
@@ -93,14 +76,23 @@ const Header = (props) => {
   }
 
   return (
-    <div>
-      <StyledEngineProvider injectFirst>
-        <Box sx={{ flexGrow: 100 }}>
-          <AppBar position="static">
-            <Toolbar>
-              {GlobalState.userIsLogged && props.isMobile && <Menu style={{width:"-webkit-fill-available"}}/>}
+    <ThemeProvider theme={theme}>
+      <div>
+        <StyledEngineProvider injectFirst>
+          <Box
+            sx={{
+              flexGrow: 100,
+              background:
+                "linear-gradient(-45deg, #f3b4a1, #f097b9, #96d7ef, #b1e7da)",
+            }}
+          >
+            <AppBar position="static">
+              <Toolbar>
+                {GlobalState.userIsLogged && props.isMobile && (
+                  <Menu style={{ width: "-webkit-fill-available" }} />
+                )}
 
-              {/* {GlobalState.userIsLogged && (
+                {/* {GlobalState.userIsLogged && (
                 // <MenuItem style={{ color: "white" }}>
                 //   <BurgerSidebarMenu
                 //     words={words}
@@ -111,55 +103,56 @@ const Header = (props) => {
                 //  <NewSidebar/>
                 // <Sidebar/>
               )} */}
-              <MenuItem
-                color="inherit"
-                onClick={() => {
-                  setGloblSearchTerm("");
-                  navigate("/");
-                }}
-                style={{ textTransform: "none" }}
-              >
-                <Typography
-                  variant="h6"
-                  component="div"
-                  sx={{ flexGrow: 1, fontFamily: "Poppins, sans-serif" }}
-                >
-                  {/* <img src={logo} style={{height:35, width:120}}></img> */}
-                  lateread
-                </Typography>
-              </MenuItem>
-              {GlobalState.userIsLogged && (
                 <MenuItem
-                  className={classes.alignRight}
-                  key={"tmp"}
-                  onClick={() => navigate("/profile")}
+                  color="inherit"
+                  onClick={() => {
+                    setGloblSearchTerm("");
+                    navigate("/");
+                  }}
+                  style={{ textTransform: "none" }}
                 >
-                  <BsFillPersonFill />
+                  <Typography
+                    variant="h5"
+                    component="div"
+                    sx={{ flexGrow: 1, fontFamily: "Lobster Two, cursive" }}
+                  >
+                    {/* <img src={logo} style={{height:35, width:120}}></img> */}
+                    lateread
+                  </Typography>
                 </MenuItem>
-              )}
-              {GlobalState.userIsLogged ? (
-                <Button
-                  sx={{ marginLeft: "auto" }}
-                  color="inherit"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </Button>
-              ) : (
-                <Button
-                  sx={{ marginLeft: "auto" }}
-                  color="inherit"
-                  onClick={() => navigate("/login")}
-                >
-                  Login
-                </Button>
-              )}
-            </Toolbar>
-          </AppBar>
-        </Box>
-      </StyledEngineProvider>
-      {/* </ClickAwayListener> */}
-    </div>
+                {GlobalState.userIsLogged && (
+                  <MenuItem
+                    className={classes.alignRight}
+                    key={"tmp"}
+                    onClick={() => navigate("/profile")}
+                  >
+                    <BsFillPersonFill />
+                  </MenuItem>
+                )}
+                {GlobalState.userIsLogged ? (
+                  <Button
+                    sx={{ marginLeft: "auto" }}
+                    color="inherit"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
+                ) : (
+                  <Button
+                    sx={{ marginLeft: "auto" }}
+                    color="inherit"
+                    onClick={() => navigate("/login")}
+                  >
+                    Login
+                  </Button>
+                )}
+              </Toolbar>
+            </AppBar>
+          </Box>
+        </StyledEngineProvider>
+        {/* </ClickAwayListener> */}
+      </div>
+    </ThemeProvider>
   );
 };
 

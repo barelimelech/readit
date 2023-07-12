@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useImmerReducer } from "use-immer";
 import { Container, Paper, Box, Grid, Typography } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import SearchesList from "./components/HomePage/SearchesList";
 import Home from "./components/HomePage/Home";
@@ -13,7 +14,7 @@ import AccountCreated from "./components/Authentication/AccountCreated";
 import WaitingList from "./components/Authentication/WaitingList";
 // import logo from "./logo.svg";
 import "./App.css";
-
+import VideoBackgroundPage from "./components/VideoBackgroundPage";
 import image from "./Images/background.jpg";
 //Contexts
 import DispatchContext from "./contexts/DispatchContext";
@@ -40,7 +41,18 @@ function App() {
   };
 
   const [isMobile, setIsMobile] = useState(false);
-
+ const theme = createTheme({
+   palette: {
+     primary: {
+       main: "#a0569a",
+       darker: "#d68bd0",
+       default: "#fce1fa",
+     },
+   },
+   typography: {
+     fontFamily: "Roboto, sans-serif",
+   },
+ });
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768); // Adjust the threshold as needed
@@ -94,24 +106,22 @@ function App() {
   const [globalSearchBtn, setGlobalSearchBtn] = useState(false);
   const [address, setAddress] = useState("");
 
+  // const [sidebarWidth, setSidebarWidth] = useState(200); // Width of the sidebar
 
-// const [sidebarWidth, setSidebarWidth] = useState(200); // Width of the sidebar
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     const sidebar = document.querySelector(".sidebar-wrapper");
+  //     const newSidebarWidth = sidebar ? sidebar.offsetWidth : 0;
+  //     setSidebarWidth(newSidebarWidth);
+  //   };
 
-// useEffect(() => {
-//   const handleResize = () => {
-//     const sidebar = document.querySelector(".sidebar-wrapper");
-//     const newSidebarWidth = sidebar ? sidebar.offsetWidth : 0;
-//     setSidebarWidth(newSidebarWidth);
-//   };
+  //   window.addEventListener("resize", handleResize);
+  //   handleResize(); // Initial calculation
 
-//   window.addEventListener("resize", handleResize);
-//   handleResize(); // Initial calculation
-
-//   return () => {
-//     window.removeEventListener("resize", handleResize);
-//   };
-// }, []);
-
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (state.userIsLogged) {
@@ -132,6 +142,8 @@ function App() {
   }, [state.userIsLogged]);
 
   return (
+        <ThemeProvider theme={theme}>
+
     <div>
       <BrowserRouter>
         <GlobalContext.Provider value={initialAddress}>
@@ -170,11 +182,12 @@ function App() {
                         zIndex: "100",
                       }}
                     >
-                      <Header isMobile={isMobile}/>
+                      <Header isMobile={isMobile} />
+                      {/* <VideoBackgroundPage /> */}
                     </div>
 
                     <div>
-                      <img
+                      {/* <img
                         src={image}
                         alt="my background"
                         style={{
@@ -185,7 +198,11 @@ function App() {
                           width: "100%",
                           height: "100%",
                         }}
-                      />
+                      /> */}
+                      <div className="d-flex flex-column justify-content-center w-100 h-100">
+                        <div className="d-flex flex-column justify-content-center align-items-center"></div>
+                      </div>
+
                       <div
                         style={{
                           top: "100px",
@@ -196,7 +213,6 @@ function App() {
                         }}
                       >
                         <Routes>
-                          
                           <Route path="/" element={<Home />} />
                           <Route path="/results" element={<SearchesList />} />
                           <Route path="/login" element={<Login />} />
@@ -241,8 +257,8 @@ function App() {
         </GlobalContext.Provider>
       </BrowserRouter>
     </div>
+    </ThemeProvider>
   );
 }
-
 
 export default App;

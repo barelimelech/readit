@@ -6,6 +6,7 @@ import Search from "./Search";
 import SearchContext from "../../contexts/SearchContext";
 import image from "../../Images/background.jpg";
 import classes from "./SearchList.module.css";
+import {ImSearch} from 'react-icons/im'
 
 const SearchesList = (props) => {
   const { searchResults } = useContext(SearchContext);
@@ -24,7 +25,9 @@ const SearchesList = (props) => {
           <Search />
         </Grid>
 
-        <h2 style={{ textAlign: "center" }}>Search Results</h2>
+        <h3 style={{ textAlign: "center", marginTop: "20px" }}>
+          Search Results
+        </h3>
         <Grid item xs={12}>
           <List>
             {searchResults.map((result) => (
@@ -45,8 +48,10 @@ const SearchesList = (props) => {
             ))}
           </List>
         </Grid>
-        <h1>Explore other options</h1>
-        <Grid item xs={12}>
+        <h1>
+          Explore other options <ImSearch />
+        </h1>
+        <Grid item xs={12} marginBottom={10}>
           <Box
             sx={{
               p: 2,
@@ -56,7 +61,6 @@ const SearchesList = (props) => {
               gap: "10px",
               flexWrap: "wrap",
             }}
-           
           >
             <a
               href={`https://www.google.com/search?q=${globlSearchTerm}`}
@@ -97,7 +101,10 @@ const SearchesList = (props) => {
               href={`https://search.brave.com/search?q=${globlSearchTerm}`}
               target="_blank"
               rel="noreferrer"
-              style={{fontSize: "large" ,pointerEvents: "none", cursor: "default"}}
+              style={{
+                fontSize: "large",
+                
+              }}
             >
               brave
             </a>

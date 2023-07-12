@@ -279,12 +279,20 @@ const Menu = (props) => {
                               <AiFillDislike />
                             </Button>
 
-                            <Button
+                            <span
+                              component="button"
                               onClick={() => handleWordClick(item.text)}
-                              style={{ color: "black" }}
+                              style={{
+                                color: "black",
+                                maxWidth: "40%",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                fontSize: "large",
+                              }}
                             >
                               {item.text}
-                            </Button>
+                            </span>
                           </ListItem>
                         </div>
                       </div>
@@ -333,9 +341,19 @@ const Menu = (props) => {
                             <Button onClick={() => handelWordToUpcoming(item)}>
                               <AiFillLike />
                             </Button>
-                            <Button onClick={() => handleWordClick(item.text)}>
+                            <span
+                              component="button"
+                              onClick={() => handleWordClick(item.text)}
+                              style={{
+                                maxWidth: "40%",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                fontSize: "large",
+                              }}
+                            >
                               {item.text}
-                            </Button>
+                            </span>
                           </ListItem>
                         </div>
                         {/* <div>

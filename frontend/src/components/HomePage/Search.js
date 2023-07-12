@@ -1,10 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Key, Search as SearchIcon } from "@mui/icons-material";
-import PopupMessage from "./PopupMessage";
+
 import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
-import { useImmerReducer } from "use-immer";
-import SearchesList from "./SearchesList";
+
 import Popup from "../Popup";
 //Contexts
 import StateContext from "../../contexts/StateContext";
@@ -25,6 +23,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  StyledEngineProvider,
 } from "@mui/material";
 
 const Search = ({ props }) => {
@@ -46,6 +45,7 @@ const Search = ({ props }) => {
   const { globlSearchTerm, setGloblSearchTerm } = useContext(SearchContext);
   const { globalSearchBtn, setGlobalSearchBtn } = useContext(SearchContext);
   const [showLaterReadPopup, setShowLaterReadPopup] = useState(false);
+  const [showSearchPopup, setShowSearchPopup] = useState(false);
 
   const handleSearchLater = () => {
     if (!GlobalState.userIsLogged) {
@@ -64,6 +64,7 @@ const Search = ({ props }) => {
       setShowPopup(false);
       setSerachBtn(true);
       setGlobalSearchBtn(true);
+      setShowSearchPopup(true);
     }
   };
 
@@ -75,6 +76,9 @@ const Search = ({ props }) => {
   const handleLaterReadClosePopup = () => {
     setShowLaterReadPopup(false);
   };
+   const handleSearchClosePopup = () => {
+     setShowSearchPopup(false);
+   };
 
   useEffect(() => {
     if ((searchBtn || globalSearchBtn) && globlSearchTerm !== "") {
@@ -100,11 +104,10 @@ const Search = ({ props }) => {
               response.data,
               ...prevSearchList,
             ]);
-          }
-          else if (response.status === 200) {
-            const newState = searchList.map(obj => {
+          } else if (response.status === 200) {
+            const newState = searchList.map((obj) => {
               if (obj.id === response.data.id) {
-                return {...obj, isNew: false};
+                return { ...obj, isNew: false };
               }
               return obj;
             });
@@ -162,9 +165,9 @@ const Search = ({ props }) => {
               response.data,
             ]);
           } else if (response.status === 200) {
-            const newState = searchList.map(obj => {
+            const newState = searchList.map((obj) => {
               if (obj.id === response.data.id) {
-                return {...obj, isNew: true};
+                return { ...obj, isNew: true };
               }
               return obj;
             });
@@ -219,15 +222,22 @@ const Search = ({ props }) => {
     >
       <Grid item xs={8}>
         <div className={classes.textfieldContainer}>
-          {(searchBtn === true || searchLaterBtn === true) &&
-            globlSearchTerm === "" && (
-              <Popup
-                title={"Right something"}
-                context={""}
-                open={showLaterReadPopup}
-                onClose={handleLaterReadClosePopup}
-              /> 
-            )}
+          {searchLaterBtn === true && globlSearchTerm === "" && (
+            <Popup
+              title={"Write something"}
+              context={""}
+              open={showLaterReadPopup}
+              onClose={handleLaterReadClosePopup}
+            />
+          )}
+          {searchBtn === true && globlSearchTerm === "" && (
+            <Popup
+              title={"Write something"}
+              context={""}
+              open={showSearchPopup}
+              onClose={handleSearchClosePopup}
+            />
+          )}
           <TextField
             variant="outlined"
             fullWidth
@@ -259,7 +269,12 @@ const Search = ({ props }) => {
             variant="contained"
             color="primary"
             size="large"
+            // style={{ borderColor: "#E8A0BF" }}
             onClick={handleSearch}
+            sx={{
+              borderColor: "black", // Change this to the desired color
+              borderWidth: "20px", // Optional: You can adjust the width of the border
+            }}
           >
             Search
           </Button>
@@ -283,6 +298,7 @@ const Search = ({ props }) => {
             value={globlSearchTerm}
             variant="outlined"
             size="large"
+            color="primary"
             onClick={handleSearchLater}
           >
             Save For Later

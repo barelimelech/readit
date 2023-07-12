@@ -16,6 +16,10 @@ import {
   ListItemButton,
   Collapse,
   StyledEngineProvider,
+  TextField,
+  Link,
+  Typography,
+  IconButton,
 } from "@mui/material";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -36,12 +40,13 @@ import {
   AiOutlineHistory,
 } from "react-icons/ai";
 import { MdWatchLater } from "react-icons/md";
+import { BsArrowLeftShort } from "react-icons/bs";
 //Contexts
 import StateContext from "../../contexts/StateContext";
 import SearchContext from "../../contexts/SearchContext";
 import GlobalContext from "../../contexts/GlobalContext";
 import Menu from "./Menu";
-const minDrawerWidth = 10;
+const minDrawerWidth = 200;
 const maxDrawerWidth = 1000;
 
 const useStyles = makeStyles((theme) => ({
@@ -86,15 +91,13 @@ const MenuSidebar = (props) => {
   const [openHistoryList, setOpenHistoryList] = useState(false);
   const [newWidth, setNewWidth] = useState();
   const [isMobile, setIsMobile] = useState(false);
-
+  const [numberOfUpcoming, setNumberOfUpcoming] = useState(false);
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768); // Adjust the threshold as needed
     };
-
     // Call the handler on initial load
     handleResize();
-
     // Add a listener to update the state when the window is resized
     window.addEventListener("resize", handleResize);
 
@@ -102,19 +105,9 @@ const MenuSidebar = (props) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   const handleClickUpcomingList = () => {
-    // if (openUpcomingList === false) {
-    //   setSidebarWidth(220);
-    // } else {
-    //   setSidebarWidth(newWidth);
-    // }
     setOpenUpcomingList(!openUpcomingList);
   };
   const handleClickHistoryList = () => {
-    // if (openHistoryList === false) {
-    //   setSidebarWidth(220);
-    // } else {
-    //   setSidebarWidth(newWidth);
-    // }
     setOpenHistoryList(!openHistoryList);
   };
 
@@ -128,6 +121,12 @@ const MenuSidebar = (props) => {
     }
   };
 
+  const handelCloseMenu = () => {
+    setSidebarWidth(0);
+  };
+  const handelOpenMenu = () => {
+    setSidebarWidth(minDrawerWidth);
+  };
   //   const handleDrag = (event, { deltaX }) => {
   //     if (isResizing) return; // Do not handle dragging if resizing is in progress
   //     const newWidth = sidebarWidth + deltaX;
@@ -149,11 +148,16 @@ const MenuSidebar = (props) => {
     if (!initialDataFetched) {
       getAllSearches();
     }
-  }, [setSearchList, searchList]);
+  }, [
+    setSearchList,
+    searchList,
+    setGloblSearchTerm,
+    globalSearchBtn,
+    setGlobalSearchBtn,
+  ]);
 
   useEffect(() => {
     if (isClicked || isClickedToUpcoming) {
-      const source = Axios.CancelToken.source();
       async function updateSearch() {
         const formData = new FormData();
         formData.append("user", GlobalState.userId);
@@ -187,7 +191,13 @@ const MenuSidebar = (props) => {
       setIsClicked(false);
       setIsClickedToUpcoming(false);
     }
-  }, [isClicked, isClickedToUpcoming, setSearchList, searchList]);
+  }, [
+    isClicked,
+    isClickedToUpcoming,
+    setSearchList,
+    searchList,
+    setGloblSearchTerm,
+  ]);
 
   const handelWordToHistory = (item) => {
     console.log("3 " + item.id);
@@ -195,15 +205,12 @@ const MenuSidebar = (props) => {
     setIsClicked(true);
   };
   const handelWordToUpcoming = (item) => {
-    console.log("3 " + item.id);
     setWordClicked(item);
     setIsClickedToUpcoming(true);
   };
-
   const handelWordDelete = (item) => {
     setWordClickedToDelete(item);
     setDeleteClicked(true);
-    console.log("word deletee");
   };
 
   useEffect(() => {
@@ -260,16 +267,36 @@ const MenuSidebar = (props) => {
     <div>
       {!isMobile && (
         <div>
-          <div
-            ref={sidebarRef}
-            
-          >
+          <div style={{ position: "absolute" }}>
+            {/* <IconButton
+              onClick={handelOpenMenu}
+              style={{ marginTop: "40px", color: "black" }}
+            >
+              <MenuIcon />
+            </IconButton> */}
+          </div>
+          <div ref={sidebarRef}>
+            {/* <Button style={{ color: "black" }}>
+              <MenuIcon />
+            </Button> */}
+
             <Drawer
               variant="permanent"
               style={{ width: sidebarWidth }}
               PaperProps={{ style: { width: sidebarWidth } }}
             >
-              <div className={classes.toolbar} />
+              <div className={classes.toolbar}>
+                {/* <IconButton
+                  onClick={handelCloseMenu}
+                  style={{
+                    color: "black",
+                    marginTop: "10px",
+                    marginRight: "10px",
+                  }}
+                >
+                  <BsArrowLeftShort />
+                </IconButton> */}
+              </div>
               <div
                 onMouseDown={(e) => handleMouseDown(e)}
                 className={classes.dragger}
@@ -277,8 +304,9 @@ const MenuSidebar = (props) => {
               <List
                 sx={{
                   width: "100%",
-                  maxWidth: 360,
+                  maxWidth: 1000,
                   bgcolor: "background.paper",
+                  marginTop: "15px",
                 }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
@@ -309,28 +337,37 @@ const MenuSidebar = (props) => {
                               <ListItem>
                                 <Button
                                   onClick={() => handelWordDelete(item)}
-                                  style={{ color: "black" }}
+                                  style={{ color: "black", minWidth: "40px" }}
                                 >
                                   <AiFillDelete />
                                 </Button>
                                 <Button
                                   onClick={() => handelWordToHistory(item)}
-                                  style={{ color: "black" }}
+                                  style={{ color: "black", minWidth: "40px" }}
                                 >
                                   <AiFillDislike />
                                 </Button>
 
-                                <Button
+                                <span
+                                  component="button"
                                   onClick={() => handleWordClick(item.text)}
-                                  style={{ color: "black" }}
+                                  style={{
+                                    color: "black",
+                                    maxWidth: "40%",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    fontSize: "large",
+                                  }}
                                 >
                                   {item.text}
-                                </Button>
+                                </span>
                               </ListItem>
                             </div>
                           </div>
                         )
                     )}
+                    {numberOfUpcoming === true && <span>nothing</span>}
                   </List>
                 </Collapse>
               </List>
@@ -338,7 +375,7 @@ const MenuSidebar = (props) => {
               <List
                 sx={{
                   width: "100%",
-                  maxWidth: 360,
+                  maxWidth: 1000,
                   bgcolor: "background.paper",
                 }}
                 component="nav"
@@ -368,26 +405,36 @@ const MenuSidebar = (props) => {
                           >
                             <div>
                               <ListItem>
-                                <Button onClick={() => handelWordDelete(item)}>
+                                <Button
+                                  onClick={() => handelWordDelete(item)}
+                                  style={{ minWidth: "40px" }}
+                                >
                                   <AiFillDelete />
                                 </Button>
                                 <Button
                                   onClick={() => handelWordToUpcoming(item)}
+                                  style={{ minWidth: "40px" }}
                                 >
                                   <AiFillLike />
                                 </Button>
-                                <Button
+                                {/* <Typography noWrap> */}
+
+                                <span
+                                  component="button"
                                   onClick={() => handleWordClick(item.text)}
+                                  style={{
+                                    maxWidth: "40%",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    fontSize: "large",
+                                  }}
                                 >
                                   {item.text}
-                                </Button>
+                                </span>
+                                {/* </Typography> */}
                               </ListItem>
                             </div>
-                            {/* <div>
-                      <Button onClick={() => handelWordToHistory(item)}>
-                        <AiFillDislike />
-                      </Button>
-                    </div> */}
 
                             {/* {item.isNew === true && <p>No history yet...</p>} */}
                           </div>

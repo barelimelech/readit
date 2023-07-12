@@ -12,23 +12,21 @@ import ProfileUpdate from "./EditProfile";
 import GlobalContext from "../../contexts/GlobalContext";
 
 // MUI
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-  StyledEngineProvider,
-  Paper,
-  Container,
-} from "@mui/material";
+import { Box, Button, Grid, Typography, Paper, Container } from "@mui/material";
 import EditProfile from "./EditProfile";
+import { alpha } from "@mui/system";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const Profile = () => {
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
   const [isEditing, setIsEditing] = useState(false);
   const address = useContext(GlobalContext);
-
+const theme = createTheme({
+  typography: {
+    fontFamily: "Roboto, sans-serif",
+  },
+});
   const initialState = {
     userProfile: {
       first_name: "",
@@ -62,10 +60,10 @@ const Profile = () => {
 
       case "loadingDone":
         draft.dataIsLoading = false;
-        return; // Add a return statement here
+        return;
 
       default:
-        return draft; // Add a return statement here
+        return draft;
     }
   }
 
@@ -90,9 +88,7 @@ const Profile = () => {
   }, []);
 
   const handelUpdateProfile = () => {
-    // <ProfileUpdate userProfile={state.userProfile} />
     setIsEditing(true);
-    // navigate("/updateprofile");
   };
 
   return (
@@ -104,33 +100,78 @@ const Profile = () => {
           justifyContent="center"
           alignItems="center"
           marginTop={15}
-      
         >
           <Grid item>
             <Typography
-              variant="h4"
+              variant="h3"
               align="center"
-              className={classes.profileHeadline}
+              sx={{ flexGrow: 1, fontFamily: "Lobster Two, cursive" }}
+              // className={classes.profileHeadline}
+             
             >
               Hello {state.userProfile.username}
             </Typography>
-            <Typography className={classes.profileDetails}>
-              <Box component={Paper} className={classes.profileSpan}>
-                Username: {state.userProfile.username}
-              </Box>
-              <Box component={Paper} className={classes.profileSpan}>
-                First Name: {state.userProfile.first_name}
-              </Box>
-              <Box component={Paper} className={classes.profileSpan}>
-                Last Name: {state.userProfile.last_name}
-              </Box>
-              <Box component={Paper} className={classes.profileSpan}>
-                Email: {state.userProfile.email}
-              </Box>
-              <Button size="large" onClick={handelUpdateProfile}>
+            <Box className={classes.profileDetails} marginTop={5}>
+              <Paper
+                className={classes.profileSpan}
+                sx={{
+                  backgroundColor: alpha("#fff", 0.8),
+                }}
+              >
+                <Typography variant="subtitle1" fontWeight="bold">
+                  Username:
+                </Typography>
+                <Typography variant="body1">
+                  {state.userProfile.username}
+                </Typography>
+              </Paper>
+              <Paper
+                className={classes.profileSpan}
+                sx={{
+                  backgroundColor: alpha("#fff", 0.8),
+                }}
+              >
+                <Typography variant="subtitle1" fontWeight="bold">
+                  First Name:
+                </Typography>
+                <Typography variant="body1">
+                  {state.userProfile.first_name}
+                </Typography>
+              </Paper>
+              <Paper
+                className={classes.profileSpan}
+                sx={{
+                  backgroundColor: alpha("#fff", 0.8),
+                }}
+              >
+                <Typography variant="subtitle1" fontWeight="bold">
+                  Last Name:
+                </Typography>
+                <Typography variant="body1">
+                  {state.userProfile.last_name}
+                </Typography>
+              </Paper>
+              <Paper
+                className={classes.profileSpan}
+                sx={{
+                  backgroundColor: alpha("#fff", 0.8),
+                }}
+              >
+                <Typography variant="subtitle1" fontWeight="bold">
+                  Email:
+                </Typography>
+                <Typography variant="body1">
+                  {state.userProfile.email}
+                </Typography>
+              </Paper>
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handelUpdateProfile}
+              >
                 Edit Profile
               </Button>
-            </Typography>
+            </Box>
           </Grid>
         </Grid>
       ) : (

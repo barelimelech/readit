@@ -178,8 +178,8 @@ const EditProfile = (props) => {
                 fullWidth
                 type="submit"
                 disabled={state.disabledBtn}
+                color="primary"
                 sx={{
-                  backgroundColor: "#1d71cb",
                   color: "white",
                   fontSize: "1.1rem",
                 }}
