@@ -5,7 +5,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.exceptions import ValidationError
-
+from googleapiclient.discovery import build
+from django.http import JsonResponse
 
 class SearchesList(generics.ListAPIView):
     queryset = Search.objects.all().order_by('-timestamp')
@@ -66,3 +67,14 @@ class UpsertResourceView(APIView):
         else:
             print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+# def search_view(request):
+#     search_query = request.GET.get('query', '')
+#     api_key = "AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU"
+#     cse_id = "858f2fc5425274d63"
+
+#     service = build('customsearch', 'v1', developerKey=api_key)
+#     result = service.cse().list(q=search_query, cx=cse_id).execute()
+
+#     return JsonResponse(result)

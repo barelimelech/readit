@@ -101,17 +101,22 @@ const theme = createTheme({
           alignItems="center"
           marginTop={15}
         >
-          <Grid item>
+          <Grid item xs={12} md={6}>
             <Typography
               variant="h3"
               align="center"
+              color="primary"
               sx={{ flexGrow: 1, fontFamily: "Lobster Two, cursive" }}
               // className={classes.profileHeadline}
-             
             >
               Hello {state.userProfile.username}
             </Typography>
-            <Box className={classes.profileDetails} marginTop={5}>
+
+            <Box
+              className={classes.profileDetails}
+              marginTop={5}
+              sx={{ p: { xs: 1, md: 3 }, boxShadow: 14 }}
+            >
               <Paper
                 className={classes.profileSpan}
                 sx={{

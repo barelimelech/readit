@@ -115,7 +115,7 @@ const MenuSidebar = (props) => {
     console.log(word);
     setGloblSearchTerm(word);
     setGlobalSearchBtn(true);
-    navigate("/results");
+      navigate(`/results?q=${word}`);
     if (props.onWordClick) {
       props.onWordClick(word);
     }

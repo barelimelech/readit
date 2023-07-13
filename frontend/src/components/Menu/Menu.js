@@ -47,6 +47,12 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: "-webkit-fill-available",
   },
+  listItemText: {
+    fontSize: "1.5rem", // Replace with your desired font size
+  },
+  listItemIcon: {
+    fontSize: "1.5rem",
+  },
 }));
 const Menu = (props) => {
   const navigate = useNavigate();
@@ -85,7 +91,7 @@ const Menu = (props) => {
     console.log(word);
     setGloblSearchTerm(word);
     setGlobalSearchBtn(true);
-    navigate("/results");
+      navigate(`/results?q=${word}`);
     if (props.onWordClick) {
       props.onWordClick(word);
     }
@@ -230,6 +236,7 @@ const Menu = (props) => {
               marginTop: "10px",
               marginRight: "10px",
             }}
+            size="large"
           >
             <BsArrowLeftShort />
           </IconButton>
@@ -238,15 +245,19 @@ const Menu = (props) => {
               width: "100%",
               maxWidth: 360,
               bgcolor: "background.paper",
+              marginLeft: "20px",
             }}
             component="nav"
             aria-labelledby="nested-list-subheader"
           >
             <ListItemButton onClick={handleClickUpcomingList}>
-              <ListItemIcon>
+              <ListItemIcon classes={{ primary: classes.listItemIcon }}>
                 <MdWatchLater />
               </ListItemIcon>
-              <ListItemText primary="Upcoming" />
+              <ListItemText
+                primary="Upcoming"
+                classes={{ primary: classes.listItemText }}
+              />
               {openUpcomingList ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={openUpcomingList} timeout="auto" unmountOnExit>
@@ -288,7 +299,7 @@ const Menu = (props) => {
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
                                 whiteSpace: "nowrap",
-                                fontSize: "large",
+                                fontSize: "x-large",
                               }}
                             >
                               {item.text}
@@ -307,15 +318,19 @@ const Menu = (props) => {
               width: "100%",
               maxWidth: 360,
               bgcolor: "background.paper",
+              marginLeft: "20px",
             }}
             component="nav"
             aria-labelledby="nested-list-subheader"
           >
             <ListItemButton onClick={handleClickHistoryList}>
-              <ListItemIcon>
+              <ListItemIcon size="large">
                 <AiOutlineHistory />
               </ListItemIcon>
-              <ListItemText primary="History" />
+              <ListItemText
+                primary="History"
+                classes={{ primary: classes.listItemText }}
+              />
               {openHistoryList ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={openHistoryList} timeout="auto" unmountOnExit>
@@ -347,9 +362,7 @@ const Menu = (props) => {
                               style={{
                                 maxWidth: "40%",
                                 overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                                fontSize: "large",
+                                fontSize: "x-large",
                               }}
                             >
                               {item.text}

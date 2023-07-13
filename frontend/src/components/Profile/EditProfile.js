@@ -127,10 +127,11 @@ const EditProfile = (props) => {
         >
           <Grid item xs={12} md={6}>
             <Typography
-              variant="h4"
+              variant="h3"
               align="center"
               color="primary"
               gutterBottom
+              sx={{ flexGrow: 2, fontFamily: "Lobster Two, cursive" }}
             >
               Edit Profile
             </Typography>
