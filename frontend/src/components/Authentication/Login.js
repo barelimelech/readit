@@ -67,7 +67,7 @@ const Login = () => {
       async function signin() {
         try {
           const response = await Axios.post(
-            `http://${address.localhostIP}/api-auth-djoser/token/login/`,
+            `${address.localhostIP}/api-auth-djoser/token/login/`,
             {
               username: state.usernameValue,
               password: state.passwordValue,
@@ -105,7 +105,7 @@ const Login = () => {
       async function getUserInfo() {
         try {
           const response = await Axios.get(
-            `http://${address.localhostIP}/api-auth-djoser/users/me/`,
+            `${address.localhostIP}/api-auth-djoser/users/me/`,
             {
               headers: { Authorization: "Token ".concat(state.token) },
             },

@@ -51,7 +51,7 @@ const WaitingList = () => {
 
         try {
           const response = await Axios.post(
-            `http://${address.localhostIP}/api/waitinglist/create/`,
+            `${address.localhostIP}/api/waitinglist/create/`,
             formData
           );
           console.log("response " + response);

@@ -74,9 +74,9 @@ function App() {
 
   const initialAddress = window.location.host.includes("localhost")
     ? {
-        localhostIP: "localhost:8000",
+        localhostIP: "http://localhost:8000",
       }
-    : { localhostIP: "lateread.com" };
+    : { localhostIP: "https://lateread.com" };
 
   function ReducerFuction(draft, action) {
     switch (action.type) {

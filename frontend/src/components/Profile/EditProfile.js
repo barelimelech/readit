@@ -83,7 +83,7 @@ const EditProfile = (props) => {
 
         try {
           const response = await Axios.patch(
-            `http://${address.localhostIP}/api/users/${GlobalState.userId}/update/`,
+            `${address.localhostIP}/api/users/${GlobalState.userId}/update/`,
             formData
           );
           GlobalState.userFirstName = state.first_name;

@@ -63,7 +63,7 @@ const theme = createTheme({
     if (confirmLogout) {
       try {
         const response = await Axios.post(
-          `http://${address.localhostIP}/api-auth-djoser/token/logout/`,
+          `${address.localhostIP}/api-auth-djoser/token/logout/`,
           GlobalState.userToken,
           { headers: { Authorization: "Token ".concat(GlobalState.userToken) } }
         );

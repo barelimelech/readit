@@ -194,7 +194,7 @@ const Register = () => {
         console.log("state.lastNameValue " + state.lastNameValue);
         try {
           const response = await Axios.post(
-            `http://${address.localhostIP}/api-auth-djoser/users/`,
+            `${address.localhostIP}/api-auth-djoser/users/`,
             {
               username: state.usernameValue,
               first_name: state.firstNameValue,

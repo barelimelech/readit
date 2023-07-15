@@ -74,7 +74,7 @@ const theme = createTheme({
     async function GetProfileInfo() {
       try {
         const response = await Axios.get(
-          `http://${address.localhostIP}/api/users/${GlobalState.userId}/`
+          `${address.localhostIP}/api/users/${GlobalState.userId}/`
         );
 
         dispatch({

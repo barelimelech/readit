@@ -137,7 +137,7 @@ const MenuSidebar = (props) => {
     async function getAllSearches() {
       try {
         const response = await Axios.get(
-          `http://${address.localhostIP}/api/searches`
+          `${address.localhostIP}/api/searches`
         );
         setSearchList(response.data);
         setInitialDataFetched(true);
@@ -172,7 +172,7 @@ const MenuSidebar = (props) => {
 
         try {
           const response = await Axios.patch(
-            `http://${address.localhostIP}/api/searches/${wordClicked.id}/update/`,
+            `${address.localhostIP}/api/searches/${wordClicked.id}/update/`,
             formData
           );
           setSearchList((prevSearchList) =>
@@ -219,7 +219,7 @@ const MenuSidebar = (props) => {
       async function updateSearch() {
         try {
           const response = await Axios.delete(
-            `http://${address.localhostIP}/api/searches/${wordClickedToDelete.id}/delete/`
+            `${address.localhostIP}/api/searches/${wordClickedToDelete.id}/delete/`
           );
           setSearchList((prevSearchList) =>
             prevSearchList.filter((item) => item.id !== wordClickedToDelete.id)

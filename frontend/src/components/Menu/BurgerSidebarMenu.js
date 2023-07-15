@@ -42,7 +42,7 @@ const BurgerSidebarMenu = (props) => {
   useEffect(() => {
     async function getAllSearches() {
       try {
-        await Axios.get(`http://${address.localhostIP}/api/searches`).then(
+        await Axios.get(`${address.localhostIP}/api/searches`).then(
           (response) => {
             setSearchList(response.data);
           }

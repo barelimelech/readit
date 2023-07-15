@@ -96,7 +96,7 @@ const Search = ({ props }) => {
 
         try {
           const response = await Axios.post(
-            `http://${address.localhostIP}/api/searches/upsert/`,
+            `${address.localhostIP}/api/searches/upsert/`,
             formData
           );
 
@@ -156,7 +156,7 @@ const Search = ({ props }) => {
 
         try {
           const response = await Axios.post(
-            `http://${address.localhostIP}/api/searches/upsert/`,
+            `${address.localhostIP}/api/searches/upsert/`,
             formData
           );
 
