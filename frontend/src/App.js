@@ -21,6 +21,7 @@ import DispatchContext from "./contexts/DispatchContext";
 import StateContext from "./contexts/StateContext";
 import GlobalContext from "./contexts/GlobalContext";
 
+//components
 import Profile from "./components/Profile/Profile";
 import EditProfile from "./components/Profile/EditProfile";
 import SearchContext from "./contexts/SearchContext";
@@ -41,18 +42,18 @@ function App() {
   };
 
   const [isMobile, setIsMobile] = useState(false);
- const theme = createTheme({
-   palette: {
-     primary: {
-       main: "#a0569a",
-       darker: "#d68bd0",
-       default: "#fce1fa",
-     },
-   },
-   typography: {
-     fontFamily: "Roboto, sans-serif",
-   },
- });
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#a0569a",
+        darker: "#d68bd0",
+        default: "#fce1fa",
+      },
+    },
+    typography: {
+      fontFamily: "Roboto, sans-serif",
+    },
+  });
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768); // Adjust the threshold as needed
@@ -142,96 +143,95 @@ function App() {
   }, [state.userIsLogged]);
 
   return (
-        <ThemeProvider theme={theme}>
-
-    <div>
-      <BrowserRouter>
-        <GlobalContext.Provider value={initialAddress}>
-          <StateContext.Provider value={state}>
-            <DispatchContext.Provider value={dispatch}>
-              <SearchContext.Provider
-                value={{
-                  searchResults,
-                  setSearchResults,
-                  searchList,
-                  setSearchList,
-                  globlSearchTerm,
-                  setGloblSearchTerm,
-                  globalSearchBtn,
-                  setGlobalSearchBtn,
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    minHeight: "100vh",
+    <ThemeProvider theme={theme}>
+      <div>
+        <BrowserRouter>
+          <GlobalContext.Provider value={initialAddress}>
+            <StateContext.Provider value={state}>
+              <DispatchContext.Provider value={dispatch}>
+                <SearchContext.Provider
+                  value={{
+                    searchResults,
+                    setSearchResults,
+                    searchList,
+                    setSearchList,
+                    globlSearchTerm,
+                    setGloblSearchTerm,
+                    globalSearchBtn,
+                    setGlobalSearchBtn,
                   }}
                 >
-                  {state.userIsLogged && !isMobile && <MenuSidebar />}
                   <div
                     style={{
-                      flex: 1,
-                      // paddingRight: `${sidebarWidth}px`, // Adjust the padding to account for the sidebar width
+                      display: "flex",
+                      minHeight: "100vh",
                     }}
                   >
+                    {/* {state.userIsLogged && !isMobile && <Sidebar />} */}
+                    {state.userIsLogged && !isMobile && <MenuSidebar />}
+
                     <div
                       style={{
-                        position: "fixed",
-                        opacity: 1,
-                        width: "-webkit-fill-available",
-                        zIndex: "100",
+                        flex: 1,
+                        // paddingRight: `${sidebarWidth}px`, // Adjust the padding to account for the sidebar width
                       }}
                     >
-                      <Header isMobile={isMobile} />
-                      {/* <VideoBackgroundPage /> */}
-                    </div>
-
-                    <div>
-                      {/* <img
-                        src={image}
-                        alt="my background"
-                        style={{
-                          filter: "brightness(90%) opacity(0.3)",
-                          position: "fixed",
-                          top: "0",
-                          left: "0",
-                          width: "100%",
-                          height: "100%",
-                        }}
-                      /> */}
-                      <div className="d-flex flex-column justify-content-center w-100 h-100">
-                        <div className="d-flex flex-column justify-content-center align-items-center"></div>
-                      </div>
-
                       <div
                         style={{
-                          top: "100px",
-                          left: "20px",
-                          textAlign: "center",
+                          position: "fixed",
+                          opacity: 1,
+                          width: "-webkit-fill-available",
                           zIndex: "100",
-                          width: "100%",
                         }}
                       >
-                        <Routes>
-                          <Route path="/" element={<Home />} />
-                          <Route path="/results" element={<SearchesList />} />
-                          <Route path="/login" element={<Login />} />
-                          <Route path="/register" element={<Register />} />
-                          <Route path="/profile" element={<Profile />} />
-                          <Route
-                            path="/updateprofile"
-                            element={<EditProfile />}
-                          />
-                          <Route path="/created" element={<AccountCreated />} />
-                          <Route
-                            path="/waitinglist"
-                            element={<WaitingList />}
-                          />
-
-                          {/* <Route path="/history" element={<History />} /> */}
-                        </Routes>
+                        <Header isMobile={isMobile} />
+                        {/* <VideoBackgroundPage /> */}
                       </div>
-                      {/* <div>
+
+                      <div>
+                        <div className="d-flex flex-column justify-content-center w-100 h-100">
+                          <div className="d-flex flex-column justify-content-center align-items-center"></div>
+                        </div>
+
+                        <div
+                          style={{
+                            top: "100px",
+                            left: "20px",
+                            textAlign: "center",
+                            zIndex: "100",
+                            width: "100%",
+                          }}
+                        >
+                          <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/results" element={<SearchesList />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="/profile" element={<Profile />} />
+                            <Route
+                              path="/updateprofile"
+                              element={<EditProfile />}
+                            />
+                            <Route
+                              path="/created"
+                              element={<AccountCreated />}
+                            />
+                            <Route
+                              path="/waitinglist"
+                              element={<WaitingList />}
+                            />
+                            {state.userIsLogged && !isMobile && (
+                              <Route
+                                path="/sidebar"
+                                element={<MenuSidebar />}
+                              />
+                            )}
+                            {state.userIsLogged && isMobile && (
+                              <Route path="/sidebar" element={<Menu />} />
+                            )}
+                          </Routes>
+                        </div>
+                        {/* <div>
                         <div
                           style={{
                             bottom: "0",
@@ -248,15 +248,15 @@ function App() {
                           </Grid>
                         </div>
                       </div> */}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </SearchContext.Provider>
-            </DispatchContext.Provider>
-          </StateContext.Provider>
-        </GlobalContext.Provider>
-      </BrowserRouter>
-    </div>
+                </SearchContext.Provider>
+              </DispatchContext.Provider>
+            </StateContext.Provider>
+          </GlobalContext.Provider>
+        </BrowserRouter>
+      </div>
     </ThemeProvider>
   );
 }

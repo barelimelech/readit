@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 # Create your models here.
 
@@ -16,14 +17,22 @@ class User(AbstractUser):
     def is_stuff(self):
         return self.is_staff
 
-# class Profile(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     first_name = models.CharField(max_length=150)
-#     last_name = models.CharField(max_length=150)
-#     # agency_name = models.CharField(max_length=100, null=True, blank=True)
-#     # phone_number = models.CharField(max_length=25, null=True, blank=True)
-#     # bio = models.TextField(null=True, blank=True)
-#     # profile_picture = models.ImageField(upload_to='profile_pictures/%Y/%m/%d/', null=True, blank=True)
 
-#     def __str__(self):
-#         return f"Profile of {self.user.username}"
+class WaitingList(models.Model):
+    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.email
+
+class Link(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_links')
+    title = models.CharField(max_length=1500)
+    href = models.CharField(max_length=1500)
+    isDeleted = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.href

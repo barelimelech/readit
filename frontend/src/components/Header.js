@@ -14,7 +14,6 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import Menu from "./Menu/Menu";
 import Sidebar from "./Menu/Sidebar";
-import NewSidebar from './Menu/NewSidebar';
 //Contexts
 import StateContext from "../contexts/StateContext";
 import DispatchContext from "../contexts/DispatchContext";
@@ -78,7 +77,7 @@ const theme = createTheme({
   return (
     <ThemeProvider theme={theme}>
       <div>
-        <StyledEngineProvider injectFirst>
+        {/* <StyledEngineProvider injectFirst> */}
           <Box
             sx={{
               flexGrow: 100,
@@ -149,7 +148,7 @@ const theme = createTheme({
               </Toolbar>
             </AppBar>
           </Box>
-        </StyledEngineProvider>
+        {/* </StyledEngineProvider> */}
         {/* </ClickAwayListener> */}
       </div>
     </ThemeProvider>

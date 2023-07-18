@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from searches.api import views as searches_api_views
 from users.api import views as users_api_views
-from waitinglist.api import views as waitinglist_api_view
+from users.api import waitinglist_api_view
+from users.api import links_api_view
 from django.shortcuts import render
 
 def render_react(request):
@@ -36,6 +37,12 @@ urlpatterns = [
     path('api/searches/upsert/',searches_api_views.UpsertResourceView.as_view()),
     # path('api/search/', searches_api_views.search_view),
 
+    path('api/links/', links_api_view.LinksList.as_view()),
+    path('api/links/create/', links_api_view.LinkCreate.as_view()),
+    path('api/links/<int:pk>/', links_api_view.LinkDetail.as_view()),
+    path('api/links/<int:pk>/delete/',links_api_view.LinkDelete.as_view()),
+    path('api/links/<int:pk>/update/',links_api_view.LinkUpdate.as_view()),
+    path('api/get-website-title/', links_api_view.get_website_title, name='get_website_title'),
 
     path('api-auth-djoser/', include('djoser.urls')),
     path('api-auth-djoser/', include('djoser.urls.authtoken')),

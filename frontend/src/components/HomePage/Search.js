@@ -47,6 +47,19 @@ const Search = ({ props }) => {
   const [showLaterReadPopup, setShowLaterReadPopup] = useState(false);
   const [showSearchPopup, setShowSearchPopup] = useState(false);
 
+  const handleSaveLink = () => {
+    document.getElementById("pasteButton").addEventListener("click", function() {
+  navigator.clipboard.readText()
+    .then(function(text) {
+      var pasteOutput = document.getElementById("pasteOutput");
+      pasteOutput.value = text;
+    })
+    .catch(function(err) {
+      console.error("Failed to read clipboard text: ", err);
+    });
+
+
+  })};
   const handleSearchLater = () => {
     if (!GlobalState.userIsLogged) {
       setShowPopup(true);
@@ -330,6 +343,19 @@ const Search = ({ props }) => {
           >
             Save For Later
           </Button>
+          {/* <Button
+            id="pasteButton"
+            fullWidth
+            // style={{ margin: '16px 16px 8px' }}
+            value={globlSearchTerm}
+            variant="outlined"
+            size="large"
+            color="primary"
+            onClick={handleSaveLink}
+          >
+            Save link
+          </Button>
+          <textarea id="pasteTarget"></textarea> */}
           {globlSearchTerm !== "" && (
             <Popup
               title={"New Word Is Added"}

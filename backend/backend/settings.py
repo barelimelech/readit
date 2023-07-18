@@ -44,9 +44,10 @@ INSTALLED_APPS = [
     'djoser',
     'rest_framework.authtoken',
     
-    'waitinglist.apps.WaitinglistConfig',
     'users.apps.UsersConfig',
     'searches.apps.SearchesConfig',
+    # 'waitinglist.apps.WaitinglistConfig',
+    # 'links.apps.LinksConfig'
     
 
 ]

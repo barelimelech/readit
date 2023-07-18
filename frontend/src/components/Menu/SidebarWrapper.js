@@ -5,47 +5,22 @@ import React, {
   useCallback,
   useContext,
 } from "react";
-import {
-  Button,
-  Paper,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-  Collapse,
-  StyledEngineProvider,
-  TextField,
-  Link,
-  Typography,
-  IconButton,
-} from "@mui/material";
+import { Drawer } from "@mui/material";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 //Icons
-import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ApartmentIcon from "@mui/icons-material/Apartment";
-import RecentActorsIcon from "@mui/icons-material/RecentActors";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import StarBorder from "@mui/icons-material/StarBorder";
-import {
-  AiFillDelete,
-  AiFillDislike,
-  AiFillLike,
-  AiOutlineHistory,
-} from "react-icons/ai";
-import { MdWatchLater } from "react-icons/md";
-import { BsArrowLeftShort } from "react-icons/bs";
+
 //Contexts
 import StateContext from "../../contexts/StateContext";
 import SearchContext from "../../contexts/SearchContext";
 import GlobalContext from "../../contexts/GlobalContext";
-import Menu from "./Menu";
+import SearchesListSidebar from "./SearchesListSidebar";
+
+import { Tab, Tabs, Box } from "@material-ui/core";
+import LinksListSidebar from "./LinksListSidebar";
+
 const minDrawerWidth = 200;
 const maxDrawerWidth = 1000;
 
@@ -53,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   drawer: {
     flexShrink: 0,
   },
-  toolbar: theme.mixins.toolbar,
+  toolbar:{minHeight: "20px"} ,
   dragger: {
     width: "5px",
     cursor: "ew-resize",
@@ -65,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     zIndex: 100,
     backgroundColor: "#f4f7f9",
+    
   },
 }));
 
@@ -88,10 +64,14 @@ const MenuSidebar = (props) => {
   const [isResizing, setIsResizing] = useState(false); // State to track if resizing is in progress
   const sidebarRef = useRef(null); // Ref for the sidebar element
   const [openUpcomingList, setOpenUpcomingList] = useState(false);
-  const [openHistoryList, setOpenHistoryList] = useState(false);
+  // const [openHistoryList, setOpenHistoryList] = useState(false);
   const [newWidth, setNewWidth] = useState();
   const [isMobile, setIsMobile] = useState(false);
-  const [numberOfUpcoming, setNumberOfUpcoming] = useState(false);
+  const [activeTab, setActiveTab] = React.useState(0);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768); // Adjust the threshold as needed
@@ -107,38 +87,21 @@ const MenuSidebar = (props) => {
   const handleClickUpcomingList = () => {
     setOpenUpcomingList(!openUpcomingList);
   };
-  const handleClickHistoryList = () => {
-    setOpenHistoryList(!openHistoryList);
-  };
 
   const handleWordClick = (word) => {
     console.log(word);
     setGloblSearchTerm(word);
     setGlobalSearchBtn(true);
-      navigate(`/results?q=${word}`);
+    navigate(`/results?q=${word}`);
     if (props.onWordClick) {
       props.onWordClick(word);
     }
   };
 
-  const handelCloseMenu = () => {
-    setSidebarWidth(0);
-  };
-  const handelOpenMenu = () => {
-    setSidebarWidth(minDrawerWidth);
-  };
-  //   const handleDrag = (event, { deltaX }) => {
-  //     if (isResizing) return; // Do not handle dragging if resizing is in progress
-  //     const newWidth = sidebarWidth + deltaX;
-  //     setSidebarWidth(newWidth);
-  //   };
-
   useEffect(() => {
     async function getAllSearches() {
       try {
-        const response = await Axios.get(
-          `${address.localhostIP}/api/searches`
-        );
+        const response = await Axios.get(`${address.localhostIP}/api/searches`);
         setSearchList(response.data);
         setInitialDataFetched(true);
       } catch (e) {
@@ -244,17 +207,6 @@ const MenuSidebar = (props) => {
     document.removeEventListener("mousemove", handleMouseMove, true);
   };
 
-  // const handleMouseMove = useCallback(
-  //   (e) => {
-  //     const newWidth = e.clientX - document.body.offsetLeft;
-  //     if (newWidth > minDrawerWidth && newWidth < maxDrawerWidth) {
-  //       setSidebarWidth(newWidth);
-  //       setNewWidth(newWidth);
-  //     }
-  //   },
-  //   [setSidebarWidth]
-  // );
-
   const handleMouseMove = useCallback((e) => {
     const newWidth = e.clientX - document.body.offsetLeft;
     if (newWidth > minDrawerWidth && newWidth < maxDrawerWidth) {
@@ -263,186 +215,64 @@ const MenuSidebar = (props) => {
     }
   }, []);
   return (
-    // <Draggable axis="x">
-    <div>
+    <div >
       {!isMobile && (
         <div>
-          <div style={{ position: "absolute" }}>
-            {/* <IconButton
-              onClick={handelOpenMenu}
-              style={{ marginTop: "40px", color: "black" }}
-            >
-              <MenuIcon />
-            </IconButton> */}
-          </div>
+          <div style={{ position: "absolute" }} />
           <div ref={sidebarRef}>
-            {/* <Button style={{ color: "black" }}>
-              <MenuIcon />
-            </Button> */}
-
             <Drawer
               variant="permanent"
               style={{ width: sidebarWidth }}
               PaperProps={{ style: { width: sidebarWidth } }}
+              className={classes.drawer}
             >
-              <div className={classes.toolbar}>
-                {/* <IconButton
-                  onClick={handelCloseMenu}
-                  style={{
-                    color: "black",
-                    marginTop: "10px",
-                    marginRight: "10px",
-                  }}
-                >
-                  <BsArrowLeftShort />
-                </IconButton> */}
-              </div>
+              <div className={classes.toolbar} />
               <div
                 onMouseDown={(e) => handleMouseDown(e)}
                 className={classes.dragger}
               />
-              <List
-                sx={{
-                  width: "100%",
-                  maxWidth: 1000,
-                  bgcolor: "background.paper",
-                  marginTop: "15px",
-                }}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-              >
-                <ListItemButton onClick={handleClickUpcomingList}>
-                  <ListItemIcon>
-                    <MdWatchLater />
-                  </ListItemIcon>
-                  <ListItemText primary="Upcoming" />
-                  {openUpcomingList ? <ExpandLess /> : <ExpandMore />}
-                </ListItemButton>
-                <Collapse in={openUpcomingList} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {searchList.map(
-                      (item) =>
-                        String(item.user) === String(GlobalState.userId) &&
-                        item.isNew === true && (
-                          <div
-                            key={item.id}
-                            style={{
-                              cursor: "pointer",
-                              padding: "8px",
-                              borderRadius: "4px",
-                              margin: "4px 9",
-                            }}
-                          >
-                            <div>
-                              <ListItem>
-                                <Button
-                                  onClick={() => handelWordDelete(item)}
-                                  style={{ color: "black", minWidth: "40px" }}
-                                >
-                                  <AiFillDelete />
-                                </Button>
-                                <Button
-                                  onClick={() => handelWordToHistory(item)}
-                                  style={{ color: "black", minWidth: "40px" }}
-                                >
-                                  <AiFillDislike />
-                                </Button>
+              <div>
+                <Tabs
+                  value={activeTab}
+                  onChange={handleTabChange}
+                  variant="scrollable"
+                  indicatorColor="transparent"
+                  style={{ marginLeft: "10px" }}
+                  sx={{ borderBottom: 1, borderColor: "divider" }}
+                >
+                  <Tab label="Searches" style={{ minWidth: 120 }} />
+                  <Tab label="Links" style={{ minWidth: 120 }} />
+                  {/* <Tab label="Tab 3" /> */}
+                </Tabs>
 
-                                <span
-                                  component="button"
-                                  onClick={() => handleWordClick(item.text)}
-                                  style={{
-                                    color: "black",
-                                    maxWidth: "40%",
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    fontSize: "large",
-                                  }}
-                                >
-                                  {item.text}
-                                </span>
-                              </ListItem>
-                            </div>
-                          </div>
-                        )
-                    )}
-                    {numberOfUpcoming === true && <span>nothing</span>}
-                  </List>
-                </Collapse>
-              </List>
+                {/* List for each tab */}
 
-              <List
-                sx={{
-                  width: "100%",
-                  maxWidth: 1000,
-                  bgcolor: "background.paper",
-                }}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-              >
-                <ListItemButton onClick={handleClickHistoryList}>
-                  <ListItemIcon>
-                    <AiOutlineHistory />
-                  </ListItemIcon>
-                  <ListItemText primary="History" />
-                  {openHistoryList ? <ExpandLess /> : <ExpandMore />}
-                </ListItemButton>
-                <Collapse in={openHistoryList} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {searchList.map(
-                      (item) =>
-                        String(item.user) === String(GlobalState.userId) &&
-                        item.isNew === false && (
-                          <div
-                            key={item.id}
-                            style={{
-                              cursor: "pointer",
-                              padding: "8px",
-                              borderRadius: "4px",
-                              margin: "4px 9",
-                            }}
-                          >
-                            <div>
-                              <ListItem>
-                                <Button
-                                  onClick={() => handelWordDelete(item)}
-                                  style={{ minWidth: "40px" }}
-                                >
-                                  <AiFillDelete />
-                                </Button>
-                                <Button
-                                  onClick={() => handelWordToUpcoming(item)}
-                                  style={{ minWidth: "40px" }}
-                                >
-                                  <AiFillLike />
-                                </Button>
-                                {/* <Typography noWrap> */}
-
-                                <span
-                                  component="button"
-                                  onClick={() => handleWordClick(item.text)}
-                                  style={{
-                                    maxWidth: "40%",
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    fontSize: "large",
-                                  }}
-                                >
-                                  {item.text}
-                                </span>
-                                {/* </Typography> */}
-                              </ListItem>
-                            </div>
-
-                            {/* {item.isNew === true && <p>No history yet...</p>} */}
-                          </div>
-                        )
-                    )}
-                  </List>
-                </Collapse>
-              </List>
+                {activeTab === 0 && (
+                  <div>
+                    <SearchesListSidebar
+                      type="Upcoming"
+                      isNew={true}
+                      searchList={searchList}
+                      handelWordDelete={handelWordDelete}
+                      handelWordToUpcoming={handelWordToHistory}
+                      handleWordClick={handleWordClick}
+                    />
+                    <SearchesListSidebar
+                      type="History"
+                      isNew={false}
+                      searchList={searchList}
+                      handelWordDelete={handelWordDelete}
+                      handelWordToUpcoming={handelWordToUpcoming}
+                      handleWordClick={handleWordClick}
+                    />
+                  </div>
+                )}
+                {activeTab === 1 && (
+                  <div>
+                  <LinksListSidebar width={sidebarWidth}/>
+                  </div>
+                )}
+              </div>
             </Drawer>
           </div>
         </div>
