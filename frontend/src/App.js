@@ -26,8 +26,8 @@ import Profile from "./components/Profile/Profile";
 import EditProfile from "./components/Profile/EditProfile";
 import SearchContext from "./contexts/SearchContext";
 import Sidebar from "./components/Menu/Sidebar";
-import MenuSidebar from "./components/Menu/SidebarWrapper";
-import Menu from "./components/Menu/Menu";
+import MenuSidebar from "./components/Menu/MenuWeb";
+import MenuMobile from "./components/Menu/MenuMobile";
 
 function App() {
   const initialState = {
@@ -227,7 +227,7 @@ function App() {
                               />
                             )}
                             {state.userIsLogged && isMobile && (
-                              <Route path="/sidebar" element={<Menu />} />
+                              <Route path="/sidebar" element={<MenuMobile />} />
                             )}
                           </Routes>
                         </div>

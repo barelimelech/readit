@@ -12,7 +12,15 @@ import ProfileUpdate from "./EditProfile";
 import GlobalContext from "../../contexts/GlobalContext";
 
 // MUI
-import { Box, Button, Grid, Typography, Paper, Container } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  Paper,
+  Container,
+  CircularProgress,
+} from "@mui/material";
 import EditProfile from "./EditProfile";
 import { alpha } from "@mui/system";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -93,7 +101,18 @@ const theme = createTheme({
 
   return (
     <Container maxWidth="md" className={classes.container}>
-      {isEditing === false ? (
+       {state.dataIsLoading ? ( // Render the spinner while data is loading
+        <Grid
+          container
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          marginTop={15}
+        >
+          <CircularProgress /> {/* Display the CircularProgress component */}
+        </Grid>
+      ) :
+      isEditing === false ? (
         <Grid
           container
           direction="column"

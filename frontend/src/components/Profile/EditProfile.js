@@ -116,7 +116,7 @@ const EditProfile = (props) => {
     dispatch({ type: "disableTheButton" });
   }
   return (
-    <StyledEngineProvider injectFirst>
+    <div>
       <form onSubmit={FormSubmit}>
         <Grid
           container
@@ -199,7 +199,7 @@ const EditProfile = (props) => {
           horizontal: "center",
         }}
       />
-    </StyledEngineProvider>
+      </div>
   );
 };
 
