@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
 
 const LinksListSidebar = (props) => {
   const classes = useStyles();
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
   const [textFieldValue, setTextFieldValue] = useState("");
@@ -77,55 +77,61 @@ const navigate = useNavigate();
     setTextFieldValue("");
   };
 
+useEffect(() => {
+  if (isSavedClicked && textFieldValue !== "") {
+    async function addLinkAndFetchTitle() {
+      try {
+        // Fetch title
+        const getTitleResponse = await Axios.get(
+          `${address.localhostIP}/api/get-website-title/?url=${textFieldValue}`
+        );
+        const { title } = getTitleResponse.data;
+        setLinkTitle(title);
 
-  useEffect(() => {
-    if (isSavedClicked && textFieldValue !== "") {
-      async function getTitle() {
-        const url = `${address.localhostIP}/api/get-website-title/?url=${textFieldValue}`; 
-        try {
-          const response = await Axios.get(url);
-          const { title } = response.data;
-          setLinkTitle(title);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-      getTitle();
-    }
-  }, [isSavedClicked,textFieldValue]);
-
-  useEffect(() => {
-    if (isSavedClicked) {
-      setIsSavedClicked(false);
-      async function addLink() {
-
+        // Add link
         const linkData = new FormData();
         linkData.append("user", GlobalState.userId);
-        if (linkTitle === "Redirecting..." || linkTitle === undefined) {
+        if (
+          title === "Redirecting..." ||
+          title === undefined ||
+          title === "No title found"
+        ) {
           linkData.append("title", textFieldValue);
         } else {
-          linkData.append("title", linkTitle);
+          linkData.append("title", title);
         }
         linkData.append("href", textFieldValue);
         linkData.append("isDeleted", false);
         linkData.append("timestamp", new Date().toISOString());
 
-        try {
-          const response = await Axios.post(
-            `${address.localhostIP}/api/links/create/`,
-            linkData
-          );
-          setLinksList((prevSearchList) => [response.data, ...prevSearchList]);
-          setIsOpen(false);
-          console.log("Response:", response); // Check the response received
-        } catch (error) {
-            
-          console.error("Error:", error); // Check the error message
-        }
+        const addLinkResponse = await Axios.post(
+          `${address.localhostIP}/api/links/create/`,
+          linkData
+        );
+
+        setLinksList((prevSearchList) => [
+          addLinkResponse.data,
+          ...prevSearchList,
+        ]);
+        setIsOpen(false);
+        setLinkTitle("");
+        console.log("Response:", addLinkResponse);
+      } catch (error) {
+        console.error("Error:", error);
       }
-      addLink();
     }
-  }, [isSavedClicked, textFieldValue, linkTitle]);
+
+    addLinkAndFetchTitle();
+  }
+}, [
+  isSavedClicked,
+  textFieldValue,
+  setLinkTitle,
+  setLinksList,
+  setIsOpen,
+  GlobalState.userId,
+]);
+
 
   useEffect(() => {
     async function addLink() {
@@ -163,20 +169,37 @@ const navigate = useNavigate();
 
   const handleLinkClick = (link) => {
     console.log(link);
-      const isAbsoluteURL =
-        link.startsWith("http://") || link.startsWith("https://");
+    const isAbsoluteURL =
+      link.startsWith("http://") || link.startsWith("https://");
 
-     if (isAbsoluteURL) {
-       const url = isAbsoluteURL ? link : `http://${link}`;
-       const newTab = window.open(url, "_blank");
-       newTab.focus(); // Optional: Set focus to the new tab
-     } else {
-       navigate(link); // Navigate to the internal route
-     }
-    if (props.onWordClick) {
-      props.onWordClick(link);
+    if (isAbsoluteURL) {
+      const url = isAbsoluteURL ? link : `http://${link}`;
+      const newTab = window.open(url, "_blank");
+      newTab.focus(); // Optional: Set focus to the new tab
+    } else {
+        const url =
+          link.startsWith("http://") || link.startsWith("https://")
+            ? link
+            : "http://" + link;
+       window.open(url, "_blank");
+
+      //navigate(link); // Navigate to the internal route
     }
   };
+
+  const handlePaste = () => {
+    navigator.clipboard
+      .readText()
+      .then((text) => {
+        // Do something with the pasted text
+        console.log("Pasted content:", text);
+        setTextFieldValue(text);
+      })
+      .catch((error) => {
+        console.log("Paste failed:", error);
+      });
+  };
+
   return (
     <div
       style={{
@@ -186,7 +209,6 @@ const navigate = useNavigate();
         marginTop: "30px",
       }}
     >
-      {" "}
       {isOpen ? (
         <div>
           <TextField
@@ -200,6 +222,9 @@ const navigate = useNavigate();
           <div style={{ marginLeft: "20px", marginTop: "16px" }}>
             <Button variant="contained" onClick={handleSaveTextField}>
               Save
+            </Button>
+            <Button onClick={handlePaste} style={{ marginLeft: "8px" }}>
+              Paste
             </Button>
             <Button
               variant="contained"
@@ -223,46 +248,46 @@ const navigate = useNavigate();
               <FiLink />
             </Button>
           </div>
-            <List component="div" disablePadding>
-              {linksList.map(
-                (item) =>
-                  String(item.user) === String(GlobalState.userId) && (
-                    <div
-                      key={item.id}
-                      style={{
-                        cursor: "pointer",
-                        padding: "8px",
-                        borderRadius: "4px",
-                        margin: "4px 9",
-                      }}
-                    >
-                      <div>
-                        <ListItem>
-                          <Button
-                            onClick={() => handelLinkDelete(item)}
-                            style={{ minWidth: "40px" }}
-                          >
-                            <AiFillDelete />
-                          </Button>
+          <List component="div" disablePadding>
+            {linksList.map(
+              (item) =>
+                String(item.user) === String(GlobalState.userId) && (
+                  <div
+                    key={item.id}
+                    style={{
+                      cursor: "pointer",
+                      padding: "8px",
+                      borderRadius: "4px",
+                      margin: "4px 9",
+                    }}
+                  >
+                    <div>
+                      <ListItem>
+                        <Button
+                          onClick={() => handelLinkDelete(item)}
+                          style={{ minWidth: "40px" }}
+                        >
+                          <AiFillDelete />
+                        </Button>
 
-                          <span
-                            component="button"
-                            onClick={() => handleLinkClick(item.href)}
-                            style={{
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                              fontSize: "large",
-                            }}
-                          >
-                            {item.title}
-                          </span>
-                        </ListItem>
-                      </div>
+                        <span
+                          component="button"
+                          onClick={() => handleLinkClick(item.href)}
+                          style={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            fontSize: "large",
+                          }}
+                        >
+                          {item.title}
+                        </span>
+                      </ListItem>
                     </div>
-                  )
-              )}
-            </List>
+                  </div>
+                )
+            )}
+          </List>
         </div>
       )}
     </div>

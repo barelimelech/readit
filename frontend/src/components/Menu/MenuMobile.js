@@ -285,7 +285,7 @@ const Menu = (props) => {
             )}
             {activeTab === 1 && (
               <div>
-                <LinksListSidebar width={sidebarWidth} />
+                <LinksListSidebar width={window.innerWidth -10} />
               </div>
             )}
           </div>

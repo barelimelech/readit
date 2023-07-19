@@ -41,30 +41,17 @@ const SearchesList = (props) => {
           setGloblSearchTerm(globlSearchTerm);
         } else {
           try {
-            const apiKey = "AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU";
+            const apiKey = process.env.REACT_APP_GOOGLE_API_KEY;
             // const apiKey = "AIzaSyCgiVn_kLVoj2FMpn2J64ahZRRnZC4gXQE";
-            const cx = "858f2fc5425274d63";
+            const cx = process.env.REACT_APP_GOOGLE_CX_KEY;
             // const cx = "14c88afe0a78b417d";
             const numResults = 10; // Number of results to fetch
             const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${globlSearchTerm}&num=${numResults}`;
             const response = await Axios.get(apiUrl);
-            if (response.status === 429) {
-              setSearchResults(
-                console.log("no results")[("no results", "n")]
-                //  `https://www.google.com/search?q=${globlSearchTerm}`
-              );
-            } else {
-              // const urlParams = new URLSearchParams(window.location.search);
-              // urlParams.set("searchResults", JSON.stringify(response.data.items));
-              // const newUrl = `${
-              //   window.location.pathname
-              // }?${urlParams.toString()}`;
-              // window.history.pushState({ path: newUrl }, "", newUrl);
-              // console.log("url :" +newUrl)
+           
               setSearchResults(response.data.items);
               setGloblSearchTerm(globlSearchTerm);
-              //  navigate(`/results?q=${globlSearchTerm}`);
-            }
+            
           } catch (error) {
             if (error.message === "Request failed with status code 429") {
               setSearchResults(

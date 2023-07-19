@@ -200,57 +200,6 @@ const Search = ({ props }) => {
     }
   }, [searchLaterBtn, setSearchList, searchList]);
 
-  // useEffect(() => {
-  //   if ((searchBtn || globalSearchBtn) && globlSearchTerm !== "") {
-  //     async function getSearchResults() {
-  //       try {
-  //         const response = await Axios.get("/api/search/", {
-  //           params: { query: globlSearchTerm },
-  //         });
-  //         if (response.status !== "404") {
-  //           setSearchResults(response.data.items);
-  //           console.log("search res : " + response.status.data);
-  //         } else {
-  //           console.log("search res : " + response.status.data);
-  //         }
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     }
-  //     getSearchResults();
-  //   }
-  // }, [globalSearchBtn, searchBtn, globlSearchTerm]);
-
-  // useEffect(() => {
-  //   if ((searchBtn || globalSearchBtn) && globlSearchTerm !== "") {
-  //     async function getSearchResults() {
-  //       try {
-  //         const apiKey = "AIzaSyAJmO8cYzZhBUym_dLJVXxVqzoEjSQxiwU";
-  //         const cx = "858f2fc5425274d63";
-  //         const numResults = 10; // Number of results to fetch
-  //         const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${globlSearchTerm}&num=${numResults}`;
-  //         const response = await Axios.get(apiUrl);
-  //         if (response.status === 429) {
-  //           setSearchResults(
-  //             `https://www.google.com/search?q=${globlSearchTerm}`
-  //           );
-  //         } else {
-  //           // const urlParams = new URLSearchParams(window.location.search);
-  //           // urlParams.set("searchResults", JSON.stringify(response.data.items));
-  //           // const newUrl = `${
-  //           //   window.location.pathname
-  //           // }?${urlParams.toString()}`;
-  //           // window.history.pushState({ path: newUrl }, "", newUrl);
-  //           // console.log("url :" +newUrl)
-  //           setSearchResults(response.data.items);
-  //           setGloblSearchTerm(globlSearchTerm);
-  //           navigate(`/results?q=${globlSearchTerm}`);
-  //         }
-  //       } catch (error) {}
-  //     }
-  //     getSearchResults();
-  //   }
-  // }, [globalSearchBtn, searchBtn]);
 
   return (
     <Grid
