@@ -28,6 +28,7 @@ import SearchContext from "./contexts/SearchContext";
 import Sidebar from "./components/Menu/Sidebar";
 import MenuSidebar from "./components/Menu/MenuWeb";
 import MenuMobile from "./components/Menu/MenuMobile";
+import Interests from "./components/Authentication/Interests";
 
 function App() {
   const initialState = {
@@ -35,6 +36,7 @@ function App() {
     userLastName: localStorage.getItem("theUserLastName"),
     userUsername: localStorage.getItem("theUserUsername"),
     userEmail: localStorage.getItem("theUserEmail"),
+    userInterests: localStorage.getItem("theUserInterests"),
     userId: localStorage.getItem("theUserId"),
     userToken: localStorage.getItem("theUserToken"),
     userIsLogged: localStorage.getItem("theUserUsername") ? true : false,
@@ -89,6 +91,7 @@ function App() {
         draft.userLastName = action.lastNameInfo;
         draft.userUsername = action.usernameInfo;
         draft.userEmail = action.emailInfo;
+        draft.userInterests = action.interestsInfo;
         draft.userId = action.IdInfo;
         draft.userIsLogged = true;
         break;
@@ -107,22 +110,6 @@ function App() {
   const [globalSearchBtn, setGlobalSearchBtn] = useState(false);
   const [address, setAddress] = useState("");
 
-  // const [sidebarWidth, setSidebarWidth] = useState(200); // Width of the sidebar
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     const sidebar = document.querySelector(".sidebar-wrapper");
-  //     const newSidebarWidth = sidebar ? sidebar.offsetWidth : 0;
-  //     setSidebarWidth(newSidebarWidth);
-  //   };
-
-  //   window.addEventListener("resize", handleResize);
-  //   handleResize(); // Initial calculation
-
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (state.userIsLogged) {
@@ -131,6 +118,7 @@ function App() {
       localStorage.setItem("theUserUsername", state.userUsername);
       localStorage.setItem("theUserEmail", state.userEmail);
       localStorage.setItem("theUserId", state.userId);
+      localStorage.setItem("theUserInterests", state.userInterests);
       localStorage.setItem("theUserToken", state.userToken);
     } else {
       localStorage.removeItem("theUserFirstName");
@@ -138,6 +126,7 @@ function App() {
       localStorage.removeItem("theUserUsername");
       localStorage.removeItem("theUserEmail");
       localStorage.removeItem("theUserId");
+      localStorage.removeItem("theUserInterests");
       localStorage.removeItem("theUserToken");
     }
   }, [state.userIsLogged]);
@@ -220,6 +209,7 @@ function App() {
                               path="/waitinglist"
                               element={<WaitingList />}
                             />
+                            <Route path="/interests" element={<Interests />} />
                             {state.userIsLogged && !isMobile && (
                               <Route
                                 path="/sidebar"

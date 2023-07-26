@@ -50,6 +50,7 @@ urlpatterns = [
     path('api/users/', users_api_views.UsersList.as_view()),
     path('api/users/<int:id>/', users_api_views.UserDetail.as_view()),
     path('api/users/<int:id>/update/', users_api_views.UserUpdate.as_view()),
+    path('api/users/<int:id>/update-field/', users_api_views.update_user_field, name='update_user_field'),
 
     path('api/waitinglist/', waitinglist_api_view.WaitingListList.as_view()),
     path('api/waitinglist/create/', waitinglist_api_view.WaitingListCreate.as_view()),

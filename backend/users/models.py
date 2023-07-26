@@ -1,13 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
-
-# Create your models here.
+from django.contrib.postgres.fields import ArrayField
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
+    interests = ArrayField(models.CharField(max_length=100), default=list)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','first_name', 'last_name']
     def get_full_name(self):

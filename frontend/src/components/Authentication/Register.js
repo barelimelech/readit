@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
@@ -20,7 +20,7 @@ import classes from "./Register.module.css";
 const Register = () => {
   const navigate = useNavigate();
   const address = useContext(GlobalContext);
-
+  const [userId, setUserId] = useState("");
   const initialState = {
     firstNameValue: "",
     lastNameValue: "",
@@ -28,6 +28,7 @@ const Register = () => {
     emailValue: "",
     passwordValue: "",
     password2Value: "",
+    interestsValue: "",
     sendRequestToSignup: 0,
     openSnack: false,
     disabledBtn: false,
@@ -202,12 +203,15 @@ const Register = () => {
               email: state.emailValue,
               password: state.passwordValue,
               re_password: state.password2Value,
+              interests: "",
             },
             {
               cancelToken: source.token,
             }
           );
           dispatch({ type: "openTheSnack" });
+          setUserId(response.data.id);
+
         } catch (error) {
           dispatch({ type: "allowTheButton" });
           if (error.response.data.username) {
@@ -242,7 +246,7 @@ const Register = () => {
   useEffect(() => {
     if (state.openSnack) {
       setTimeout(() => {
-        navigate("/login");
+        navigate("/interests", { state: { userId: userId } });
       }, 1500);
     }
   }, [state.openSnack]);
